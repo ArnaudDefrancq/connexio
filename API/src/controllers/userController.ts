@@ -5,6 +5,9 @@ import { Security } from "../tools/Security";
 
 exports.signup = async (req: Request, res: Response, next: NextFunction) : Promise<void> => {
     try {
+        if (await Security.checkEmail(req.body.email)) {
+            res.status(409).json({message: 'Email not unique'})
+        }
         const userModel = new UserModel();
         const hash = await Security.hashPassword(req.body.password);
         const date: number = Math.floor(Date.now() / 1000);
@@ -26,3 +29,5 @@ exports.signup = async (req: Request, res: Response, next: NextFunction) : Promi
         next(error);
     }
 }
+
+exports.login = (req: Request, res: Response, next: NextFunction) => {}
