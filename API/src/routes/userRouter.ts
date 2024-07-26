@@ -1,10 +1,11 @@
-import express, {Request, Response} from 'express';
-import User from '../types/user';
-const userCtrl = require('../controllers/userController');
+import express from 'express';
+import { signup, login, updateUser, deleteUser } from '../controllers/userController';
+
 const userRouter = express.Router();
 
-userRouter.post('/auth/signup', userCtrl.signup)
-userRouter.post('/auth/signin', userCtrl.login)
-userRouter.put('/:id', userCtrl.updateUser)
+userRouter.post('/auth/signup', signup);
+userRouter.post('/auth/signin', login);
+userRouter.put('/:id/update', updateUser);
+userRouter.delete("/:id/delete", deleteUser);
 
 export default userRouter;

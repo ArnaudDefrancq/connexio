@@ -67,7 +67,7 @@ export class Dao<T> {
         });
     }
 
-/**
+    /**
      * UPDATE DAO
      * @param id Id en BDD - number
      * @param item Objet a mettre a jour - Object
@@ -83,5 +83,9 @@ export class Dao<T> {
             const { affectedRows } = <ResultSetHeader>result;
             callback(null, affectedRows);
         });
+    }
+
+    public delete(id: number, callback: Function): void {
+        
     }
 }

@@ -7,7 +7,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-exports.signup = async (req: Request, res: Response, next: NextFunction) : Promise<void> => {
+export const signup = async (req: Request, res: Response, next: NextFunction) : Promise<void> => {
     try {
         if (await Security.checkEmail(req.body.email)) {
             res.status(409).json({message: 'Email not unique'})
@@ -36,11 +36,12 @@ exports.signup = async (req: Request, res: Response, next: NextFunction) : Promi
     }
 }
 
-exports.login = async (req: Request, res: Response, next: NextFunction) => {
+export const login = async (req: Request, res: Response, next: NextFunction) : Promise<void> => {
     try {
         // Vérifier si l'email existe
         if (!await Security.checkEmail(req.body.email)) {
-            return res.status(401).json({ message: 'Pas d\'utilisateur trouvé' });
+            res.status(401).json({ message: 'Pas d\'utilisateur trouvé' });
+            return;
         }
 
         const userModel = new UserModel();
@@ -54,7 +55,8 @@ exports.login = async (req: Request, res: Response, next: NextFunction) => {
             const passwordMatches = await Security.checkPassword(req.body.password, user.password);
 
             if (!passwordMatches) {
-                return res.status(401).json({ error: 'Mauvais mot de passe' });
+                res.status(401).json({ error: 'Mauvais mot de passe' });
+                return;
             }
 
             // Générer le token JWT
@@ -62,26 +64,29 @@ exports.login = async (req: Request, res: Response, next: NextFunction) => {
                 expiresIn: '24h',
             });
 
-            return res.status(200).json({
+            res.status(200).json({
                 user_id: user.id_user,
                 role: user.id_role,
                 token,
             });
+            return;
         } else {
-            return res.status(404).json({ error: 'Utilisateur non trouvé' });
+            res.status(404).json({ error: 'Utilisateur non trouvé' });
+            return;
         }
     } catch (error) {
-        console.error('Erreur dans la fonction de connexion:', error);
-        return res.status(500).json({ error: 'Erreur interne du serveur' });
+        res.status(500).json({ error: 'Erreur interne du serveur' });
+        return;
     }
 };
 
-exports.updateUser = async (req: Request, res: Response, next: NextFunction) => {
+export const updateUser = async (req: Request, res: Response, next: NextFunction) : Promise<void> => {
     try {
         const id = Number(req.params.id);
 
         if (isNaN(id)) {
-            return res.status(400).json({ error: 'ID utilisateur invalide' });
+            res.status(400).json({ error: 'ID utilisateur invalide' });
+            return;
         }
 
         const userModel = new UserModel();
@@ -106,12 +111,21 @@ exports.updateUser = async (req: Request, res: Response, next: NextFunction) => 
                 }
                 return res.status(201).json({ id: affectedRows });
             })
-
+            return;
 
         } else {
-            return res.status(404).json({ error: 'Utilisateur non trouvé' });
+            res.status(404).json({ error: 'Utilisateur non trouvé' });
+            return;
         }
     } catch (error) {
-        return res.status(500).json({ error: 'Erreur interne du serveur' });    
+        res.status(500).json({ error: 'Erreur interne du serveur' });    
+        return;
     }
+}
+
+export const deleteUser = async (req: Request, res: Response, next: NextFunction) : Promise<void> => {
+    // Recup id param
+    // Check si en BDD
+    // Si oui delete
+    // Si non rien
 }
