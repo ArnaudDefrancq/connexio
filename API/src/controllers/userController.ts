@@ -4,7 +4,6 @@ import { User } from '../types/user';
 import { Security } from "../tools/Security";
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
-import { log } from 'console';
 
 dotenv.config();
 
@@ -76,3 +75,42 @@ exports.login = async (req: Request, res: Response, next: NextFunction) => {
         return res.status(500).json({ error: 'Erreur interne du serveur' });
     }
 };
+
+exports.updateUser = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const id = Number(req.params.id);
+        var hash = "";
+        const userModel = new UserModel();
+
+        const result = await userModel.findById(id);
+
+        if (result && result.length > 0) {
+            const user = result[0];
+
+            if (req.body.password.length > 0) {
+                hash = await Security.hashPassword(req.body.password);
+            }
+
+            const updateUser: User = {
+                id_user: user.id_user,
+                email: req.body.email ? req.body.email : user.email,
+                password: hash ? String(hash) : user.password,
+                created_at: user.created_at,
+                id_role: user.id_role
+            } 
+
+            userModel.updateUser(id, updateUser, (error, affectedRows) => {
+                if (error) {
+                    return res.status(500).json({ error });
+                }
+                return res.status(201).json({ id: affectedRows });
+            })
+
+
+        } else {
+            return res.status(404).json({ error: 'Utilisateur non trouvé' });
+        }
+    } catch (error) {
+        return res.status(500).json({ error: 'Erreur interne du serveur' });    
+    }
+}

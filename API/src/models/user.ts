@@ -16,8 +16,12 @@ export class UserModel {
     return  this.userDao.find(where, select);
   }
 
-  public findById(id: number, select: string = "*"): Promise<User> {
+  public findById(id: number, select: string = "*"): Promise<User[]> {
     return this.userDao.findById(id, select);
+  }
+
+  public updateUser(id: number, user: User, callback: (error: Error | null, affectedRows?: number) => void): void {
+    return this.userDao.update(id, user, callback)
   }
 }
 
