@@ -11,20 +11,29 @@ export class Security {
            const passwordHash = await bcrypt.hash(password, Number(process.env.SALT))
            return passwordHash;
         } catch (error) {
-            throw new Error('Problem hash')
+            throw new Error('Problem hash');
         }
     }
 
     public static async checkEmail(email: string): Promise<boolean> {
         try {
-            const dao = new Dao<any>('User');
-            const where = 'email = ?'; 
-            const results = await dao.find(['email'], where, [email]);
+            const dao = new Dao('User');
+            const where = `email = '${email}'`
+            const results = await dao.find(['email'], where);
             
             return results.length > 0; 
         } catch (error) {
             console.error('Problem checking email:', error);
             throw new Error('Problem checking email');
+        }
+    }
+
+    public static async checkPassword(password: string, passwordHash: string): Promise<boolean> {
+        try {
+            const compare = await bcrypt.compare(password, passwordHash);
+            return compare;
+        } catch (error) {
+            throw new Error('Problem checkPassword');
         }
     }
 }

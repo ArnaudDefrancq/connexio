@@ -21,12 +21,13 @@ export class Dao<T> {
         })
     }
 
-    public find(select: string[], where: string, params: any[] = []): Promise<T[]> {
-        return new Promise((resolve, reject) => {
-            const selectFields = select.join(", ");
-            const queryString = `SELECT ${selectFields} FROM cx__${this.tableName} WHERE ${where}`;
-            
-            connection.query(queryString, params, (error, results) => {
+    public find(select: string[], where: string): Promise<T[]> {
+        const selectFields = select.join(", ");
+        const queryString = `SELECT ${selectFields} FROM cx__${this.tableName} WHERE ${where}`;
+        
+        console.log(queryString);
+        return new Promise<T[]>((resolve, reject) => {
+            connection.query(queryString, (error, results) => {
                 if (error) {
                     reject(error);
                 } else {
@@ -35,5 +36,4 @@ export class Dao<T> {
             });
         });
     }
-    
 }
