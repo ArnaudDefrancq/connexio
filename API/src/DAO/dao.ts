@@ -21,17 +21,29 @@ export class Dao<T> {
         })
     }
 
-    public find(select: string[], where: string): Promise<T[]> {
-        const selectFields = select.join(", ");
-        const queryString = `SELECT ${selectFields} FROM cx__${this.tableName} WHERE ${where}`;
+    public find(where: string, select: string): Promise<T[]> {
+        const queryString = `SELECT ${select} FROM cx__${this.tableName} WHERE ${where}`;
         
-        console.log(queryString);
         return new Promise<T[]>((resolve, reject) => {
             connection.query(queryString, (error, results) => {
                 if (error) {
                     reject(error);
                 } else {
                     resolve(results as T[]);
+                }
+            });
+        });
+    }
+    public findById(id: number, select: string): Promise<T> {
+
+        const queryString = `SELECT ${select} FROM cx__${this.tableName} WHERE id_${this.tableName}=${id}`;
+
+        return new Promise<T>((resolve, reject) => {
+            connection.query(queryString, (error, results) => {
+                if (error) {
+                    reject(error);
+                } else {
+                    resolve(results as T);
                 }
             });
         });

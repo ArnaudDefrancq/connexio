@@ -47,8 +47,7 @@ exports.login = async (req: Request, res: Response, next: NextFunction) => {
         const userModel = new UserModel();
 
         // Appeler findUser pour obtenir les résultats
-        const results = await userModel.findUser(['id_user', 'id_role', 'password'], `email = '${req.body.email}'`);
-
+        const results = await userModel.findUser(`email = '${req.body.email}'`, 'id_user, id_role, password');
         if (results.length > 0) {
             const user = results[0];
             

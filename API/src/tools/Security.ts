@@ -19,7 +19,7 @@ export class Security {
         try {
             const dao = new Dao('User');
             const where = `email = '${email}'`
-            const results = await dao.find(['email'], where);
+            const results = await dao.find(where, '"email"');
             
             return results.length > 0; 
         } catch (error) {
