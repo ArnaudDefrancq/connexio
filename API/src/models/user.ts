@@ -20,7 +20,7 @@ export class UserModel {
     return this.userDao.findById(id, select);
   }
 
-  public updateUser(id: number, user: User, callback: (error: Error | null, affectedRows?: number) => void): void {
+  public updateUser(id: number, user: Partial<User>, callback: (error: Error | null, affectedRows?: number) => void): void {
     return this.userDao.update(id, user, callback)
   }
 }
