@@ -1,5 +1,5 @@
 import connection from "../../db-config";
-import { ResultSetHeader, RowDataPacket } from "mysql2";
+import { ResultSetHeader } from "mysql2";
 
 export class Dao<T> {
 
@@ -14,16 +14,16 @@ export class Dao<T> {
      * @param item Objet a mettre en BDD - Object
      * @param callback Retour - Function
      */
-    public create(item: T, callback: Function): void {
-        const queryString = `INSERT INTO cx__${this.tableName} SET ?`;  
+    public create(item: T, callback: (error: Error | null, insertId?: number) => void): void {
+        const queryString: string = `INSERT INTO cx__${this.tableName} SET ?`;
         connection.query(queryString, item, (error, result) => {
             if (error) {
                 return callback(error);
             }
 
-            const { insertId } = <ResultSetHeader>result;
+            const { insertId } = result as ResultSetHeader;
             callback(null, insertId);
-        })
+        });
     }
 
     /**
@@ -32,9 +32,9 @@ export class Dao<T> {
      * @param select Colonne (si empty "*") - string
      * @returns tableau d'objet
      */
-    public find(where: string, select: string): Promise<T[]> {
-        const queryString = `SELECT ${select} FROM cx__${this.tableName} WHERE ${where}`;
-        
+    public find(where: string, select: string = '*'): Promise<T[]> {
+        const queryString: string = `SELECT ${select} FROM cx__${this.tableName} WHERE ${where}`;
+
         return new Promise<T[]>((resolve, reject) => {
             connection.query(queryString, (error, results) => {
                 if (error) {
@@ -52,12 +52,11 @@ export class Dao<T> {
      * @param select Colonne (si empty "*") - string
      * @returns Object
      */
-    public findById(id: number, select: string): Promise<T[]> {
-
-        const queryString = `SELECT ${select} FROM cx__${this.tableName} WHERE id_${this.tableName}=${id}`;
+    public findById(id: number, select: string = '*'): Promise<T[]> {
+        const queryString: string = `SELECT ${select} FROM cx__${this.tableName} WHERE id_${this.tableName} = ?`;
 
         return new Promise<T[]>((resolve, reject) => {
-            connection.query(queryString, (error, results) => {
+            connection.query(queryString, [id], (error, results) => {
                 if (error) {
                     reject(error);
                 } else {
@@ -73,19 +72,32 @@ export class Dao<T> {
      * @param item Objet a mettre a jour - Object
      * @param callback Retour - Function
      */
-    public update(id: number, item: Partial<T>, callback: Function): void {
-        const queryString = `UPDATE cx__${this.tableName} SET ? WHERE id_${this.tableName}=${id}`;
-            connection.query(queryString, item, (error, result) => {
+    public update(id: number, item: Partial<T>, callback: (error: Error | null, affectedRows?: number) => void): void {
+        const queryString: string = `UPDATE cx__${this.tableName} SET ? WHERE id_${this.tableName} = ?`;
+        connection.query(queryString, [item, id], (error, result) => {
             if (error) {
                 return callback(error);
             }
 
-            const { affectedRows } = <ResultSetHeader>result;
+            const { affectedRows } = result as ResultSetHeader;
             callback(null, affectedRows);
         });
     }
 
-    public delete(id: number, callback: Function): void {
-        
+    /**
+     * DELETE DAO
+     * @param id Id en BDD - number
+     * @param callback Retour - Function
+     */
+    public delete(id: number, callback: (error: Error | null, affectedRows?: number) => void): void {
+        const queryString: string = `DELETE FROM cx__${this.tableName} WHERE id_${this.tableName} = ?`;
+        connection.query(queryString, [id], (error, result) => {
+            if (error) {
+                return callback(error);
+            }
+
+            const { affectedRows } = result as ResultSetHeader;
+            callback(null, affectedRows);
+        });
     }
 }

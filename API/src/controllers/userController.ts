@@ -128,4 +128,34 @@ export const deleteUser = async (req: Request, res: Response, next: NextFunction
     // Check si en BDD
     // Si oui delete
     // Si non rien
+    try {
+        const id = Number(req.params.id);
+
+        if (isNaN(id)) {
+            res.status(400).json({ error: 'ID utilisateur invalide' });
+            return;
+        }
+
+        const userModel = new UserModel();
+        const result = await userModel.findById(id);
+
+        if (result && result.length > 0) {
+            const user = result[0];
+
+            userModel.deleteUSer(id, (error, affectedRows) => {
+                if (error) {
+                    return res.status(500).json({ error });
+                }
+                return res.status(201).json({ id: affectedRows });
+            })
+            return;
+
+        } else {
+            res.status(404).json({ error: 'Utilisateur non trouvé' });
+            return;
+        }
+    } catch (error) {
+        res.status(500).json({ error: 'Erreur interne du serveur' });    
+        return;
+    }
 }
