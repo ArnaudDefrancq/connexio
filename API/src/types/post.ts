@@ -1,4 +1,4 @@
-interface Post {
+export interface Post {
     id_post: number,
     content: string,
     media: string,

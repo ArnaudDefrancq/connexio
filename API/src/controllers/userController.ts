@@ -1,6 +1,6 @@
 import { UserModel } from '../models/UserModel';
 import { Request, Response, NextFunction } from 'express';
-import { User } from '../types/user';
+import { User } from '../types/User';
 import { Security } from "../tools/Security";
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';

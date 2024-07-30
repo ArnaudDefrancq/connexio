@@ -1,6 +1,7 @@
 import dotenv from 'dotenv';
 import express from 'express';
 import userRouter from './src/routes/userRouter';
+import profilRouter from './src/routes/profilRouter';
 
 dotenv.config();
 
@@ -28,7 +29,8 @@ res.status(200).json({
 });
 });
 
-app.use('/users', userRouter)
+app.use('/users', userRouter);
+app.use('/profils', profilRouter);
 
 app.listen(process.env.PORT, () => {
     console.log(`Server is running on port ${process.env.PORT}`)

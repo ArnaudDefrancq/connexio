@@ -1,5 +1,5 @@
-import { Dao } from "../DAO/dao";
-import Profil from "../types/profil";
+import { Dao } from "../DAO/DAO";
+import Profil from "../types/Profil";
 
 
 export class ProfilModel {

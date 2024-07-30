@@ -1,4 +1,4 @@
-interface Profil {
+export interface Profil {
     id_profil: number,
     nom: string,
     prenom: string,

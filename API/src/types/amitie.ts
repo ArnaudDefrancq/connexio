@@ -1,6 +1,6 @@
-import { AmitieStatus } from "./statusEnum";
+import { AmitieStatus } from "./StatusEnum";
 
-interface Amitie {
+export interface Amitie {
     id_amitie: number,
     id_profil: number,
     id_profil_1: number,

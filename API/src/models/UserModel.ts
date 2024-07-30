@@ -1,5 +1,5 @@
-import User from "../types/user";
-import { Dao } from "../DAO/dao";
+import User from "../types/User";
+import { Dao } from "../DAO/DAO";
 
 export class UserModel {
   private userDao: Dao<User>; 
