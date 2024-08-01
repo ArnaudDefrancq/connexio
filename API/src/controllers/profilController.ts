@@ -5,7 +5,6 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-export const createProfil = async (req: Request, res: Response, next: NextFunction) : Promise<void> => {}
 export const updateProfil = async (req: Request, res: Response, next: NextFunction) : Promise<void> => {}
 export const getAllProfil = async (req: Request, res: Response, next: NextFunction) : Promise<void> => {}
 // export const findProfilByName = async (req: Request, res: Response, next: NextFunction) : Promise<Profil[]> => {}

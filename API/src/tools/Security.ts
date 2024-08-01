@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 import dotenv from 'dotenv';
-import { Dao } from '../DAO/dao';
+import { Dao } from '../DAO/DAO';
 
 
 dotenv.config();

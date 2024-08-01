@@ -1,40 +1,63 @@
 import { UserModel } from '../models/UserModel';
+import { ProfilModel } from '../models/ProfilModel';
 import { Request, Response, NextFunction } from 'express';
 import { User } from '../types/User';
+import { Profil } from '../types/Profil';
 import { Security } from "../tools/Security";
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
+import { Folder } from '../tools/Folder';
 
 dotenv.config();
 
 export const signup = async (req: Request, res: Response, next: NextFunction) : Promise<void> => {
     try {
         if (await Security.checkEmail(req.body.email)) {
-            res.status(409).json({message: 'Email not unique'})
+            res.status(409).json({ message: 'Email not unique' });
             return;
         }
+
         const userModel: UserModel = new UserModel();
+        const profilModel: ProfilModel = new ProfilModel();
         const hash: string = await Security.hashPassword(req.body.password);
         const date: number = Math.floor(Date.now() / 1000);
-    
+
         const user: User = {
             email: req.body.email,
             password: String(hash),
             created_at: date,
             id_role: req.body.id_role
-        }
-    
-        userModel.createUser(user, (error, insertId) => {
+        };
+
+        userModel.createUser(user, async (error, insertId) => {
             if (error) {
                 return res.status(500).json({ error });
             }
-            return res.status(201).json({ id: insertId });
+
+            if (!(await Folder.createFolder(String(insertId)))) {
+                return res.status(500).json({ message: 'Failed to create user folders' });
+            }
+
+            const profil: Profil = {
+                actif: 0,
+                created_at: date,
+                updated_at: date,
+                id_user: Number(insertId)
+            };
+
+            profilModel.createProfil(profil, (error, insertIdProfil) => {
+                if (error) {
+                    return res.status(500).json({ error });
+                }
+                return res.status(201).json({ id: insertIdProfil });
+            });
         });
+
     } catch (error) {
         res.status(500).json({ error });
-        return;
     }
-}
+};
+
 
 export const login = async (req: Request, res: Response, next: NextFunction) : Promise<void> => {
     try {
