@@ -5,7 +5,7 @@ import { ProfilModel } from '../models/ProfilModel';
 
 dotenv.config();
 
-interface AuthRequest extends Request {
+export interface AuthRequest extends Request {
     auth?: { userId: string; roleId: string, actif: string }
 };
 

@@ -7,6 +7,7 @@ import { Security } from "../tools/Security";
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import { Folder } from '../tools/Folder';
+import { AuthRequest } from '../middlewares/auth'
 
 dotenv.config();
 
@@ -98,8 +99,9 @@ export const login = async (req: Request, res: Response, next: NextFunction) : P
     }
 };
 
-export const updateUser = async (req: Request, res: Response, next: NextFunction) : Promise<void> => {
+export const updateUser = async (req: AuthRequest, res: Response, next: NextFunction) : Promise<void> => {
     try {
+        const { userId, roleId, actif } = req.auth || {};
         const id: number = Number(req.params.id);
 
         if (isNaN(id)) {
@@ -107,42 +109,49 @@ export const updateUser = async (req: Request, res: Response, next: NextFunction
             return;
         }
 
-        const userModel: UserModel = new UserModel();
-        const result: User[] = await userModel.findById(id);
-
-        if (result && result.length > 0) {
-            const user: User = result[0];
-            let hash: string = "";
-
-            if (req.body.password.length > 0) {
-                hash = await Security.hashPassword(req.body.password);
-            }
-
-            const updateUser: Partial<User> = {
-                email: req.body.email || user.email,
-                password: hash || user.password,
-            } 
-
-            userModel.updateUser(id, updateUser, (error, affectedRows) => {
-                if (error) {
-                    return res.status(500).json({ error });
+        if ((id == Number(userId) && actif == '1') || roleId == '1') {
+            const userModel: UserModel = new UserModel();
+            const result: User[] = await userModel.findById(id);
+    
+            if (result && result.length > 0) {
+                const user: User = result[0];
+                let hash: string = "";
+    
+                if (req.body.password.length > 0) {
+                    hash = await Security.hashPassword(req.body.password);
                 }
-                return res.status(201).json({ id: affectedRows });
-            })
-            return;
-
-        } else {
-            res.status(404).json({ error: 'Utilisateur non trouvé' });
-            return;
+    
+                const updateUser: Partial<User> = {
+                    email: req.body.email || user.email,
+                    password: hash || user.password,
+                } 
+    
+                userModel.updateUser(id, updateUser, (error, affectedRows) => {
+                    if (error) {
+                        return res.status(500).json({ error });
+                    }
+                    return res.status(201).json({ id: affectedRows });
+                })
+                return;
+    
+            } else {
+                res.status(404).json({ error: 'Utilisateur non trouvé' });
+                return;
+            }
         }
+
+        res.status(404).json({message: 'Les ID ne correspondent pas'});
+        return;
+
     } catch (error) {
         res.status(500).json({ error: 'Erreur interne du serveur' });    
         return;
     }
 }
 
-export const deleteUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+export const deleteUser = async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
+        const { userId, roleId, actif } = req.auth || {};
         const id: number = Number(req.params.id);
 
         if (isNaN(id)) {
@@ -150,39 +159,44 @@ export const deleteUser = async (req: Request, res: Response, next: NextFunction
             return;
         }
 
-        const userModel = new UserModel();
-        const profilModel = new ProfilModel();
-        let message;
+        if ((id == Number(userId) && actif == '1') || roleId == '1') {
+            const userModel = new UserModel();
+            const profilModel = new ProfilModel();
+            let message;
 
-        const result: User[] = await userModel.findById(id);
+            const result: User[] = await userModel.findById(id);
 
-        if (result && result.length > 0) {
-            const profilDeleted = await new Promise<number>((resolve, reject) => {
-                profilModel.deleteProfil(id, (error, affectedRows) => {
-                    if (error) {
-                        reject(error);
-                    } else {
-                        resolve(affectedRows || 0);
-                    }
+            if (result && result.length > 0) {
+                const profilDeleted = await new Promise<number>((resolve, reject) => {
+                    profilModel.deleteProfil(id, (error, affectedRows) => {
+                        if (error) {
+                            reject(error);
+                        } else {
+                            resolve(affectedRows || 0);
+                        }
+                    });
                 });
-            });
 
-            const userDeleted = await new Promise<number>((resolve, reject) => {
-                userModel.deleteUser(id, (error, affectedRows) => {
-                    if (error) {
-                        reject(error);
-                    } else {
-                        resolve(affectedRows || 0);
-                    }
+                const userDeleted = await new Promise<number>((resolve, reject) => {
+                    userModel.deleteUser(id, (error, affectedRows) => {
+                        if (error) {
+                            reject(error);
+                        } else {
+                            resolve(affectedRows || 0);
+                        }
+                    });
                 });
-            });
-            message = profilDeleted + ' ' + userDeleted;
-            res.status(200).json({ message: 'Utilisateur supprimé avec succès ligne affecté => '  + message});
-            return;
-        } else {
-            res.status(404).json({ error: 'Utilisateur non trouvé' });
-            return;
+                message = profilDeleted + ' ' + userDeleted;
+                res.status(200).json({ message: 'Utilisateur supprimé avec succès ligne affecté => '  + message});
+                return;
+            } else {
+                res.status(404).json({ error: 'Utilisateur non trouvé' });
+                return;
+            }
         }
+        res.status(404).json({message: 'Les ID ne correspondent pas'});
+        return;
+
     } catch (error) {
         res.status(500).json({ error: 'Erreur interne du serveur' });
         return;
