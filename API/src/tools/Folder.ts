@@ -5,15 +5,12 @@ export class Folder {
     public static async createFolder(id: string): Promise<boolean> {
         const profilFolder = path.join(__dirname, '../img/imgProfil', id);
         const postFolder = path.join(__dirname, '../img/imgPost', id);
-        console.log(profilFolder);
 
         try {
-            // Vérifier et créer le dossier profil si nécessaire
             if (!(await Folder.folderExists(profilFolder))) {
                 await fs.mkdir(profilFolder, { recursive: true });
             }
 
-            // Vérifier et créer le dossier post si nécessaire
             if (!(await Folder.folderExists(postFolder))) {
                 await fs.mkdir(postFolder, { recursive: true });
             }

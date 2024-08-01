@@ -58,10 +58,8 @@ export const signup = async (req: Request, res: Response, next: NextFunction) : 
     }
 };
 
-
 export const login = async (req: Request, res: Response, next: NextFunction) : Promise<void> => {
     try {
-        // Vérifier si l'email existe
         if (!await Security.checkEmail(req.body.email)) {
             res.status(401).json({ message: 'Pas d\'utilisateur trouvé' });
             return;
@@ -69,12 +67,10 @@ export const login = async (req: Request, res: Response, next: NextFunction) : P
 
         const userModel = new UserModel();
 
-        // Appeler findUser pour obtenir les résultats
         const results: User[] = await userModel.findUser(`email = '${req.body.email}'`, 'id_user, id_role, password');
         if (results.length > 0) {
             const user: User = results[0];
             
-            // Vérifier le mot de passe de manière asynchrone
             const passwordMatches: boolean = await Security.checkPassword(req.body.password, user.password);
 
             if (!passwordMatches) {
@@ -82,7 +78,6 @@ export const login = async (req: Request, res: Response, next: NextFunction) : P
                 return;
             }
 
-            // Générer le token JWT
             const token: string = jwt.sign({ userId: user.id_user }, String(process.env.JWT_TOKEN), {
                 expiresIn: '24h',
             });
@@ -146,7 +141,7 @@ export const updateUser = async (req: Request, res: Response, next: NextFunction
     }
 }
 
-export const deleteUser = async (req: Request, res: Response, next: NextFunction) : Promise<void> => {
+export const deleteUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const id: number = Number(req.params.id);
 
@@ -155,24 +150,41 @@ export const deleteUser = async (req: Request, res: Response, next: NextFunction
             return;
         }
 
-        const userModel: UserModel = new UserModel();
+        const userModel = new UserModel();
+        const profilModel = new ProfilModel();
+        let message;
+
         const result: User[] = await userModel.findById(id);
 
         if (result && result.length > 0) {
-            userModel.deleteUSer(id, (error, affectedRows) => {
-                if (error) {
-                    return res.status(500).json({ error });
-                }
-                return res.status(201).json({ id: affectedRows });
-            })
-            return;
+            const profilDeleted = await new Promise<number>((resolve, reject) => {
+                profilModel.deleteProfil(id, (error, affectedRows) => {
+                    if (error) {
+                        reject(error);
+                    } else {
+                        resolve(affectedRows || 0);
+                    }
+                });
+            });
 
+            const userDeleted = await new Promise<number>((resolve, reject) => {
+                userModel.deleteUser(id, (error, affectedRows) => {
+                    if (error) {
+                        reject(error);
+                    } else {
+                        resolve(affectedRows || 0);
+                    }
+                });
+            });
+            message = profilDeleted + ' ' + userDeleted;
+            res.status(200).json({ message: 'Utilisateur supprimé avec succès ligne affecté => '  + message});
+            return;
         } else {
             res.status(404).json({ error: 'Utilisateur non trouvé' });
             return;
         }
     } catch (error) {
-        res.status(500).json({ error: 'Erreur interne du serveur' });    
+        res.status(500).json({ error: 'Erreur interne du serveur' });
         return;
     }
 }
