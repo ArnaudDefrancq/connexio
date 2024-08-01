@@ -83,9 +83,14 @@ export const login = async (req: Request, res: Response, next: NextFunction) : P
                 expiresIn: '24h',
             });
 
+            const profilModel = new ProfilModel();
+            const actifProfil = await profilModel.findById(Number(user.id_user), 'actif');
+            const actif  = String(actifProfil[0].actif);
+
             res.status(200).json({
                 user_id: user.id_user,
                 role: user.id_role,
+                actif,
                 token,
             });
             return;

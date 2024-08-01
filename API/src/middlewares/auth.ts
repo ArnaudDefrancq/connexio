@@ -25,12 +25,8 @@ const authMiddleware = async (req: AuthRequest, res: Response, next: NextFunctio
             throw new Error('Token missing');
           }
       
-          const decodedToken = jwt.verify(token, process.env.JWT_TOKEN as string) as { userId: string; roleId: string };
-          const { userId, roleId } = decodedToken;
-          
-          const profilModel = new ProfilModel();
-          const actifProfil = await profilModel.findById(Number(userId), 'actif');
-          const actif  = String(actifProfil[0].actif);
+          const decodedToken = jwt.verify(token, process.env.JWT_TOKEN as string) as { userId: string; roleId: string, actif: string };
+          const { userId, roleId, actif } = decodedToken;
           
           req.auth = {  userId, roleId, actif };
       
