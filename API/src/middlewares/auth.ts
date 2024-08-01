@@ -1,16 +1,17 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
+import { ProfilModel } from '../models/ProfilModel';
 
 dotenv.config();
 
 interface AuthRequest extends Request {
-    auth?: { userId: string; roleId: string }
+    auth?: { userId: string; roleId: string, actif: string }
 };
 
 
 
-const authMiddleware = (req: AuthRequest, res: Response, next: NextFunction) => {
+const authMiddleware = async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
         const authHeader = req.headers.authorization; 
 
@@ -26,8 +27,12 @@ const authMiddleware = (req: AuthRequest, res: Response, next: NextFunction) => 
       
           const decodedToken = jwt.verify(token, process.env.JWT_TOKEN as string) as { userId: string; roleId: string };
           const { userId, roleId } = decodedToken;
-      
-          req.auth = {  userId, roleId  };
+          
+          const profilModel = new ProfilModel();
+          const actifProfil = await profilModel.findById(Number(userId), 'actif');
+          const actif  = String(actifProfil[0].actif);
+          
+          req.auth = {  userId, roleId, actif };
       
           if (req.body.userId && req.body.userId !== userId) {
             throw new Error('User ID non valable');
