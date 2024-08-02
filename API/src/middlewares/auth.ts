@@ -6,7 +6,7 @@ import { ProfilModel } from '../models/ProfilModel';
 dotenv.config();
 
 export interface AuthRequest extends Request {
-    auth?: { userId: string; roleId: string, actif: string }
+    auth?: { userId: string; role: string, actif: string }
 };
 
 
@@ -25,10 +25,11 @@ const authMiddleware = async (req: AuthRequest, res: Response, next: NextFunctio
             throw new Error('Token missing');
           }
       
-          const decodedToken = jwt.verify(token, process.env.JWT_TOKEN as string) as { userId: string; roleId: string, actif: string };
-          const { userId, roleId, actif } = decodedToken;
+          const decodedToken = jwt.verify(token, process.env.JWT_TOKEN as string) as { userId: string; role: string, actif: string };
+
+          const { userId, role, actif } = decodedToken;
           
-          req.auth = {  userId, roleId, actif };
+          req.auth = {  userId, role, actif };
       
           if (req.body.userId && req.body.userId !== userId) {
             throw new Error('User ID non valable');

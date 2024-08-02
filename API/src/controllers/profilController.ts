@@ -10,7 +10,7 @@ dotenv.config();
 
 export const updateProfil = async (req: AuthRequest, res: Response, next: NextFunction) : Promise<void> => {
     try {
-        const { userId, roleId, actif } = req.auth || {};
+        const { userId, role, actif } = req.auth || {};
         const id: number = Number(req.params.id);
 
         if (isNaN(id)) {
@@ -18,7 +18,7 @@ export const updateProfil = async (req: AuthRequest, res: Response, next: NextFu
             return;
         }
 
-        if ((id == Number(userId)) || roleId == '1') {
+        if ((id == Number(userId)) || role == '1') {
             const profilModel: ProfilModel = new ProfilModel();
             const result: Profil[] = await profilModel.findById(id);
     
@@ -29,14 +29,14 @@ export const updateProfil = async (req: AuthRequest, res: Response, next: NextFu
                 const files = req.files as { [fieldname: string]: Express.Multer.File[] };
 
                 if (files?.profil) {
-                    const oldImagePath = path.join(__dirname, '../img/imgProfil/', id.toString(), 'profil', String(profil.img_profil));
+                    const oldImagePath = path.join(__dirname, '../img/imgProfil/', String(id), 'profil', String(profil.img_profil));
                     if (fs.existsSync(oldImagePath)) {
                         fs.unlinkSync(oldImagePath);
                     }
                 }
 
                 if (files?.bg) {
-                    const oldBgPath = path.join(__dirname, '../img/imgProfil/', id.toString(), 'bg',  String(profil.img_bg));
+                    const oldBgPath = path.join(__dirname, '../img/imgProfil/', String(id), 'bg',  String(profil.img_bg));
                     if (fs.existsSync(oldBgPath)) {
                         fs.unlinkSync(oldBgPath);
                     }
@@ -77,7 +77,25 @@ export const updateProfil = async (req: AuthRequest, res: Response, next: NextFu
         return;
     }
 }
-export const getAllProfil = async (req: Request, res: Response, next: NextFunction) : Promise<void> => {}
+export const getAllProfil = async (req: AuthRequest, res: Response, next: NextFunction) : Promise<void> => {
+    try {
+        const { actif } = req.auth || {};
+        if (actif == '1') {
+            const profilModel = new ProfilModel();;
+            
+            const arrayProfil: Profil[] = await profilModel.findProfil('actif = 1');         
+
+            res.status(200).json(arrayProfil);
+            return;
+        } 
+        res.status(404).json({ error : 'Pas autorisé'})
+        return;
+
+    } catch (error) {
+        res.status(500).json({ error: 'Erreur interne du serveur' });    
+        return;
+    }
+}
 // export const findProfilByName = async (req: Request, res: Response, next: NextFunction) : Promise<Profil[]> => {}
 // export const findOneProfilById = async (req: Request, res: Response, next: NextFunction) : Promise<Profil[]> => {}
 export const deleteProfil = async (req: Request, res: Response, next: NextFunction) : Promise<void> => {}

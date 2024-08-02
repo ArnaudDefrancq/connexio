@@ -78,19 +78,25 @@ export const login = async (req: Request, res: Response, next: NextFunction) : P
                 res.status(401).json({ error: 'Mauvais mot de passe' });
                 return;
             }
-
-            const token: string = jwt.sign({ userId: user.id_user }, String(process.env.JWT_TOKEN), {
-                expiresIn: '24h',
-            });
-
+ 
             const profilModel = new ProfilModel();
             const actifProfil = await profilModel.findById(Number(user.id_user), 'actif');
-            const actif  = String(actifProfil[0].actif);
+            const actif  = actifProfil[0].actif;
+
+            const token: string = jwt.sign(
+                { 
+                    userId: user.id_user,
+                    role: user.id_role,
+                    actif: actif        
+                }, 
+                String(process.env.JWT_TOKEN), 
+                { expiresIn: '24h' }
+            );
 
             res.status(200).json({
                 user_id: user.id_user,
                 role: user.id_role,
-                actif,
+                actif: actif,
                 token,
             });
             return;
@@ -106,7 +112,7 @@ export const login = async (req: Request, res: Response, next: NextFunction) : P
 
 export const updateUser = async (req: AuthRequest, res: Response, next: NextFunction) : Promise<void> => {
     try {
-        const { userId, roleId, actif } = req.auth || {};
+        const { userId, role, actif } = req.auth || {};
         const id: number = Number(req.params.id);
 
         if (isNaN(id)) {
@@ -114,7 +120,7 @@ export const updateUser = async (req: AuthRequest, res: Response, next: NextFunc
             return;
         }
 
-        if ((id == Number(userId) && actif == '1') || roleId == '1') {
+        if ((id == Number(userId) && actif == '1') || role == '1') {
             const userModel: UserModel = new UserModel();
             const result: User[] = await userModel.findById(id);
     
@@ -156,7 +162,7 @@ export const updateUser = async (req: AuthRequest, res: Response, next: NextFunc
 
 export const deleteUser = async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
-        const { userId, roleId, actif } = req.auth || {};
+        const { userId, role, actif } = req.auth || {};
         const id: number = Number(req.params.id);
 
         if (isNaN(id)) {
@@ -164,7 +170,7 @@ export const deleteUser = async (req: AuthRequest, res: Response, next: NextFunc
             return;
         }
 
-        if ((id == Number(userId) && actif == '1') || roleId == '1') {
+        if ((id == Number(userId) && actif == '1') || role == '1') {
             const userModel = new UserModel();
             const profilModel = new ProfilModel();
             let message;
