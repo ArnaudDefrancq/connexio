@@ -17,10 +17,6 @@ export class ProfilModel {
         return  this.profilDao.find(where, select);
       }
 
-      public findAllProfil(select: string = "*"): Promise<Profil[]> {
-        return  this.profilDao.findAll();
-      }
-    
       public findById(id: number, select: string = "*"): Promise<Profil[]> {
         return this.profilDao.findById(id, select);
       }

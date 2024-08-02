@@ -46,20 +46,6 @@ export class Dao<T> {
         });
     }
 
-    public findAll(select: string = '*'): Promise<T[]> {
-        const queryString: string = `SELECT ${select} FROM cx__${this.tableName}`;
-
-        return new Promise<T[]>((resolve, reject) => {
-            connection.query(queryString, (error, results) => {
-                if (error) {
-                    reject(error);
-                } else {
-                    resolve(results as T[]);
-                }
-            });
-        });
-    }
-
     /**
      * SELECT ID DAO
      * @param id Id en BDD - number
