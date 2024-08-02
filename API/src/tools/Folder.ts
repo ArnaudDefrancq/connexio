@@ -9,6 +9,12 @@ export class Folder {
         try {
             if (!(await Folder.folderExists(profilFolder))) {
                 await fs.mkdir(profilFolder, { recursive: true });
+
+                const profil = path.join(__dirname, '../img/imgProfil', id, 'profil');
+                const bg = path.join(__dirname, '../img/imgProfil', id, 'bg');
+
+                await fs.mkdir(profil, { recursive: true });
+                await fs.mkdir(bg, { recursive: true });
             }
 
             if (!(await Folder.folderExists(postFolder))) {
@@ -30,4 +36,6 @@ export class Folder {
             return false;
         }
     }
+
+    // TODO: Foire une methode pour supprimer les dossiers images
 }
