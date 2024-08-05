@@ -38,7 +38,6 @@ export class Folder {
         }
     }
 
-    // TODO: Foire une methode pour supprimer les dossiers images
     public static async deleteFolder(id: string): Promise<boolean> {
         const profilFolder = path.join(__dirname, '../img/imgProfil', id);
         const postFolder = path.join(__dirname, '../img/imgPost', id);
