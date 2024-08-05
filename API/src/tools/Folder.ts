@@ -1,5 +1,6 @@
 import path from 'path';
-import fs from 'fs/promises';
+import * as fs from 'fs/promises';
+
 
 export class Folder {
     public static async createFolder(id: string): Promise<boolean> {
@@ -38,4 +39,22 @@ export class Folder {
     }
 
     // TODO: Foire une methode pour supprimer les dossiers images
+    public static async deleteFolder(id: string): Promise<boolean> {
+        const profilFolder = path.join(__dirname, '../img/imgProfil', id);
+        const postFolder = path.join(__dirname, '../img/imgPost', id);
+
+        try {
+            if (await this.folderExists(profilFolder)) {
+                await fs.rm(profilFolder, { recursive: true, force: true})
+            }
+            if (await this.folderExists(postFolder)) {
+                await fs.rm(postFolder, { recursive: true, force: true})
+            }
+
+            return true;
+        }catch (error) {
+            console.error('Erreur lors de la suppression des dossiers:', error);
+            return false;
+        }
+    }
 }

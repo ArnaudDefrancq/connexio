@@ -170,7 +170,7 @@ export const deleteUser = async (req: AuthRequest, res: Response, next: NextFunc
             return;
         }
 
-        if ((id == Number(userId) && actif == '1') || role == '1') {
+        if ((id == Number(userId)) || role == '1') {
             const userModel = new UserModel();
             const profilModel = new ProfilModel();
             let message;
@@ -178,6 +178,8 @@ export const deleteUser = async (req: AuthRequest, res: Response, next: NextFunc
             const result: User[] = await userModel.findById(id);
 
             if (result && result.length > 0) {
+                Folder.deleteFolder(String(userId))
+
                 const profilDeleted = await new Promise<number>((resolve, reject) => {
                     profilModel.deleteProfil(id, (error, affectedRows) => {
                         if (error) {

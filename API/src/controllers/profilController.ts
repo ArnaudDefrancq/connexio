@@ -129,4 +129,5 @@ export const getProfilById = async (req: AuthRequest, res: Response, next: NextF
         return;
     }
 }
+
 export const deleteProfil = async (req: Request, res: Response, next: NextFunction) : Promise<void> => {}
