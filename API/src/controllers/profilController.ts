@@ -77,11 +77,12 @@ export const updateProfil = async (req: AuthRequest, res: Response, next: NextFu
         return;
     }
 }
+
 export const getAllProfil = async (req: AuthRequest, res: Response, next: NextFunction) : Promise<void> => {
     try {
         const { actif } = req.auth || {};
         if (actif == '1') {
-            const profilModel = new ProfilModel();;
+            const profilModel: ProfilModel = new ProfilModel();;
             
             const arrayProfil: Profil[] = await profilModel.findProfil('actif = 1');         
 
@@ -97,5 +98,35 @@ export const getAllProfil = async (req: AuthRequest, res: Response, next: NextFu
     }
 }
 // export const findProfilByName = async (req: Request, res: Response, next: NextFunction) : Promise<Profil[]> => {}
-// export const findOneProfilById = async (req: Request, res: Response, next: NextFunction) : Promise<Profil[]> => {}
+export const getProfilById = async (req: AuthRequest, res: Response, next: NextFunction) : Promise<void> => {
+    try {
+        const { userId, role, actif } = req.auth || {};
+        const id: number = Number(req.params.id);
+
+        if (isNaN(id)) {
+            res.status(400).json({ error: 'ID Profil invalide' });
+            return;
+        }
+
+        if ((id == Number(userId) && actif == '1') || role == '1') {
+            const profilModel: ProfilModel = new ProfilModel();
+            const result: Profil[] = await profilModel.findById(id);
+
+            if (result && result.length > 0) {
+                const profil: Profil = result[0];
+
+                res.status(200).json(profil);
+                return
+            }
+
+
+        } else {
+                res.status(404).json({ error: 'Profil non trouvé' });
+                return;
+            }
+    } catch (error) {
+        res.status(500).json({ error: 'Erreur interne du serveur' });    
+        return;
+    }
+}
 export const deleteProfil = async (req: Request, res: Response, next: NextFunction) : Promise<void> => {}

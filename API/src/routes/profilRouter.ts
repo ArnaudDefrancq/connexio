@@ -1,5 +1,5 @@
 import express from 'express';
-import { updateProfil, getAllProfil, deleteProfil } from '../controllers/profilController';
+import { updateProfil, getAllProfil, getProfilById, deleteProfil } from '../controllers/profilController';
 import authMiddleware from '../middlewares/auth';
 import getMulterConfigProfil from '../middlewares/multer';
 
@@ -16,6 +16,7 @@ profilRouter.put('/:id/update', authMiddleware, (req, res,next) => {
     ])(req, res, next)
 }, updateProfil);
 profilRouter.get('/', authMiddleware, getAllProfil);
+profilRouter.get('/:id/profil', authMiddleware, getProfilById);
 // profilRouter.delete('/:id/delete', authMiddleware, multer, deleteProfil);
 
 export default profilRouter;
