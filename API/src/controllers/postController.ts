@@ -98,4 +98,23 @@ export const updatePost = async (req: AuthRequest, res: Response, next: NextFunc
         return;
     }
 }
-export const getAllPost = async (req: AuthRequest, res: Response, next: NextFunction) : Promise<void> => {}
+
+export const getAllPost = async (req: AuthRequest, res: Response, next: NextFunction) : Promise<void> => {
+    try {
+        const { actif } = req.auth || {};
+        if (actif == '1') {
+            const postModel: PostModel = new PostModel();;
+            
+            const arrayPost: Post[] = await postModel.findPost("");         
+
+            res.status(200).json(arrayPost);
+            return;
+        } 
+        res.status(404).json({ error : 'Pas autorisé'})
+        return;
+
+    } catch (error) {
+        res.status(500).json({ error: 'Erreur interne du serveur' });    
+        return;
+    }
+}

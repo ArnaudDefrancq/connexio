@@ -33,7 +33,7 @@ export class Dao<T> {
      * @returns tableau d'objet
      */
     public find(where: string, select: string = '*'): Promise<T[]> {
-        const queryString: string = `SELECT ${select} FROM cx__${this.tableName} WHERE ${where}`;
+        const queryString: string = `SELECT ${select} FROM cx__${this.tableName} ${where}`;
 
         return new Promise<T[]>((resolve, reject) => {
             connection.query(queryString, (error, results) => {
@@ -45,6 +45,8 @@ export class Dao<T> {
             });
         });
     }
+
+
 
     /**
      * SELECT ID DAO

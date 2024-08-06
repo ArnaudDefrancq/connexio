@@ -18,7 +18,7 @@ export class Security {
     public static async checkEmail(email: string): Promise<boolean> {
         try {
             const dao = new Dao('User');
-            const where = `email = '${email}'`
+            const where = `WHERE email = '${email}'`
             const results = await dao.find(where, '"email"');
             
             return results.length > 0; 

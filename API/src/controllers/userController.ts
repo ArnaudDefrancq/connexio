@@ -68,7 +68,7 @@ export const login = async (req: Request, res: Response, next: NextFunction) : P
 
         const userModel = new UserModel();
 
-        const results: User[] = await userModel.findUser(`email = '${req.body.email}'`, 'id_user, id_role, password');
+        const results: User[] = await userModel.findUser(`WHERE email = '${req.body.email}'`, 'id_user, id_role, password');
         if (results.length > 0) {
             const user: User = results[0];
             

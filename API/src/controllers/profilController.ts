@@ -84,7 +84,7 @@ export const getAllProfil = async (req: AuthRequest, res: Response, next: NextFu
         if (actif == '1') {
             const profilModel: ProfilModel = new ProfilModel();;
             
-            const arrayProfil: Profil[] = await profilModel.findProfil('actif = 1');         
+            const arrayProfil: Profil[] = await profilModel.findProfil('WHERE actif = 1');         
 
             res.status(200).json(arrayProfil);
             return;
