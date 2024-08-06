@@ -1,5 +1,5 @@
 import express from 'express';
-import { getAllPost, createPost } from '../controllers/postController';
+import { getAllPost, createPost, updatePost } from '../controllers/postController';
 import authMiddleware from '../middlewares/auth';
 import { getMulterConfigPost } from '../middlewares/multer';
 
@@ -14,14 +14,13 @@ postRouter.post('/:id/post',authMiddleware, (req, res,next) => {
         ])(req, res, next)
 },createPost);
 
-// postRouter.put('/:id/update', authMiddleware, (req, res,next) => {
-//     const upload = getMulterConfigProfil('imgProfil', Number(req.params.id));
+postRouter.put('/:idUser/update/:idPost', authMiddleware, (req, res,next) => {
+    const upload = getMulterConfigPost('imgPost', Number(req.params.idUser));
 
-//     upload.fields([
-//         {name: 'profil', maxCount: 1},
-//         {name: 'bg', maxCount: 1}
-//     ])(req, res, next)
-// }, updateProfil);
+    upload.fields([
+        {name: 'media', maxCount: 1},
+    ])(req, res, next)
+}, updatePost);
 
 postRouter.get('/', authMiddleware, getAllPost);
 
