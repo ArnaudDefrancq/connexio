@@ -6,6 +6,7 @@ import postRouter from './src/routes/postRouter';
 import commentaireRouter from './src/routes/commentaireRouter';
 import postLikeRouter from './src/routes/postLikeRouter';
 import commentaireLikeRouter from './src/routes/commentaireLikeRouter';
+import amitieRouter from './src/routes/amitieRouter';
 
 dotenv.config();
 
@@ -39,6 +40,7 @@ app.use('/posts', postRouter);
 app.use('/commentaires', commentaireRouter);
 app.use('/posts-like', postLikeRouter);
 app.use('/commentaires-like', commentaireLikeRouter);
+app.use('/amities', amitieRouter);
 
 app.listen(process.env.PORT, () => {
     console.log(`Server is running on port ${process.env.PORT}`)
