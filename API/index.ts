@@ -3,7 +3,8 @@ import express from 'express';
 import userRouter from './src/routes/userRouter';
 import profilRouter from './src/routes/profilRouter';
 import postRouter from './src/routes/postRouter';
-import commentaireRouter from './src/routes/CommentaireRouter';
+import commentaireRouter from './src/routes/commentaireRouter';
+import postLikeRouter from './src/routes/postLikeRouter';
 
 dotenv.config();
 

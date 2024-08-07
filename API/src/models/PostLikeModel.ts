@@ -2,7 +2,7 @@ import { Dao } from "../DAO/DAO";
 import PostLike from "../types/PostLike";
 
 
-export class PostModel {
+export class PostLikeModel {
     private postLikeDao: Dao<PostLike>;
 
     constructor() {
