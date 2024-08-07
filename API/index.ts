@@ -3,6 +3,7 @@ import express from 'express';
 import userRouter from './src/routes/userRouter';
 import profilRouter from './src/routes/profilRouter';
 import postRouter from './src/routes/postRouter';
+import commentaireRouter from './src/routes/CommentaireRouter';
 
 dotenv.config();
 
@@ -33,6 +34,7 @@ res.status(200).json({
 app.use('/users', userRouter);
 app.use('/profils', profilRouter);
 app.use('/posts', postRouter);
+app.use('/commmentaires', commentaireRouter);
 
 app.listen(process.env.PORT, () => {
     console.log(`Server is running on port ${process.env.PORT}`)
