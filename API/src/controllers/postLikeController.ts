@@ -1,6 +1,8 @@
 import { PostLikeModel } from "../models/PostLikeModel";
+import { PostModel } from "../models/PostModel";
 import { Request, Response, NextFunction } from 'express';
 import { PostLike } from '../types/PostLike';
+import { Post } from '../types/Post';
 import { AuthRequest } from '../middlewares/auth'
 
 export const createPostLike = async (req: AuthRequest, res: Response, next: NextFunction) : Promise<void> => {
@@ -32,6 +34,42 @@ export const createPostLike = async (req: AuthRequest, res: Response, next: Next
         return;
     }
 }
+
+export const getAllPostLike = async (req: AuthRequest, res: Response, next: NextFunction) : Promise<void> => {
+    try {
+        const { actif } = req.auth || {};
+
+        const id: number = Number(req.params.idPost);
+        if (actif !== '1') {        
+            res.status(404).json({ error : 'Pas autorisé'})
+            return;
+        }
+
+        if (isNaN(id)) {
+            res.status(400).json({ error: ' ID pas invalide' });
+            return;
+        }
+
+        const postModel: PostModel = new PostModel();
+
+        const result: Post[] = await postModel.findById(id);
+
+        if (result && result.length > 0) {
+            const postLikeModel: PostLikeModel = new PostLikeModel();
+            
+            const arrayPostLike: PostLike[] = await postLikeModel.findPostLike(`WHERE id_post = ${id}`);         
+
+            res.status(200).json(arrayPostLike);
+            return;
+        } 
+
+        res.status(400).json({error : "Pas de post trouvé"});
+
+    } catch (error) {
+        res.status(500).json({ error: 'Erreur interne du serveur' });    
+        return;
+    }
+} 
 
 export const deletePostLike = async (req: AuthRequest, res: Response, next: NextFunction) : Promise<void> => {
     try {
