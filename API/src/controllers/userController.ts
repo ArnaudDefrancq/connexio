@@ -2,12 +2,14 @@ import { UserModel } from '../models/UserModel';
 import { ProfilModel } from '../models/ProfilModel';
 import { Request, Response, NextFunction } from 'express';
 import { User } from '../types/User';
+import { Post } from '../types/Post';
 import { Profil } from '../types/Profil';
 import { Security } from "../tools/Security";
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import { Folder } from '../tools/Folder';
 import { AuthRequest } from '../middlewares/auth'
+import { PostModel } from '../models/PostModel';
 
 dotenv.config();
 
@@ -162,7 +164,7 @@ export const updateUser = async (req: AuthRequest, res: Response, next: NextFunc
 
 export const deleteUser = async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
-        const { userId, role, actif } = req.auth || {};
+        const { userId, role } = req.auth || {};
         const id: number = Number(req.params.id);
 
         if (isNaN(id)) {
@@ -171,39 +173,70 @@ export const deleteUser = async (req: AuthRequest, res: Response, next: NextFunc
         }
 
         if ((id == Number(userId)) || role == '1') {
-            const userModel = new UserModel();
-            const profilModel = new ProfilModel();
+            const userModel: UserModel = new UserModel();
+            const profilModel: ProfilModel = new ProfilModel();
+            const postModel: PostModel = new PostModel();
+
             let message;
 
-            const result: User[] = await userModel.findById(id);
+            const resultUser: User[] = await userModel.findById(id);
 
-            if (result && result.length > 0) {
-                Folder.deleteAllFolder(String(userId))
+            if (resultUser && resultUser.length > 0) {
 
-                const profilDeleted = await new Promise<number>((resolve, reject) => {
-                    profilModel.deleteProfil(id, (error, affectedRows) => {
-                        if (error) {
-                            reject(error);
-                        } else {
-                            resolve(affectedRows || 0);
+                const resultProfil: Profil[] = await profilModel.findById(Number(resultUser[0].id_user));
+
+                if (resultProfil && resultProfil.length > 0) {
+                    const profil: Profil = resultProfil[0];
+
+                    if (profil.id_profil == userId || role == "1") {
+                        Folder.deleteAllFolder(String(userId))
+
+                        const allPost: Post[] = await postModel.findPost(`WHERE id_profil=${profil.id_profil}`);
+
+                        if (allPost && allPost.length > 0) {
+                           await new Promise<number>((resolve, reject) => {
+                                allPost.forEach(e => {
+                                    postModel.deletePost(Number(e.id_post), (error, affectedRows) => {
+                                        if (error) {
+                                            reject(error);
+                                        } else {
+                                            resolve(affectedRows || 0);
+                                        }
+                                    });
+                                })
+                            });
                         }
-                    });
-                });
 
-                const userDeleted = await new Promise<number>((resolve, reject) => {
-                    userModel.deleteUser(id, (error, affectedRows) => {
-                        if (error) {
-                            reject(error);
-                        } else {
-                            resolve(affectedRows || 0);
-                        }
-                    });
-                });
+                        const profilDeleted = await new Promise<number>((resolve, reject) => {
+                            profilModel.deleteProfil(id, (error, affectedRows) => {
+                                if (error) {
+                                    reject(error);
+                                } else {
+                                    resolve(affectedRows || 0);
+                                }
+                            });
+                        });
+        
+                        const userDeleted = await new Promise<number>((resolve, reject) => {
+                            userModel.deleteUser(id, (error, affectedRows) => {
+                                if (error) {
+                                    reject(error);
+                                } else {
+                                    resolve(affectedRows || 0);
+                                }
+                            });
+                        });
+        
+                        // TODO: Ajouter la suppression des commentaires, amitiées et like du profil
+                        message = profilDeleted + ' ' + userDeleted;
+                        res.status(200).json({ message: 'Utilisateur supprimé avec succès ligne affecté => '  + message});
+                        return;
 
-                // TODO: Ajouter la suppression des commentaires, posts, amitiées et like du profil
-                message = profilDeleted + ' ' + userDeleted;
-                res.status(200).json({ message: 'Utilisateur supprimé avec succès ligne affecté => '  + message});
-                return;
+                    } else {
+                        res.status(401).json({error: "Unauthorize"});
+                        return;
+                    }
+                }
             } else {
                 res.status(404).json({ error: 'Utilisateur non trouvé' });
                 return;
