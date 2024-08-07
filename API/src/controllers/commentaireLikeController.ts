@@ -1,126 +1,126 @@
 import { CommentaireLikeModel } from "../models/CommentaireLikeModel";
-// import { PostModel } from "../models/PostModel";
+import { CommentaireModel } from "../models/CommentaireModel";
 import { Request, Response, NextFunction } from 'express';
 import { CommentaireLike } from '../types/CommentaireLike';
-// import { Post } from '../types/Post';
+import { Commentaire } from '../types/Commentaire';
 import { AuthRequest } from '../middlewares/auth'
 
 export const createCommentaireLike = async (req: AuthRequest, res: Response, next: NextFunction) : Promise<void> => {
-    // try {
-    //     const { actif } = req.auth || {};
+    try {
+        const { userId, actif } = req.auth || {};
 
-    //     if (actif == '1') {
-    //         const postLikeModel: PostLikeModel = new PostLikeModel();
+        if (actif == '1') {
+            const commentaireLikeModel: CommentaireLikeModel = new CommentaireLikeModel();
 
-    //         const newPostLike: PostLike = {
-    //             id_profil: req.body.id_profil,
-    //             id_post: req.body.id_post
-    //         } 
+            const newCommentaireLike: CommentaireLike = {
+                id_profil: Number(userId),
+                id_commentaire: req.body.id_post
+            } 
 
-    //         postLikeModel.createPostLike(newPostLike, (error, insertId) => {
-    //             if (error) {
-    //                 return res.status(500).json({ error });
-    //             }
-    //             return res.status(201).json({ id: insertId });
-    //         });
-    //         return;
-    //     }
+            commentaireLikeModel.createCommentaireLike(newCommentaireLike, (error, insertId) => {
+                if (error) {
+                    return res.status(500).json({ error });
+                }
+                return res.status(201).json({ id: insertId });
+            });
+            return;
+        }
 
-    //     res.status(401).json({error: 'Compte pas actif'});
-    //     return;
+        res.status(401).json({error: 'Compte pas actif'});
+        return;
 
-    // } catch (error) {
-    //     res.status(500).json({ error: 'Erreur interne du serveur' });    
-    //     return;
-    // }
+    } catch (error) {
+        res.status(500).json({ error: 'Erreur interne du serveur' });    
+        return;
+    }
 }
 
 export const getAllCommentaireLike = async (req: AuthRequest, res: Response, next: NextFunction) : Promise<void> => {
-    // try {
-    //     const { actif } = req.auth || {};
+    try {
+        const { actif } = req.auth || {};
 
-    //     const id: number = Number(req.params.idPost);
-    //     if (actif !== '1') {        
-    //         res.status(404).json({ error : 'Pas autorisé'})
-    //         return;
-    //     }
+        const id: number = Number(req.params.idCommentaire);
+        if (actif !== '1') {        
+            res.status(404).json({ error : 'Pas autorisé'})
+            return;
+        }
 
-    //     if (isNaN(id)) {
-    //         res.status(400).json({ error: ' ID pas invalide' });
-    //         return;
-    //     }
+        if (isNaN(id)) {
+            res.status(400).json({ error: ' ID pas invalide' });
+            return;
+        }
 
-    //     const postModel: PostModel = new PostModel();
+        const commentaireModel: CommentaireModel = new CommentaireModel();
 
-    //     const result: Post[] = await postModel.findById(id);
+        const result: Commentaire[] = await commentaireModel.findById(id);
 
-    //     if (result && result.length > 0) {
-    //         const postLikeModel: PostLikeModel = new PostLikeModel();
+        if (result && result.length > 0) {
+            const commentaireLikeModel: CommentaireLikeModel = new CommentaireLikeModel();
             
-    //         const arrayPostLike: PostLike[] = await postLikeModel.findPostLike(`WHERE id_post = ${id}`);         
+            const arrayCommentaireLike: CommentaireLike[] = await commentaireLikeModel.findCommentaireLike(`WHERE id_commentaire = ${id}`);         
 
-    //         res.status(200).json(arrayPostLike);
-    //         return;
-    //     } 
+            res.status(200).json(arrayCommentaireLike);
+            return;
+        } 
 
-    //     res.status(400).json({error : "Pas de post trouvé"});
+        res.status(400).json({error : "Pas de post trouvé"});
 
-    // } catch (error) {
-    //     res.status(500).json({ error: 'Erreur interne du serveur' });    
-    //     return;
-    // }
+    } catch (error) {
+        res.status(500).json({ error: 'Erreur interne du serveur' });    
+        return;
+    }
 } 
 
 export const deleteCommentaireLike = async (req: AuthRequest, res: Response, next: NextFunction) : Promise<void> => {
-    // try {
-    //     const { userId, role, actif } = req.auth || {};
-    //     const id: number = Number(req.params.id);
+    try {
+        const { userId, role, actif } = req.auth || {};
+        const id: number = Number(req.params.id);
 
-    //     if (isNaN(id)) {
-    //         res.status(400).json({ error: ' ID pas invalide' });
-    //         return;
-    //     }
+        if (isNaN(id)) {
+            res.status(400).json({ error: ' ID pas invalide' });
+            return;
+        }
 
-    //     if (actif == "1" || role == '1') {
-    //         const postLikeModel: PostLikeModel = new PostLikeModel();
-    //         let message;
+        if (actif == "1" || role == '1') {
+            const commentaireLikeModel: CommentaireLikeModel = new CommentaireLikeModel();
+            let message;
 
-    //         const result: PostLike[] = await postLikeModel.findById(id);
+            const result: CommentaireLike[] = await commentaireLikeModel.findById(id);
 
-    //         if (result && result.length > 0) {
+            if (result && result.length > 0) {
 
-    //             const postLike: PostLike = result[0];
+                const commentaireLike: CommentaireLike = result[0];
                 
-    //             if (postLike.id_profil == Number(userId) || role == '1') {
+                if (commentaireLike.id_profil == Number(userId) || role == '1') {
 
-    //                 const postLikeDelete = await new Promise<number>((resolve, reject) => {
-    //                     postLikeModel.deletePostLike(id, (error, affectedRows) => {
-    //                         if (error) {
-    //                             reject(error);
-    //                         } else {
-    //                             resolve(affectedRows || 0);
-    //                         }
-    //                     });
-    //                 });
+                    const commentaireLikeDelete = await new Promise<number>((resolve, reject) => {
+                        commentaireLikeModel.deleteCommentaireLike(id, (error, affectedRows) => {
+                            if (error) {
+                                reject(error);
+                            } else {
+                                resolve(affectedRows || 0);
+                            }
+                        });
+                    });
 
-    //                 message = postLikeDelete;
-    //                 res.status(200).json({ message: 'commentaire supprimé avec succès ligne affecté => '  + message});
-    //                 return;
-    //             } else {
-    //                 res.status(401).json({error : "Unauthorize"})
-    //                 return;
-    //             }
-    //         } else {
-    //             res.status(404).json({ error: 'commentaire non trouvé' });
-    //             return;
-    //         }
-    //     }
-    //     res.status(404).json({message: 'Les ID ne correspondent pas'});
-    //     return;
+                    message = commentaireLikeDelete;
+                    res.status(200).json({ message: 'commentaire supprimé avec succès ligne affecté => '  + message});
+                    return;
+                } else {
+                    res.status(401).json({error : "Unauthorize"})
+                    return;
+                }
+            } else {
+                res.status(404).json({ error: 'commentaire non trouvé' });
+                return;
+            }
+        }
+        res.status(404).json({message: 'Les ID ne correspondent pas'});
+        return;
 
-    // } catch (error) {
-    //     res.status(500).json({ error: 'Erreur interne du serveur' });
-    //     return;
-    // }
+    } catch (error) {
+        res.status(500).json({ error: 'Erreur interne du serveur' });
+        return;
+    }
 
 }

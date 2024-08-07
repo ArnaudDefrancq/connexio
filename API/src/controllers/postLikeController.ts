@@ -7,13 +7,13 @@ import { AuthRequest } from '../middlewares/auth'
 
 export const createPostLike = async (req: AuthRequest, res: Response, next: NextFunction) : Promise<void> => {
     try {
-        const { actif } = req.auth || {};
+        const { userId, actif } = req.auth || {};
 
         if (actif == '1') {
             const postLikeModel: PostLikeModel = new PostLikeModel();
 
             const newPostLike: PostLike = {
-                id_profil: req.body.id_profil,
+                id_profil: Number(userId),
                 id_post: req.body.id_post
             } 
 
