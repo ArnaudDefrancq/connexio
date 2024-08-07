@@ -6,6 +6,6 @@ import authMiddleware from '../middlewares/auth';
 const commentaireRouter = express.Router();
 
 commentaireRouter.post('/',authMiddleware ,createCommentaire);
-commentaireRouter.post('/:id/delete',authMiddleware ,deleteCommentaire);
+commentaireRouter.delete('/:id',authMiddleware ,deleteCommentaire);
 
 export default commentaireRouter;

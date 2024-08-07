@@ -36,4 +36,55 @@ export const createCommentaire= async (req: AuthRequest, res: Response, next: Ne
     }
 }
 
-export const deleteCommentaire= async (req: AuthRequest, res: Response, next: NextFunction) : Promise<void> => {}
+export const deleteCommentaire= async (req: AuthRequest, res: Response, next: NextFunction) : Promise<void> => {
+    try {
+        const { userId, role, actif } = req.auth || {};
+        const id: number = Number(req.params.id);
+
+        if (isNaN(id)) {
+            res.status(400).json({ error: ' ID pas invalide' });
+            return;
+        }
+
+        if (actif == "1" || role == '1') {
+            const commentaireModel: CommentaireModel = new CommentaireModel();
+            let message;
+
+            const result: Commentaire[] = await commentaireModel.findById(id);
+
+            if (result && result.length > 0) {
+
+                const commentaire: Commentaire = result[0];
+                
+                if (commentaire.id_profil == Number(userId) || role == '1') {
+
+                    const commentaireDelete = await new Promise<number>((resolve, reject) => {
+                        commentaireModel.deleteCommentaire(id, (error, affectedRows) => {
+                            if (error) {
+                                reject(error);
+                            } else {
+                                resolve(affectedRows || 0);
+                            }
+                        });
+                    });
+
+                    message = commentaireDelete;
+                    res.status(200).json({ message: 'commentaire supprimé avec succès ligne affecté => '  + message});
+                    return;
+                } else {
+                    res.status(401).json({error : "Unauthorize"})
+                    return;
+                }
+            } else {
+                res.status(404).json({ error: 'commentaire non trouvé' });
+                return;
+            }
+        }
+        res.status(404).json({message: 'Les ID ne correspondent pas'});
+        return;
+
+    } catch (error) {
+        res.status(500).json({ error: 'Erreur interne du serveur' });
+        return;
+    }
+}
