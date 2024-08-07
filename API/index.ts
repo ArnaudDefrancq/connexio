@@ -5,6 +5,7 @@ import profilRouter from './src/routes/profilRouter';
 import postRouter from './src/routes/postRouter';
 import commentaireRouter from './src/routes/commentaireRouter';
 import postLikeRouter from './src/routes/postLikeRouter';
+import commentaireLikeRouter from './src/routes/commentaireLikeRouter';
 
 dotenv.config();
 
@@ -37,6 +38,7 @@ app.use('/profils', profilRouter);
 app.use('/posts', postRouter);
 app.use('/commentaires', commentaireRouter);
 app.use('/posts-like', postLikeRouter);
+app.use('/commentaires-like', commentaireLikeRouter);
 
 app.listen(process.env.PORT, () => {
     console.log(`Server is running on port ${process.env.PORT}`)
