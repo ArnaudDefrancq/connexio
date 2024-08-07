@@ -1,5 +1,5 @@
 import express from 'express';
-import { getAllPost, createPost, updatePost } from '../controllers/postController';
+import { getAllPost, createPost, updatePost, getOnePost, deletePost } from '../controllers/postController';
 import authMiddleware from '../middlewares/auth';
 import { getMulterConfigPost } from '../middlewares/multer';
 
@@ -24,6 +24,8 @@ postRouter.put('/:idUser/update/:idPost', authMiddleware, (req, res,next) => {
 
 postRouter.get('/', authMiddleware, getAllPost);
 
-// postRouter.get('/:id/profil', authMiddleware, getProfilById);
+postRouter.get('/:id', authMiddleware, getOnePost);
+
+postRouter.delete('/:idUser/delete/:idPost', authMiddleware, deletePost);
 
 export default postRouter;

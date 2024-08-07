@@ -1,10 +1,10 @@
 import { PostModel } from "../models/PostModel";
 import { Request, Response, NextFunction } from 'express';
 import { Post } from '../types/Post';
-import dotenv from 'dotenv';
 import fs from 'fs';
 import path from 'path';
 import { AuthRequest } from '../middlewares/auth'
+import { Folder } from "../tools/Folder";
 
 export const createPost = async (req: AuthRequest, res: Response, next: NextFunction) : Promise<void> => {
     try {
@@ -115,6 +115,93 @@ export const getAllPost = async (req: AuthRequest, res: Response, next: NextFunc
 
     } catch (error) {
         res.status(500).json({ error: 'Erreur interne du serveur' });    
+        return;
+    }
+}
+
+export const getOnePost = async (req: AuthRequest, res: Response, next: NextFunction) : Promise<void> => {
+    try {
+        const { role, actif } = req.auth || {};
+        const id: number = Number(req.params.id);
+
+        if (isNaN(id)) {
+            res.status(400).json({ error: 'ID Profil invalide' });
+            return;
+        }
+
+        if (actif == '1' || role == '1') {
+            const postModel: PostModel = new PostModel();
+            const result: Post[] = await postModel.findById(id);
+
+            if (result && result.length > 0) {
+                const post: Post = result[0];
+
+                res.status(200).json(post);
+                return
+            }
+
+
+        } else {
+            res.status(404).json({ error: 'Post non trouvé' });
+            return;
+        }
+    } catch (error) {
+        res.status(500).json({ error: 'Erreur interne du serveur' });    
+        return;
+    }
+}
+
+export const deletePost = async (req: AuthRequest, res: Response, next: NextFunction) : Promise<void> => {
+    try {
+        const { userId, role, actif } = req.auth || {};
+        const idUser: number = Number(req.params.idUser);
+        const idPost: number = Number(req.params.idPost);
+
+        if (isNaN(idUser) && isNaN(idPost)) {
+            res.status(400).json({ error: 'Les ID ne sont pas invalide' });
+            return;
+        }
+
+        if ((idUser == Number(userId) && actif == "1") || role == '1') {
+            const postModel: PostModel = new PostModel();
+            let message;
+
+            const result: Post[] = await postModel.findById(idPost);
+
+            if (result && result.length > 0) {
+
+                const post: Post = result[0];
+                
+                if (post.id_profil == idUser || role == '1') {
+                    if (post.media != null) Folder.deleteFolderPost(String(userId), post.media)
+
+                    const postDelete = await new Promise<number>((resolve, reject) => {
+                        postModel.deletePost(idPost, (error, affectedRows) => {
+                            if (error) {
+                                reject(error);
+                            } else {
+                                resolve(affectedRows || 0);
+                            }
+                        });
+                    });
+
+                    message = postDelete;
+                    res.status(200).json({ message: 'Post supprimé avec succès ligne affecté => '  + message});
+                    return;
+                } else {
+                    res.status(401).json({error : "Unauthorize"})
+                    return;
+                }
+            } else {
+                res.status(404).json({ error: 'Post non trouvé' });
+                return;
+            }
+        }
+        res.status(404).json({message: 'Les ID ne correspondent pas'});
+        return;
+
+    } catch (error) {
+        res.status(500).json({ error: 'Erreur interne du serveur' });
         return;
     }
 }

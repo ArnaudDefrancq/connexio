@@ -178,7 +178,7 @@ export const deleteUser = async (req: AuthRequest, res: Response, next: NextFunc
             const result: User[] = await userModel.findById(id);
 
             if (result && result.length > 0) {
-                Folder.deleteFolder(String(userId))
+                Folder.deleteAllFolder(String(userId))
 
                 const profilDeleted = await new Promise<number>((resolve, reject) => {
                     profilModel.deleteProfil(id, (error, affectedRows) => {
@@ -199,6 +199,8 @@ export const deleteUser = async (req: AuthRequest, res: Response, next: NextFunc
                         }
                     });
                 });
+
+                // TODO: Ajouter la suppression des commentaires, posts, amitiées et like du profil
                 message = profilDeleted + ' ' + userDeleted;
                 res.status(200).json({ message: 'Utilisateur supprimé avec succès ligne affecté => '  + message});
                 return;

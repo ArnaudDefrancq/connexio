@@ -100,7 +100,7 @@ export const getAllProfil = async (req: AuthRequest, res: Response, next: NextFu
 // export const findProfilByName = async (req: Request, res: Response, next: NextFunction) : Promise<Profil[]> => {}
 export const getProfilById = async (req: AuthRequest, res: Response, next: NextFunction) : Promise<void> => {
     try {
-        const { userId, role, actif } = req.auth || {};
+        const { role, actif } = req.auth || {};
         const id: number = Number(req.params.id);
 
         if (isNaN(id)) {
@@ -108,7 +108,7 @@ export const getProfilById = async (req: AuthRequest, res: Response, next: NextF
             return;
         }
 
-        if ((id == Number(userId) && actif == '1') || role == '1') {
+        if (actif == '1' || role == '1') {
             const profilModel: ProfilModel = new ProfilModel();
             const result: Profil[] = await profilModel.findById(id);
 
