@@ -36,6 +36,7 @@ app.use('/users', userRouter);
 app.use('/profils', profilRouter);
 app.use('/posts', postRouter);
 app.use('/commentaires', commentaireRouter);
+app.use('/posts-like', postLikeRouter);
 
 app.listen(process.env.PORT, () => {
     console.log(`Server is running on port ${process.env.PORT}`)
