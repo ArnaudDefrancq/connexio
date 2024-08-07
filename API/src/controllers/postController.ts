@@ -9,8 +9,14 @@ import { Folder } from "../tools/Folder";
 export const createPost = async (req: AuthRequest, res: Response, next: NextFunction) : Promise<void> => {
     try {
         const { userId, actif } = req.auth || {};
+        const idUser: number = Number(req.params.id);
 
-        if (actif == '1') {
+        if (isNaN(idUser)) {
+            res.status(400).json({ error: 'ID utilisateur invalide' });
+            return;
+        }
+
+        if (idUser == Number(userId) && actif == '1') {
             const postModel: PostModel = new PostModel();
             const files = req.files as { [fieldname: string]: Express.Multer.File[] };
             const date: number = Math.floor(Date.now() / 1000);
