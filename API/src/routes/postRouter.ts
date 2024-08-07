@@ -26,6 +26,6 @@ postRouter.get('/', authMiddleware, getAllPost);
 
 postRouter.get('/:id', authMiddleware, getOnePost);
 
-postRouter.delete('/:idUser/delete/:idPost', authMiddleware, deletePost);
+postRouter.delete('/:id/delete', authMiddleware, deletePost);
 
 export default postRouter;

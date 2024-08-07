@@ -160,29 +160,28 @@ export const getOnePost = async (req: AuthRequest, res: Response, next: NextFunc
 export const deletePost = async (req: AuthRequest, res: Response, next: NextFunction) : Promise<void> => {
     try {
         const { userId, role, actif } = req.auth || {};
-        const idUser: number = Number(req.params.idUser);
-        const idPost: number = Number(req.params.idPost);
+        const id: number = Number(req.params.id);
 
-        if (isNaN(idUser) && isNaN(idPost)) {
-            res.status(400).json({ error: 'Les ID ne sont pas invalide' });
+        if (isNaN(id)) {
+            res.status(400).json({ error: ' ID pas invalide' });
             return;
         }
 
-        if ((idUser == Number(userId) && actif == "1") || role == '1') {
+        if (actif == "1" || role == '1') {
             const postModel: PostModel = new PostModel();
             let message;
 
-            const result: Post[] = await postModel.findById(idPost);
+            const result: Post[] = await postModel.findById(id);
 
             if (result && result.length > 0) {
 
                 const post: Post = result[0];
                 
-                if (post.id_profil == idUser || role == '1') {
+                if (post.id_profil == Number(userId) || role == '1') {
                     if (post.media != null) Folder.deleteFolderPost(String(userId), post.media)
 
                     const postDelete = await new Promise<number>((resolve, reject) => {
-                        postModel.deletePost(idPost, (error, affectedRows) => {
+                        postModel.deletePost(id, (error, affectedRows) => {
                             if (error) {
                                 reject(error);
                             } else {

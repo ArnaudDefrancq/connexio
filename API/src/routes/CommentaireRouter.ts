@@ -1,10 +1,11 @@
 import express from 'express';
-import { createCommentaire } from '../controllers/commentaireController';
+import { createCommentaire, deleteCommentaire } from '../controllers/commentaireController';
 import authMiddleware from '../middlewares/auth';
 
 
 const commentaireRouter = express.Router();
 
-commentaireRouter.post('/:idUser/commentaire/:idPost',authMiddleware ,createCommentaire);
+commentaireRouter.post('/',authMiddleware ,createCommentaire);
+commentaireRouter.post('/:id/delete',authMiddleware ,deleteCommentaire);
 
 export default commentaireRouter;

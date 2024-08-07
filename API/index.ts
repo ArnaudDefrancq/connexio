@@ -34,7 +34,7 @@ res.status(200).json({
 app.use('/users', userRouter);
 app.use('/profils', profilRouter);
 app.use('/posts', postRouter);
-app.use('/commmentaires', commentaireRouter);
+app.use('/commentaires', commentaireRouter);
 
 app.listen(process.env.PORT, () => {
     console.log(`Server is running on port ${process.env.PORT}`)
