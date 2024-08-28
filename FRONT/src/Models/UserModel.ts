@@ -54,7 +54,7 @@ export class UserModel implements User {
         }
     }
  //TODO
-    static async fetchModifyUser() {
+    // static async fetchModifyUser() {
 
-    }
+    // }
 }

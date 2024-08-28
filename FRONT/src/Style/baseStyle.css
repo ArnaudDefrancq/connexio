@@ -1,0 +1,52 @@
+:root {
+  --color1: #B8CBD0;
+  --color2: #C9E3CC;
+  --color3: #B0B9A8;
+  --color4: #606C5A;
+  --color5: #424340;
+  --colorWhite: white;
+  --colorError: red;
+  --colorBlack: black;
+}
+
+@font-face {
+  font-family: "font-text";
+  src: url(../Assets/font/Roboto-Regular.ttf);
+}
+
+@font-face {
+  font-family: "font-title";
+  src: url(../Assets/font/Merriweather-Regular.ttf);
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  font-family: "font-text";
+  font-size: 16px;
+}
+
+body {
+  background: var(--color1);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "font-title";
+  font-size: 24px;
+}
+
+a {
+  text-decoration: none;
+  color: black;
+}
+
+button {
+  border: none;
+  cursor: pointer;
+}
