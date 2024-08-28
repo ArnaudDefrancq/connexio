@@ -1,15 +1,15 @@
 import * as React from 'react';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface IProfilPageProps {
+interface IProfilPageProps {
 }
 
-export default class ProfilPage extends React.Component<IProfilPageProps> {
-  public render() {
-    return (
-      <div>
+const ProfilPage: React.FunctionComponent<IProfilPageProps> = () => {
+  return (
+    <>
         <h1>Profil</h1>
-      </div>
-    );
-  }
-}
+    </>
+  ) ;
+};
+
+export default ProfilPage;

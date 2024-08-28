@@ -1,0 +1,40 @@
+.form {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    padding: 10% 3%;
+    background-color: white;
+    border-radius: 15px;
+  }
+  
+  .div {
+    display: flex;
+    flex-direction: column;
+    padding: 3% 0;
+  }
+  
+  .label {
+    font-size: 20px;
+    font-weight: bold;
+    padding: 3%;
+  }
+  
+  .input {
+    padding: 3%;
+    margin-top: 3%;
+    font-size: 20px;
+  }
+  
+  .btn {
+    width: 60%;
+    background: var(--color3);
+    margin: 10% auto 3%;
+    border-radius: 15px;
+    font-size: 24px;
+    padding: 3% 3%;
+  }
+  
+  .badText {
+    margin: 3% 0;
+    color: red !important;
+  }

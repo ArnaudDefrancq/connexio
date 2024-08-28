@@ -1,15 +1,16 @@
 import * as React from 'react';
+import Connexion from '../Components/connexionPage/Connexion';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface IConnexionPageProps {
+interface IConnexionPageProps {
 }
 
-export default class ConnexionPage extends React.Component<IConnexionPageProps> {
-  public render() {
-    return (
-      <div>
-        
-      </div>
-    );
-  }
-}
+const ConnexionPage: React.FunctionComponent<IConnexionPageProps> = () => {
+  return(
+    <>
+      < Connexion />
+    </>
+  ) ;
+};
+
+export default ConnexionPage;

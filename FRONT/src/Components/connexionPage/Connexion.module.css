@@ -1,0 +1,42 @@
+ 
+.divBtn {
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn1 {
+  width: 100%;
+  padding: 5% 0;
+  font-size: 20px;
+  border-top-left-radius: 15px;
+}
+.btn2 {
+  width: 100%;
+  padding: 5% 0;
+  font-size: 20px;
+  border-top-right-radius: 15px;
+}
+
+.btnSignUp {
+  border-top-left-radius: 15px;
+}
+
+.btnSignIn {
+  border-top-right-radius: 15px;
+}
+
+.isClick {
+  background-color: white;
+}
+
+.isClickOtherFalse {
+  border-left: 1px solid black;
+  border-bottom: 1px solid black;
+}
+.isClickOtherTrue {
+  border-right: 1px solid black;
+  border-bottom: 1px solid black;
+}
