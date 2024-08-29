@@ -66,45 +66,47 @@ const SignUp: React.FunctionComponent<ISignUpProps> = () => {
   }
   return (
     <>
-      <form className={Style.form}>
-          <div className={Style.div}>
-              <label className={Style.label} htmlFor="email">Email </label>
-              <input 
-                  className={Style.input} 
-                  type="email" 
-                  id="email"
-                  onChange={(e) => {checkValidity(e.target.value, REGEX_CHECK_MAIL, "errorMail"); setEmail(e.target.value)}}/>
-              {
-                  (errors.errorMail && isClick) && <p className={Style.badText}>Veuillez entrer un mail valide.</p>
-              }
-          </div>
-          <div>
-              <div className={Style.div}>
-                  <label className={Style.label} htmlFor="password">Mot de passe </label>
-                  <input 
-                      className={Style.input} 
-                      type="password" 
-                      id="password"
-                      onChange={(e) => {checkValidity(e.target.value, REGEX_CHECK_PASSWORD, "errorPassword"); setPassword(e.target.value)}} />
-                  {
-                      (errors.errorPassword && isClick) && <p className={Style.badText}>Veuillez entrer un mot de passe valide.</p>
-                  }
-              </div>
-              <div className={Style.div}>
-                  <label className={Style.label} htmlFor="comfirmPassword">Confirmer mot de passe </label>
-                  <input 
-                      className={Style.input} 
-                      type="password" 
-                      id="comfirmPassword"
-                      onChange={(e) => {checkSamePassword(e.target.value, "errorComfirmPassword");}} />
-                  {
-                      (errors.errorComfirmPassword && isClick ) && <p className={Style.badText}>Les mots de passe ne correspondent pas.</p>
-                  }
-              </div>
-          </div>
-          <div className={Style.div}>
-              <button onClick={(e) => {setIsCLick(true); handelClick(e)}} className={Style.btn}>Valider</button>
-          </div>
+      <form className={`${Style.form} form`}>
+        <div className={`${Style.div} form-group`}>
+            <input 
+                className={Style.input} 
+                type="email" 
+                id="email"
+                placeholder=" "
+                required
+                onChange={(e) => {checkValidity(e.target.value, REGEX_CHECK_MAIL, "errorMail"); setEmail(e.target.value)}}/>
+            <label className={Style.label} htmlFor="email">Mail </label>
+            {
+                (errors.errorMail && isClick) && <p className="messageError">Veuillez entrer un mail valide.</p>
+            }
+        </div>
+        <div className={`${Style.div} form-group`}>
+            <input 
+                className={Style.input} 
+                type="password" 
+                id="password"
+                required
+                placeholder=" "
+                onChange={(e) => {checkValidity(e.target.value, REGEX_CHECK_PASSWORD, "errorPassword"); setPassword(e.target.value)}} />
+            <label className={Style.label} htmlFor="password">Mot de passe </label>
+            {
+                (errors.errorPassword && isClick) && <p className="messageError">Veuillez entrer un mot de passe valide.</p>
+            }
+        </div>
+        <div className={`${Style.div} form-group`}>
+            <input 
+                className={Style.input} 
+                required
+                type="password" 
+                placeholder=" "
+                id="comfirmPassword"
+                onChange={(e) => {checkSamePassword(e.target.value, "errorComfirmPassword");}} />
+            <label className={Style.label} htmlFor="comfirmPassword">Confirmer mot de passe </label>
+            {
+                (errors.errorComfirmPassword && isClick ) && <p className="messageError">Les mots de passe ne correspondent pas.</p>
+            }
+        </div>
+        <button onClick={(e) => {setIsCLick(true); handelClick(e)}}  className='btnValid'>Valider</button>
       </form>
     </>
   );

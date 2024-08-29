@@ -7,6 +7,7 @@
   --colorWhite: white;
   --colorError: red;
   --colorBlack: black;
+  --colorModal: #4243401a;
 }
 
 @font-face {
@@ -40,11 +41,17 @@ h6 {
   font-family: "font-title";
   font-size: 24px;
 }
+
+.messageError {
+  color: var(--colorError);
+  font-size: 12px;
+  padding-top: 3%;
+}
 /* ------------------- */
 /* Link */
 a {
   text-decoration: none;
-  color: black;
+  color: var(--colorBlack);
 }
 /* ------------------- */
 /* Button */
@@ -53,6 +60,59 @@ button {
   cursor: pointer;
   background: none;
 }
+
+.btnValid {
+  padding: 5% 15%;
+  border-radius: 15px;
+  background-color: var(--color2);
+}
 /* ------------------- */
-/* Input */
+/* Form */
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  height: 350px;
+}
+
+.form-group {
+  position: relative;
+  /* margin: 12% 3%; */
+  width: 80%;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--color4);
+  border-radius: 4px;
+  outline: none;
+}
+
+.form-group input::placeholder {
+  color: transparent;
+}
+
+.form-group label {
+  position: absolute;
+  top: 10px;
+  left: 12px;
+  color: var(--color4);
+  transition: all 0.2s ease;
+  pointer-events: none;
+}
+
+.form-group input:focus + label,
+.form-group input:not(:placeholder-shown) + label {
+  top: -20px;
+  left: 10px;
+  color: var(--colorBlack);
+}
+
+.form-group input:valid + label {
+  top: -20px;
+  left: 10px;
+  color: var(--colorBlack);
+}
 /* ------------------- */

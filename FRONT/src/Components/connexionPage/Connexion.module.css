@@ -1,7 +1,7 @@
 .section {
   height: 100vh;
   display: flex;
-  justify-content: center;
+   justify-content: center;
   align-items: center;
 }
 
@@ -33,21 +33,29 @@
 .isClickOtherFalse {
   border-left: 1px solid var(--color5);
   border-bottom: 1px solid var(--color5);
+  background-color: var(--colorModal) !important;
 }
 .isClickOtherTrue {
   border-right: 1px solid var(--color5);
-  border-bottom: var(--color5); 
+  border-bottom: 1px solid var(--color5); 
+  background-color: var(--colorModal) !important;
 }
 
 .modalConnexion {
-  background-color: var(--colorWhite);
-  height: 80%;
+  background-color: var(--colorWhite);  
   width: 80%;
   border-radius: 15px;
+  box-shadow: 0 0 5px 0 var(--color5) ;
 }
 
 .divBtn {
   display: flex;
   align-items: center;
   justify-content: space-evenly;
+}
+
+.formConnexion {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }

@@ -31,35 +31,38 @@ const SignIn: React.FunctionComponent<ISignInProps> = () => {
 
   return (
     <>
-      <form className={Style.form}>
+      <form className={`${Style.form} form`}>
           {
-              (errors && isClick) && <p className={Style.badText}>Adresse mail ou mot de passe invalide.</p>
+            (errors && isClick) && <p className="messageError">Mail ou mot de passe invalide.</p>
           }
-      <div className={Style.div}>
-              <label className={Style.label} htmlFor="email">Mail </label>
+          <div className={`${Style.div} form-group`}>
               <input 
                   className={Style.input} 
+                  required
                   type="text" 
                   id="email"
+                  placeholder=" "
                   onChange={(e) => {setEmail(e.target.value)}}
-                  />
+                />
+                <label className={Style.label} htmlFor="email">Mail </label>
           </div>
-          <div className={Style.div}>
+          <div className={`${Style.div} form-group`}>
+            <input 
+                className={Style.input} 
+                required
+                type="password" 
+                id="password"
+                placeholder=" "
+                onChange={(e) => {setPassword(e.target.value)}}
+                />
               <label className={Style.label} htmlFor="password">Mot de passe </label>
-              <input 
-                  className={Style.input} 
-                  type="password" 
-                  id="password"
-                  onChange={(e) => {setPassword(e.target.value)}}
-                  />
           </div>
-          <div className={Style.div}>
-              <button 
-                  onClick={(e) => {setIsCLick(true); handelClick(e)}} 
-                  className={Style.btn}
-                  >Valider</button>
-          </div>
-      </form>
+          <button 
+              onClick={(e) => {setIsCLick(true); handelClick(e)}} 
+              className='btnValid'
+              >Valider
+          </button>
+        </form>
     </>
   );
 };

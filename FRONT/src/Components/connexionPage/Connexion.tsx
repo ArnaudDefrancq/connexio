@@ -33,7 +33,7 @@ const ConnexionPage: React.FC<IConnexionProps> = () => {
                             className={!modal ? `${Style.btn2} ${Style.btnSignIn} ${Style.isClickOtherFalse}`: `${Style.btn2} ${Style.isClick}`} id="connexion">Connexion
                         </button>
                     </div>
-                    <div>
+                    <div className={Style.formConnexion}>
                         { modal ?  <SignIn /> : <SignUp />}
                     </div>
                 </div>
