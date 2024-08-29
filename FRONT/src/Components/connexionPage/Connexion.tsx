@@ -11,8 +11,10 @@ export interface IConnexionProps {
 const ConnexionPage: React.FC<IConnexionProps> = () => {
     const [modal, setModal] = useState<boolean>(true);
 
-    const handelClick = () => {
-        if (modal) {
+    const handleClick = (e:React.MouseEvent<HTMLButtonElement>) => {
+        const target = e.target as HTMLButtonElement
+        
+        if (target.id == "inscription") {
             setModal(false)
         } else {
             setModal(true)
@@ -21,20 +23,22 @@ const ConnexionPage: React.FC<IConnexionProps> = () => {
 
     return (
         <>
-        <section className={Style.section}>
-            <div className={Style.divBtn}>
-                <button onClick={handelClick} 
-                    className={!modal ? `${Style.btn1} ${Style.btnSignUp} ${Style.isClick}` : `${Style.btn1} ${Style.btnSignUp} ${Style.isClickOtherTrue}`}>Inscription
-                </button>
-                <button onClick={handelClick} 
-                    className={!modal ? `${Style.btn2} ${Style.btnSignIn} ${Style.isClickOtherFalse}`: `${Style.btn2} ${Style.isClick}`}>Connection
-                </button>
-            </div>
-            <div>
-                { modal ?  <SignIn /> : <SignUp />}
-            </div>
-        </section>
-      </>
+            <section className={Style.section}>
+                <div className={Style.modalConnexion}>
+                    <div className={Style.divBtn}>
+                        <button onClick={(e) =>handleClick(e)} 
+                            className={!modal ? `${Style.btn1} ${Style.btnSignUp} ${Style.isClick}` : `${Style.btn1} ${Style.btnSignUp} ${Style.isClickOtherTrue}`} id="inscription">Inscription
+                        </button>
+                        <button onClick={(e) =>handleClick(e)} 
+                            className={!modal ? `${Style.btn2} ${Style.btnSignIn} ${Style.isClickOtherFalse}`: `${Style.btn2} ${Style.isClick}`} id="connexion">Connexion
+                        </button>
+                    </div>
+                    <div>
+                        { modal ?  <SignIn /> : <SignUp />}
+                    </div>
+                </div>
+            </section>
+        </>
     );
 }
 

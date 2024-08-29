@@ -1,7 +1,5 @@
- 
-.divBtn {
-  border-top-left-radius: 15px;
-  border-top-right-radius: 15px;
+.section {
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -33,10 +31,23 @@
 }
 
 .isClickOtherFalse {
-  border-left: 1px solid black;
-  border-bottom: 1px solid black;
+  border-left: 1px solid var(--color5);
+  border-bottom: 1px solid var(--color5);
 }
 .isClickOtherTrue {
-  border-right: 1px solid black;
-  border-bottom: 1px solid black;
+  border-right: 1px solid var(--color5);
+  border-bottom: var(--color5); 
+}
+
+.modalConnexion {
+  background-color: var(--colorWhite);
+  height: 80%;
+  width: 80%;
+  border-radius: 15px;
+}
+
+.divBtn {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
 }
