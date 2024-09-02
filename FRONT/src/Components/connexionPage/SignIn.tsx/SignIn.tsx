@@ -8,7 +8,7 @@ interface ISignInProps {
 }
 
 const SignIn: React.FunctionComponent<ISignInProps> = () => {
-  const [email, setEmail] = useState("");
+  const [mail, setMail] = useState("");
   const [password, setPassword] = useState("")
   const [isClick, setIsCLick] = useState(false);
 
@@ -18,11 +18,14 @@ const SignIn: React.FunctionComponent<ISignInProps> = () => {
 
   // const navigate = useNavigate();
 
+  
+
   const handelClick = async (e:React.MouseEvent<HTMLButtonElement>) => {
       e.preventDefault();
 
-      if (email.length > 0 && password.length > 0) {
-          await UserController.signIn(email, password);
+      if (mail.length > 0 && password.length > 0) {
+
+          await UserController.signIn(mail, password);
           
       } else {
           setErrors(true);
@@ -33,7 +36,7 @@ const SignIn: React.FunctionComponent<ISignInProps> = () => {
     <>
       <form className={`${Style.form} form`}>
           {
-            (errors && isClick) && <p className="messageError">Mail ou mot de passe invalide.</p>
+            (errors && isClick) && <p className={`${Style.messErrorLogin} messageError`}>Mail ou mot de passe invalide.</p>
           }
           <div className={`${Style.div} form-group`}>
               <input 
@@ -42,7 +45,7 @@ const SignIn: React.FunctionComponent<ISignInProps> = () => {
                   type="text" 
                   id="email"
                   placeholder=" "
-                  onChange={(e) => {setEmail(e.target.value)}}
+                  onChange={(e) => {setMail(e.target.value)}}
                 />
                 <label className={Style.label} htmlFor="email">Mail </label>
           </div>

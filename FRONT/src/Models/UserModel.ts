@@ -23,7 +23,8 @@ export class UserModel implements User {
                 email,
                 password
             }
-            const res = await axios.post(`${import.meta.env.VITE_REACT_API_URL_AUTH}/signin`, auth);
+                       
+            const res = await axios.post(`${import.meta.env.VITE_URL_AUTH}/signin`, auth);
                 
             return {
                 id_user: res.data.id_user,
