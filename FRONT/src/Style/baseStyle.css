@@ -8,6 +8,7 @@
   --colorError: red;
   --colorBlack: black;
   --colorModal: #4243401a;
+  --colorValid: green;
 }
 
 @font-face {
@@ -40,6 +41,13 @@ h5,
 h6 {
   font-family: "font-title";
   font-size: 24px;
+}
+/* ------------------- */
+/* Message */
+.messageValid {
+  color: var(--colorValid);
+  font-weight: bold;
+  letter-spacing: 1.3px;
 }
 
 .messageError {

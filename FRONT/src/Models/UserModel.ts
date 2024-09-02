@@ -17,7 +17,7 @@ export class UserModel implements User {
         this.id_role = data.id_role;
     }
 
-    static async fetchSignIn(email: string, password: string) : Promise<{id_role: string; token: string; id_user: string} | string> {
+    static async fetchSignIn(email: string, password: string) : Promise<{id_role: string; token: string; id_user: string, is_actif: string} | string> {
         try {
             const auth: Auth =  {
                 email,
@@ -27,8 +27,9 @@ export class UserModel implements User {
             const res = await axios.post(`${import.meta.env.VITE_URL_AUTH}/signin`, auth);
                 
             return {
-                id_user: res.data.id_user,
-                id_role: res.data.id_role,
+                id_user: res.data.user_id,
+                id_role: res.data.role,
+                is_actif: res.data.actif,
                 token: res.data.token
             };
     

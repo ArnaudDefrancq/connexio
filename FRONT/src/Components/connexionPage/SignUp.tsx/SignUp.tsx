@@ -11,36 +11,37 @@ const SignUp: React.FunctionComponent<ISignUpProps> = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isClick, setIsCLick] = useState(false);
+  const [isValid, setIsValid] = useState(false); 
 
   const [errors, setErrors] = useState ({
-      errorPseudo: true,
-      errorMail: true,
-      errorPassword: true,
-      errorComfirmPassword: true
+    errorPseudo: true,
+    errorMail: true,
+    errorPassword: true,
+    errorComfirmPassword: true,
   })
 
-  const REGEX_CHECK_MAIL = /^(?!\.)[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+\.[a-zA-Z]{2,}(?:\.[a-zA-Z]{2,})?$/;
-  const REGEX_CHECK_PASSWORD = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,}$/;
+  const REGEX_CHECK_MAIL: RegExp = /^(?!\.)[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+\.[a-zA-Z]{2,}(?:\.[a-zA-Z]{2,})?$/;
+  const REGEX_CHECK_PASSWORD: RegExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,}$/;
 
-  const checkInput = (value: string, regex: RegExp) => {
-      return regex.test(value) && value != "";
+  const checkInput = (value: string, regex: RegExp): boolean  => {
+    return regex.test(value) && value != "";
   }
 
-  const checkValidity = (value: string, regex: RegExp, node: string) => {
-      if (checkInput(value, regex)) {
-          setErrors((elemnt) => ({
-              ...elemnt,
-              [node]: false
-          }));
-      } else {
-          setErrors((elemnt) => ({
-              ...elemnt,
-              [node]: true
-          }));
-      }
+  const checkValidity = (value: string, regex: RegExp, node: string): void => {
+    if (checkInput(value, regex)) {
+        setErrors((elemnt) => ({
+            ...elemnt,
+            [node]: false
+        }));
+    } else {
+        setErrors((elemnt) => ({
+            ...elemnt,
+            [node]: true
+        }));
+    }
   }
 
-  const checkSamePassword = (value: string, node: string) => {
+  const checkSamePassword = (value: string, node: string): void => {
       if (password == value) {
           setErrors((elemnt) => ({
               ...elemnt,
@@ -55,18 +56,22 @@ const SignUp: React.FunctionComponent<ISignUpProps> = () => {
       }
   }
 
-  const handelClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handelClick = async (e: React.MouseEvent<HTMLButtonElement>): Promise<void | string> => {
       e.preventDefault();
 
       if (!errors.errorMail && !errors.errorPassword && !errors.errorComfirmPassword) {
-          await UserController.signUp(email, password);
+        await UserController.signUp(email, password);
+        setIsValid(true);
       } else {
-          console.log("Bad Request");
+        console.log("Bad Request");
       }
   }
   return (
     <>
       <form className={`${Style.form} form`}>
+        {
+            (isValid) && <p className='messageValid'>Compte créé !</p> 
+        }
         <div className={`${Style.div} form-group`}>
             <input 
                 className={Style.input} 

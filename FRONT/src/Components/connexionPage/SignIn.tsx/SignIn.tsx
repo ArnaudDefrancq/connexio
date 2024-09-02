@@ -20,15 +20,14 @@ const SignIn: React.FunctionComponent<ISignInProps> = () => {
 
   
 
-  const handelClick = async (e:React.MouseEvent<HTMLButtonElement>) => {
+  const handelClick = async (e:React.MouseEvent<HTMLButtonElement>): Promise<{id_role: string; token: string; id_user: string, is_actif: string} | string | void> => {
       e.preventDefault();
 
       if (mail.length > 0 && password.length > 0) {
-
-          await UserController.signIn(mail, password);
-          
+         const connexion = await UserController.signIn(mail, password);
+         console.log(connexion);
       } else {
-          setErrors(true);
+        setErrors(true);
       }
   }
 
