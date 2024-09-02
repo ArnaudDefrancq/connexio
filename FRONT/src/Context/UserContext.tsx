@@ -4,7 +4,7 @@ interface UserState {
     token: string | null;
     role: string | null;
     user_id: string | null;
-    actif: boolean | null;
+    actif: string | null;
 }
 
 interface UserContextType extends UserState {
