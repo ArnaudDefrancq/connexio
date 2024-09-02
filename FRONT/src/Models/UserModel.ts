@@ -23,7 +23,7 @@ export class UserModel implements User {
                 email,
                 password
             }
-                       
+
             const res = await axios.post(`${import.meta.env.VITE_URL_AUTH}/signin`, auth);
                 
             return {
@@ -46,7 +46,7 @@ export class UserModel implements User {
                 id_role: 3
             };
 
-            await axios.post(`${import.meta.env.VITE_REACT_API_URL_AUTH}/signup`, auth)
+            await axios.post(`${import.meta.env.VITE_URL_AUTH}/signup`, auth)
 
             return;
         } catch (error) {
