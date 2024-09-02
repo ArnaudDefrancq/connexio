@@ -17,7 +17,7 @@ export class UserModel implements User {
         this.id_role = data.id_role;
     }
 
-    static async fetchSignIn(email: string, password: string) : Promise<{id_role: string; token: string; id_user: string, is_actif: string} | string> {
+    static async fetchSignIn(email: string, password: string) : Promise<{id_role: string; token: string; id_user: string, is_actif: string} | boolean> {
         try {
             const auth: Auth =  {
                 email,
@@ -35,7 +35,7 @@ export class UserModel implements User {
     
         } catch (error) {
             console.error("Erreur de connexion:", error);
-            return 'Erreur de connexion';
+            return false;
         }
     }
 

@@ -1,7 +1,8 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import Style from './SignIn.module.css'
 import { UserController } from '../../../Controllers/UserController';
+import { UserContext } from '../../../Context/UserContext';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface ISignInProps {
@@ -14,18 +15,30 @@ const SignIn: React.FunctionComponent<ISignInProps> = () => {
 
   const [errors, setErrors] = useState (true)
 
-  // const { updateUserContext } = useContext(UserContext);
+  const { updateUserContext } = useContext(UserContext);
 
   // const navigate = useNavigate();
 
+  const putIntoContext = (data: {id_role: string; token: string; id_user: string, is_actif: string} | boolean ): void => {
+    if (typeof data !== 'boolean') {
+      updateUserContext("role", data.id_role);
+      updateUserContext("token", data.token);
+      updateUserContext("user_id", data.id_user);
+      updateUserContext("actif", data.is_actif);
+    } else {
+      console.log('Pas le bon type');
+    }
+  }
+
   
 
-  const handelClick = async (e:React.MouseEvent<HTMLButtonElement>): Promise<{id_role: string; token: string; id_user: string, is_actif: string} | string | void> => {
+  const handelClick = async (e:React.MouseEvent<HTMLButtonElement>): Promise<{id_role: string; token: string; id_user: string, is_actif: string} | boolean | void> => {
       e.preventDefault();
 
       if (mail.length > 0 && password.length > 0) {
-         const connexion = await UserController.signIn(mail, password);
-         console.log(connexion);
+        const connexion = await UserController.signIn(mail, password);
+        if (connexion == false) stop();
+        putIntoContext(connexion);
       } else {
         setErrors(true);
       }
