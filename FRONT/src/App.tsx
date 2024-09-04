@@ -17,7 +17,7 @@ function App() {
         <Routes>
           <Route path='/' element={<ConnexionPage />} />
           {
-            (is_actif == "1") ? (
+            (is_actif == 1) ? (
               <>
                 <Route path='/feeds' element={<HomePage />} />
                 <Route path='/profil/:id' element={<ProfilPage />} />

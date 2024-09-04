@@ -17,7 +17,7 @@ export class UserModel implements User {
         this.id_role = data.id_role;
     }
 
-    static async fetchSignIn(email: string, password: string) : Promise<{id_role: string; token: string; id_user: string, is_actif: string} | boolean> {
+    static async fetchSignIn(email: string, password: string) : Promise<{id_role: number; token: number; id_user: number, is_actif: number} | boolean> {
         try {
             const auth: Auth =  {
                 email,

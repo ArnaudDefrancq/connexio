@@ -3,6 +3,7 @@ import { useState } from 'react';
 import Style from './SignIn.module.css'
 import { UserController } from '../../../Controllers/UserController';
 import { Security } from '../../../Tools/Security';
+import { useNavigate } from 'react-router-dom';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface ISignInProps {
@@ -14,8 +15,10 @@ const SignIn: React.FunctionComponent<ISignInProps> = () => {
   const [isClick, setIsCLick] = useState(false);
 
   const [errors, setErrors] = useState (true)
+
+  const navigate = useNavigate();
   
-  const handelClick = async (e:React.MouseEvent<HTMLButtonElement>): Promise<{id_role: string; token: string; id_user: string, is_actif: string} | boolean | void> => {
+  const handelClick = async (e:React.MouseEvent<HTMLButtonElement>): Promise<{id_role: number; token: number; id_user: number, is_actif: number} | boolean | void> => {
       e.preventDefault();
 
       if (mail.length > 0 && password.length > 0) {
@@ -23,10 +26,16 @@ const SignIn: React.FunctionComponent<ISignInProps> = () => {
         if (typeof connexion !== 'boolean') {
           const encryptedData = Security.encryptData(connexion);
           localStorage.setItem('data', encryptedData);
-          if (connexion.is_actif === "1") {
+          console.log( connexion.is_actif);
+          
+          if (connexion.is_actif == 1) {
             // Page feed
+            navigate('/feeds');
+          } else {
+            // Page création profil
+            navigate('/create-profil')
           }
-          // Page création profil
+          
         }
         
       } else {

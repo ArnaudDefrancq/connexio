@@ -1,6 +1,6 @@
 export interface UserState {
-    token: string | null;
-    role: string | null;
-    user_id: string | null;
-    is_actif: string | null;
+    token: number | null;
+    role: number | null;
+    user_id: number | null;
+    is_actif: number | null;
 };

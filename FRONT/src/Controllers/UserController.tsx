@@ -1,7 +1,7 @@
 import  { UserModel } from '../Models/UserModel';
 
 export class UserController {
-    static async signIn(email: string, password: string) : Promise<{id_role: string; token: string; id_user: string, is_actif: string} | boolean> {
+    static async signIn(email: string, password: string) : Promise<{id_role: number; token: number; id_user: number, is_actif: number} | boolean> {
         return await UserModel.fetchSignIn(email, password);
     }
 
