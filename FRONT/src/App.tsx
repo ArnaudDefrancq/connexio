@@ -5,11 +5,11 @@ import ProfilPage from './Pages/ProfilPage';
 import ErrorPage from './Pages/ErrorPage';
 import { UserContext } from './Context/UserContext';
 import { useContext } from 'react';
+import CreateProfil from './Pages/CreateProfil';
 
 function App() {
 
   const { is_actif } = useContext(UserContext);
-  console.log(is_actif)
 
   return (
     <>
@@ -17,10 +17,14 @@ function App() {
         <Routes>
           <Route path='/' element={<ConnexionPage />} />
           {
-            (is_actif == "1") && (
+            (is_actif == "1") ? (
               <>
                 <Route path='/feeds' element={<HomePage />} />
                 <Route path='/profil/:id' element={<ProfilPage />} />
+              </>
+            ) : (
+              <>
+                <Route path='/create-profil' element={<CreateProfil />}/>
               </>
             )
           }

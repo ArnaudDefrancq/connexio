@@ -70,7 +70,7 @@ const SignUp: React.FunctionComponent<ISignUpProps> = () => {
     <>
       <form className={`${Style.form} form`}>
         {
-            (isValid) && <p className='messageValid'>Compte créé !</p> 
+            (isValid) && <p className='messageValid'>Compte créé ! Vous pouvez vous connecter !</p> 
         }
         <div className={`${Style.div} form-group`}>
             <input 
