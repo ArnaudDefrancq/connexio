@@ -1,22 +1,19 @@
-import { createContext, useState, ReactNode, FC } from 'react';
-
-interface UserState {
-    token: string | null;
-    role: string | null;
-    user_id: string | null;
-    actif: string | null;
-}
+import { createContext, useState, ReactNode, FC, useEffect } from 'react';
+import { Security } from '../Tools/Security';
+import { UserState } from '../Types/UserState';
 
 interface UserContextType extends UserState {
     updateUserContext: (field: keyof UserState, value: string | boolean | null) => void;
+    logoutUser: () => void;
 }
 
 export const UserContext = createContext<UserContextType>({
     token: null,
     role: null,
     user_id: null,
-    actif: null,
+    is_actif: null,
     updateUserContext: () => {},
+    logoutUser: () => {},
 });
 
 interface UserProviderProps {
@@ -24,19 +21,36 @@ interface UserProviderProps {
 }
 
 const UserProvider: FC<UserProviderProps> = ({ children }) => {
-    const [user, setUser] = useState<UserState>({
-        token: null,
-        role: null,
-        user_id: null,
-        actif: null,
-    });
-
-    const updateUserContext = (field: keyof UserState, value: string | boolean | null) => {
-        setUser((prevUser) => ({ ...prevUser, [field]: value }));
+    const getInitialUserState = (): UserState => {
+        const storedUser = localStorage.getItem('data');
+        return storedUser ? Security.decryptData(storedUser) : { token: null, role: null, user_id: null, is_actif: null };
     };
 
+    const [user, setUser] = useState<UserState>(getInitialUserState);
+    
+
+    const updateUserContext = (field: keyof UserState, value: string | boolean | null) => {
+        setUser((prevUser) => {
+            const updatedUser = { ...prevUser, [field]: value };
+            localStorage.setItem('data', JSON.stringify(updatedUser));
+            return updatedUser;
+        });
+    };
+
+    const logoutUser = () => {
+        localStorage.removeItem('data');
+        setUser({ token: null, role: null, user_id: null, is_actif: null });
+    };
+
+    useEffect(() => {
+        const storedUser = localStorage.getItem('data');
+        if (storedUser) {
+            setUser(Security.decryptData(storedUser));
+        }
+    }, []);
+
     return (
-        <UserContext.Provider value={{ ...user, updateUserContext }}>
+        <UserContext.Provider value={{ ...user, updateUserContext, logoutUser }}>
             {children}
         </UserContext.Provider>
     );
