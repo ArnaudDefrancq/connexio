@@ -3,6 +3,8 @@ import { useState } from 'react';
 import Style from './FormCreateProfil.module.css';
 import FormCreateProfil_1 from './form_1/FormCreateProfil_1';
 import FormCreateProfil_2 from './form_2/FormCreateProfil_2';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowRight, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface IFormCreateProfilProps {
@@ -12,13 +14,17 @@ const FormCreateProfil: React.FunctionComponent<IFormCreateProfilProps> = () => 
 
   const [getForm, setGetForm] = useState<boolean>(true);
 
-  // const handleClick = () => {
-  //   if (getForm) {
-  //     setGetForm(false);
-  //   } else {
-  //     setGetForm(true);
-  //   }
-  // }
+  const handleClick = () : void => {
+    if (getForm) {
+      setGetForm(false);
+    } else {
+      setGetForm(true);
+    }
+  }
+
+  const roleButton = ():JSX.Element  => {
+    return getForm ? <FontAwesomeIcon className={Style.icon} icon={faArrowRight}/> : <FontAwesomeIcon className={Style.icon} icon={faArrowLeft}/>;
+  }
   
   return (
     <>
@@ -29,7 +35,9 @@ const FormCreateProfil: React.FunctionComponent<IFormCreateProfilProps> = () => 
             getForm ? <FormCreateProfil_1 /> : <FormCreateProfil_2 /> 
           }
           </form>
-          {/* <button onClick={() => handleClick()}>next</button> */}
+          <div className={Style.btnNextForm}>
+            <button onClick={() => handleClick()}>{roleButton()}</button>
+          </div>
         </div>
       </section>
     </>
