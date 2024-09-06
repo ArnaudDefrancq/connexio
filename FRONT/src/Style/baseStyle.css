@@ -90,15 +90,18 @@ button {
   width: 80%;
 }
 
-.form-group input {
+.form-group input,
+.form-group textarea {
   width: 100%;
   padding: 10px;
   border: 1px solid var(--color4);
   border-radius: 4px;
   outline: none;
+  resize: none;
 }
 
-.form-group input::placeholder {
+.form-group input::placeholder,
+.form-group textarea::placeholder {
   color: transparent;
 }
 
@@ -112,15 +115,25 @@ button {
 }
 
 .form-group input:focus + label,
-.form-group input:not(:placeholder-shown) + label {
+.form-group input:not(:placeholder-shown) + label,
+.form-group textarea:focus + label,
+.form-group textarea:not(:placeholder-shown) + label {
   top: -20px;
   left: 10px;
   color: var(--colorBlack);
 }
 
-.form-group input:valid + label {
+.form-group input:valid + label,
+.form-group textarea:valid + label {
   top: -20px;
   left: 10px;
   color: var(--colorBlack);
+}
+
+select {
+  padding: 5px;
+  /* font-size: 14px; */
+  border: 1px solid var(--color4);
+  border-radius: 4px;
 }
 /* ------------------- */

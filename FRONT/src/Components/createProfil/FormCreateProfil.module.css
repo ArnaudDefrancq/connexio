@@ -1,0 +1,17 @@
+.section {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+  
+.formCreate {
+    background-color: var(--colorWhite);  
+    width: 80%;
+    border-radius: 15px;
+    box-shadow: 0 0 5px 0 var(--color5) ;
+}
+
+.form {
+    height: 500px !important;
+}

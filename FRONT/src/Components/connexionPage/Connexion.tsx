@@ -11,7 +11,7 @@ export interface IConnexionProps {
 const ConnexionPage: React.FC<IConnexionProps> = () => {
     const [modal, setModal] = useState<boolean>(true);
 
-    const handleClick = (e:React.MouseEvent<HTMLButtonElement>) => {
+    const handleClick = (e:React.MouseEvent<HTMLButtonElement>) : void=> {
         const target = e.target as HTMLButtonElement
         
         if (target.id == "inscription") {

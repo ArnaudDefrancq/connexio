@@ -35,9 +35,7 @@ const SignIn: React.FunctionComponent<ISignInProps> = () => {
             // Page création profil
             navigate('/create-profil')
           }
-          
         }
-        
       } else {
         setErrors(true);
       }
