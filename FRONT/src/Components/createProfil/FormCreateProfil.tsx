@@ -14,12 +14,39 @@ const FormCreateProfil: React.FunctionComponent<IFormCreateProfilProps> = () => 
 
   const [getForm, setGetForm] = useState<boolean>(true);
 
+  // Changement du Form
   const handleClick = () : void => {
     if (getForm) {
       setGetForm(false);
     } else {
       setGetForm(true);
     }
+  }
+
+  if (!localStorage.getItem('formData')) {
+    interface storedData {
+      firstName:string, 
+      lastName: string, 
+      day: string,
+      mounth : string,
+      year : string
+      city: string, 
+      content :string,
+      profil : string,
+      banner : string
+    }
+    const defaultValue : storedData =  {
+      firstName : "",
+      lastName: "",
+      day: "",
+      mounth: "",
+      year: "",
+      city : "",
+      content : "",
+      profil: "",
+      banner : ""
+    }
+    localStorage.setItem('formData', JSON.stringify(defaultValue));
   }
 
   const roleButton = ():JSX.Element  => {
