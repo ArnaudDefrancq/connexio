@@ -16,8 +16,8 @@
 }
 
 .imgProfil {
-    width: 50% !important;
-    border-radius: 50%;
+    width: 70% !important;
+    border-radius: 15px;
 }
 
 input[type='file'] {

@@ -1,12 +1,29 @@
 import * as React from 'react';
 import Style from './FormCreateProfil_1.module.css'
-// import { useState } from 'react';
+import { day, month } from '../../../Tools/config.ts'
+import { allYears } from '../../../Tools/function.ts';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface IFormCreateProfil_1Props {
 }
 
 const FormCreateProfil_1: React.FunctionComponent<IFormCreateProfil_1Props> = () => {
+
+  const years: Array<string> = allYears().reverse();
+
+  const displaySelect = (array: Array<string>, year:boolean = false): JSX.Element[]  => {
+    if (!year) {
+      let i: number = 0;
+      return array.map((elmnt) => {
+        i++;
+        return <option key={i} value={i}>{elmnt}</option>
+      })
+    } else{
+      return array.map((elmnt) => {
+        return <option key={elmnt} value={elmnt}>{elmnt}</option>
+      })
+    }
+  }
 
   return (
     <>
@@ -40,9 +57,9 @@ const FormCreateProfil_1: React.FunctionComponent<IFormCreateProfil_1Props> = ()
                   id="day"
               >
                 <option defaultValue="">Jour</option>
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
+                {
+                  displaySelect(day)
+                }
               </select>
           </div>
           <div className={`${Style.div} `}>
@@ -52,9 +69,9 @@ const FormCreateProfil_1: React.FunctionComponent<IFormCreateProfil_1Props> = ()
                   id="month"
               >
                 <option defaultValue="">Mois</option>
-                <option value="1">janvier</option>
-                <option value="2">fevrier</option>
-                <option value="3">mars</option>
+                {
+                  displaySelect(month)
+                }
               </select>
           </div>
           <div className={`${Style.div} `}>
@@ -64,9 +81,9 @@ const FormCreateProfil_1: React.FunctionComponent<IFormCreateProfil_1Props> = ()
                   id="year"
               >
                 <option defaultValue="">Année</option>
-                <option value="1">1900</option>
-                <option value="2">1901</option>
-                <option value="3">1903</option>
+                {
+                  displaySelect(years, true)
+                }
               </select>
           </div>
 
