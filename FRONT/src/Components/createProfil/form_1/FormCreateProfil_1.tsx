@@ -3,7 +3,6 @@ import Style from './FormCreateProfil_1.module.css'
 import { useState, useEffect } from 'react';
 import { day, month } from '../../../Tools/config.ts'
 import { allYears } from '../../../Tools/function.ts';
-import { json } from 'react-router-dom';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface IFormCreateProfil_1Props {
@@ -44,18 +43,10 @@ const FormCreateProfil_1: React.FunctionComponent<IFormCreateProfil_1Props> = ()
   const years: Array<string> = allYears().reverse();
 
   // Permet d'afficher les options
-  const displaySelect = (array: Array<string>, year:boolean = false): JSX.Element[]  => {
-    if (!year) {
-      let i: number = 0;
-      return array.map((elmnt) => {
-        i++;
-        return <option key={i} value={i}>{elmnt}</option>
-      })
-    } else{
+  const displaySelect = (array: Array<string>): JSX.Element[]  => {
       return array.map((elmnt) => {
         return <option key={elmnt} value={elmnt}>{elmnt}</option>
       })
-    }
   }
 
   // Permet de set les données dans le localStorage
@@ -64,7 +55,7 @@ const FormCreateProfil_1: React.FunctionComponent<IFormCreateProfil_1Props> = ()
       const storedData = localStorage.getItem('formData');
       if (storedData) {
         const parseData = JSON.parse(storedData);
-        if (node in parseData) {
+        if (node in parseData) {          
           parseData[node] = value
         }
         localStorage.setItem('formData', JSON.stringify(parseData))
@@ -109,7 +100,7 @@ const FormCreateProfil_1: React.FunctionComponent<IFormCreateProfil_1Props> = ()
                   onChange={(e) => setDataLocalStorage('day', e.target.value)}
               >
                 {
-                  (dayOption) ? <option defaultValue={dayOption}>{dayOption}</option> : <option defaultValue="">Jour</option>
+                  (dayOption) ? <option defaultValue={dayOption}>{dayOption}</option> :  <option defaultValue="">Jour</option>
                 }
                 {                
                   displaySelect(day)
@@ -142,7 +133,7 @@ const FormCreateProfil_1: React.FunctionComponent<IFormCreateProfil_1Props> = ()
                   (year) ? <option defaultValue={year}>{year}</option> : <option defaultValue="">Année</option>
                 }
                 {
-                  displaySelect(years, true)
+                  displaySelect(years)
                 }
               </select>
           </div>
