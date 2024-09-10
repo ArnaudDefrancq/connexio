@@ -9,6 +9,21 @@ const FormCreateProfil_2: React.FunctionComponent<IFormCreateProfil_2Props> = ()
   const [imgProfil, setImgProfil] = useState<string>('../../../../public/images/profilDefault.png');
   const [imgBanner, setImgBanner] = useState<string>('../../../../public/images/bannerDefault.png');
 
+  // Permet de visualiser la photo
+  const previewImg = (e:React.ChangeEvent<HTMLInputElement>, profil: boolean = true):void => {
+    if (e.target.files && e.target.files[0]) {
+      const reader = new FileReader();
+      reader.onload = (event: ProgressEvent<FileReader>) => {
+        if (profil) {
+          setImgProfil(event.target?.result as string);
+        } else {
+          setImgBanner(event.target?.result as string);
+        }
+      };
+      reader.readAsDataURL(e.target.files[0]);
+    }
+  }
+
   return (
     <>
       <div className={`${Style.div} form-group`}>
@@ -19,8 +34,8 @@ const FormCreateProfil_2: React.FunctionComponent<IFormCreateProfil_2Props> = ()
             className={Style.input} 
             type="file" 
             id="fileProfil"
-            // placeholder=" "
             required
+            onChange={(e) => previewImg(e)}
           />
         <label className={Style.label} htmlFor="fileProfil">Photo de profil </label>
       </div>
@@ -32,7 +47,7 @@ const FormCreateProfil_2: React.FunctionComponent<IFormCreateProfil_2Props> = ()
             className={Style.input} 
             type="file" 
             id="fileBanner"
-            placeholder=" "
+            onChange={(e) => previewImg(e, false)}
             required
           />
         <label className={Style.label} htmlFor="fileBanner">Photo banner </label>
