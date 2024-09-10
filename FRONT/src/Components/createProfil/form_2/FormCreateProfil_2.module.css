@@ -1,0 +1,33 @@
+.div {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 170px;
+}
+
+.divImg {
+    height: 100px;
+    text-align: center;
+}
+
+.divImg img {
+    height: 100%;
+    width: 100%;
+}
+
+.imgProfil {
+    width: 50% !important;
+    border-radius: 50%;
+}
+
+input[type='file'] {
+    font-size: 14px;
+    color: transparent;
+    position: relative;
+}
+
+.label {
+    top: 82% !important;
+    left: 59% !important;
+    font-size: 14px;
+}
