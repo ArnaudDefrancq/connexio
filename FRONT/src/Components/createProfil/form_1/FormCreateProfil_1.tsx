@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Style from './FormCreateProfil_1.module.css'
 import { useState, useEffect } from 'react';
-import { day, month } from '../../../Tools/config.ts'
+import { dayArray, monthArray } from '../../../Tools/config.ts'
 import { allYears } from '../../../Tools/function.ts';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
@@ -13,7 +13,7 @@ const FormCreateProfil_1: React.FunctionComponent<IFormCreateProfil_1Props> = ()
   const [firstName, setFirstName] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
   const [dayOption, setDayOption] = useState<string>("");
-  const [mounth, setMounth] = useState<string>("");
+  const [month, setMonth] = useState<string>("");
   const [year, setYear] = useState<string>("");
   const [city, setCity] = useState<string>("");
   const [content, setContent] = useState<string>("");
@@ -27,7 +27,7 @@ const FormCreateProfil_1: React.FunctionComponent<IFormCreateProfil_1Props> = ()
         if (parseData.firstName) setFirstName(parseData.firstName);      
         if (parseData.lastName) setLastName(parseData.lastName);      
         if (parseData.day) setDayOption(parseData.day);      
-        if (parseData.mounth) setMounth(parseData.mounth);      
+        if (parseData.month) setMonth(parseData.month);      
         if (parseData.year) setYear(parseData.year);      
         if (parseData.city) setCity(parseData.city);      
         if (parseData.content) setContent(parseData.content);      
@@ -35,12 +35,8 @@ const FormCreateProfil_1: React.FunctionComponent<IFormCreateProfil_1Props> = ()
     }
   }, [])
 
-  
-  // const REGEX_DATE_NAISSANCE: RegExp = /^(0?[1-9]|[12][0-9]|3[01])[\/](0?[1-9]|1[012])[\/\-]\d{4}$/;
-  // const REGEX_TEXTE: RegExp = /^[a-zA-Z\s].{3,20}$/;
-
   // Contruit le tableau avec les années 
-  const years: Array<string> = allYears().reverse();
+  const yearsArray: Array<string> = allYears().reverse();
 
   // Permet d'afficher les options
   const displaySelect = (array: Array<string>): JSX.Element[]  => {
@@ -103,7 +99,7 @@ const FormCreateProfil_1: React.FunctionComponent<IFormCreateProfil_1Props> = ()
                   (dayOption) ? <option defaultValue={dayOption}>{dayOption}</option> :  <option defaultValue="">Jour</option>
                 }
                 {                
-                  displaySelect(day)
+                  displaySelect(dayArray)
                 }
               </select>
           </div>
@@ -112,13 +108,13 @@ const FormCreateProfil_1: React.FunctionComponent<IFormCreateProfil_1Props> = ()
                   className={Style.input} 
                   required
                   id="month"
-                  onChange={(e) => setDataLocalStorage('mounth', e.target.value)}
+                  onChange={(e) => setDataLocalStorage('month', e.target.value)}
                 >
                 {
-                  (mounth) ? <option defaultValue={mounth}>{mounth}</option> : <option defaultValue="">Mois</option>
+                  (month) ? <option defaultValue={month}>{month}</option> : <option defaultValue="">Mois</option>
                 }
                 {
-                  displaySelect(month)
+                  displaySelect(monthArray)
                 }
               </select>
           </div>
@@ -133,7 +129,7 @@ const FormCreateProfil_1: React.FunctionComponent<IFormCreateProfil_1Props> = ()
                   (year) ? <option defaultValue={year}>{year}</option> : <option defaultValue="">Année</option>
                 }
                 {
-                  displaySelect(years)
+                  displaySelect(yearsArray)
                 }
               </select>
           </div>

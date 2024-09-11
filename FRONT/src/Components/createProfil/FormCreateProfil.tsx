@@ -28,7 +28,7 @@ const FormCreateProfil: React.FunctionComponent<IFormCreateProfilProps> = () => 
       firstName:string, 
       lastName: string, 
       day: string,
-      mounth : string,
+      month : string,
       year : string
       city: string, 
       content :string,
@@ -39,7 +39,7 @@ const FormCreateProfil: React.FunctionComponent<IFormCreateProfilProps> = () => 
       firstName : "",
       lastName: "",
       day: "",
-      mounth: "",
+      month: "",
       year: "",
       city : "",
       content : "",
