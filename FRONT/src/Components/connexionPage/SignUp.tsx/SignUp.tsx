@@ -2,9 +2,16 @@ import * as React from 'react';
 import { useState } from 'react';
 import Style from "./SignUp.module.css"
 import { UserController } from '../../../Controllers/UserController';
+import { Security } from '../../../Tools/Security';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface ISignUpProps {
+}
+
+type Errors = {
+  errorMail: boolean,
+  errorPassword: boolean,
+  errorComfirmPassword: boolean,
 }
 
 const SignUp: React.FunctionComponent<ISignUpProps> = () => {
@@ -13,8 +20,7 @@ const SignUp: React.FunctionComponent<ISignUpProps> = () => {
   const [isClick, setIsCLick] = useState(false);
   const [isValid, setIsValid] = useState(false); 
 
-  const [errors, setErrors] = useState ({
-    errorPseudo: true,
+  const [errors, setErrors] = useState<Errors> ({
     errorMail: true,
     errorPassword: true,
     errorComfirmPassword: true,
@@ -23,39 +29,20 @@ const SignUp: React.FunctionComponent<ISignUpProps> = () => {
   const REGEX_CHECK_MAIL: RegExp = /^(?!\.)[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+\.[a-zA-Z]{2,}(?:\.[a-zA-Z]{2,})?$/;
   const REGEX_CHECK_PASSWORD: RegExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,}$/;
 
-  const checkInput = (value: string, regex: RegExp): boolean  => {
-    return regex.test(value) && value != "";
+  // Permet de ckeck les inputs 
+  const checkEmail = (value: string):void => {
+    Security.checkValidity(value, REGEX_CHECK_MAIL, 'errorMail', setErrors);
   }
 
-  const checkValidity = (value: string, regex: RegExp, node: string): void => {
-    if (checkInput(value, regex)) {
-        setErrors((elemnt) => ({
-            ...elemnt,
-            [node]: false
-        }));
-    } else {
-        setErrors((elemnt) => ({
-            ...elemnt,
-            [node]: true
-        }));
-    }
+  const checkPassword = (value: string):void => {
+    Security.checkValidity(value, REGEX_CHECK_PASSWORD, 'errorPassword', setErrors);
   }
 
-  const checkSamePassword = (value: string, node: string): void => {
-      if (password == value) {
-          setErrors((elemnt) => ({
-              ...elemnt,
-              [node]: false
-          }));
-
-      } else {
-          setErrors((elemnt) => ({
-              ...elemnt,
-              [node]: true
-          }));
-      }
+  const checkSamePassword = (value: string):void => {
+    Security.checkSamePassword(value, password, 'errorComfirmPassword', setErrors);
   }
 
+  // Permet d'envoyer le formulaire
   const handelClick = async (e: React.MouseEvent<HTMLButtonElement>): Promise<void | string> => {
       e.preventDefault();
 
@@ -79,7 +66,7 @@ const SignUp: React.FunctionComponent<ISignUpProps> = () => {
                 id="email"
                 placeholder=" "
                 required
-                onChange={(e) => {checkValidity(e.target.value, REGEX_CHECK_MAIL, "errorMail"); setEmail(e.target.value)}}/>
+                onChange={(e) => {checkEmail(e.target.value); setEmail(e.target.value)}}/>
             <label className={Style.label} htmlFor="email">Mail </label>
             {
                 (errors.errorMail && isClick) && <p className="messageError">Veuillez entrer un mail valide.</p>
@@ -92,7 +79,7 @@ const SignUp: React.FunctionComponent<ISignUpProps> = () => {
                 id="password"
                 required
                 placeholder=" "
-                onChange={(e) => {checkValidity(e.target.value, REGEX_CHECK_PASSWORD, "errorPassword"); setPassword(e.target.value)}} />
+                onChange={(e) => {checkPassword(e.target.value); setPassword(e.target.value)}} />
             <label className={Style.label} htmlFor="password">Mot de passe </label>
             {
                 (errors.errorPassword && isClick) && <p className="messageError">Veuillez entrer un mot de passe valide.</p>
@@ -105,7 +92,7 @@ const SignUp: React.FunctionComponent<ISignUpProps> = () => {
                 type="password" 
                 placeholder=" "
                 id="comfirmPassword"
-                onChange={(e) => {checkSamePassword(e.target.value, "errorComfirmPassword");}} />
+                onChange={(e) => {checkSamePassword(e.target.value);}} />
             <label className={Style.label} htmlFor="comfirmPassword">Confirmer mot de passe </label>
             {
                 (errors.errorComfirmPassword && isClick ) && <p className="messageError">Les mots de passe ne correspondent pas.</p>
