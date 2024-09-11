@@ -10,7 +10,7 @@ interface UserContextType extends UserState {
 export const UserContext = createContext<UserContextType>({
     token: null,
     role: null,
-    user_id: null,
+    id_user: null,
     is_actif: null,
     updateUserContext: () => {},
     logoutUser: () => {},
@@ -23,7 +23,7 @@ interface UserProviderProps {
 const UserProvider: FC<UserProviderProps> = ({ children }) => {
     const getInitialUserState = (): UserState => {
         const storedUser = localStorage.getItem('data');
-        return storedUser ? Security.decryptData(storedUser) : { token: null, role: null, user_id: null, is_actif: null };
+        return storedUser ? Security.decryptData(storedUser) : { token: null, role: null, id_user: null, is_actif: null };
     };
 
     const [user, setUser] = useState<UserState>(getInitialUserState);
@@ -39,7 +39,7 @@ const UserProvider: FC<UserProviderProps> = ({ children }) => {
 
     const logoutUser = () => {
         localStorage.removeItem('data');
-        setUser({ token: null, role: null, user_id: null, is_actif: null });
+        setUser({ token: null, role: null, id_user: null, is_actif: null });
     };
 
     useEffect(() => {

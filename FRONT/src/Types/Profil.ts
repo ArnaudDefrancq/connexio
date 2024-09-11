@@ -9,8 +9,8 @@ export interface Profil {
     description?: string,
     actif: number,
     created_at: number,
-    updated_at: number
-    id_user: number
+    updated_at: number,
+    id_user: number,
 };
 
 export default Profil;

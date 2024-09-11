@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import { UserContext } from '../../../Context/UserContext';
 import Style from './FormCreateProfil_2.module.css';
 import { monthArray } from '../../../Tools/config';
 import { Security } from '../../../Tools/Security';
@@ -18,6 +19,8 @@ type Errors = {
 }
 
 const FormCreateProfil_2: React.FunctionComponent<IFormCreateProfil_2Props> = () => {
+  const { token, id_user } = useContext(UserContext);
+
   const [imgProfil, setImgProfil] = useState<string>('');
   const [imgBanner, setImgBanner] = useState<string>('');
 
