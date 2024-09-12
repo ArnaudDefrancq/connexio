@@ -52,10 +52,7 @@ export const updateProfil = async (req: AuthRequest, res: Response, next: NextFu
                     description: req.body.content || profil.description,
                     actif: 1,
                     updated_at: date
-                } 
-
-                console.log(updateProfil);
-                
+                }                 
     
                 profilModel.updateProfil(id, updateProfil, (error, affectedRows) => {
                     if (error) {

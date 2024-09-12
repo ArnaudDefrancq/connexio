@@ -30,10 +30,12 @@ const SignIn: React.FunctionComponent<ISignInProps> = () => {
           
           if (connexion.is_actif == 1) {
             // Page feed
-            navigate('/feeds');
+            navigate('/feeds', { replace: false});
+            window.location.href = '/feeds';
           } else {
             // Page création profil
-            navigate('/create-profil')
+            navigate('/create-profil', { replace: false});
+            window.location.href = '/create-profil';
           }
         }
       } else {

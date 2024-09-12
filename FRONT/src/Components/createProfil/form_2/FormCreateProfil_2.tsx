@@ -1,14 +1,14 @@
 import * as React from 'react';
-import { useState, useEffect, useContext } from 'react';
-import { UserContext } from '../../../Context/UserContext';
+import { useState, useEffect } from 'react';
 import Style from './FormCreateProfil_2.module.css';
 import { monthArray } from '../../../Tools/config';
 import { Security } from '../../../Tools/Security';
 import { ProfilController } from '../../../Controllers/ProfilController';
 import { UpdateProfil } from '../../../Types/Profil';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface IFormCreateProfil_2Props {
+  id_user: number | null,
+  token: string | null
 }
 
 type Errors = {
@@ -19,10 +19,7 @@ type Errors = {
   errorContent: boolean;
 }
 
-const FormCreateProfil_2: React.FunctionComponent<IFormCreateProfil_2Props> = () => {
-  const { token, id_user } = useContext(UserContext);
-  console.log(id_user);
-    
+const FormCreateProfil_2: React.FunctionComponent<IFormCreateProfil_2Props> = ({id_user, token}) => {
 
   const [imgProfil, setImgProfil] = useState<string>('');
   const [imgBanner, setImgBanner] = useState<string>('');
@@ -46,6 +43,9 @@ const FormCreateProfil_2: React.FunctionComponent<IFormCreateProfil_2Props> = ()
     city: "",
     content: "",
   };
+
+  const REGEX_DATE_NAISSANCE: RegExp = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
+  const REGEX_TEXTE: RegExp = /^[a-zA-Z\s].{3,20}$/;
 
   // Permet de récup les données et de set les données dans les input
   useEffect(() => {
@@ -88,27 +88,22 @@ const FormCreateProfil_2: React.FunctionComponent<IFormCreateProfil_2Props> = ()
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
       const reader = new FileReader();
-  
       reader.onload = (event: ProgressEvent<FileReader>) => {
         const filePreview = event.target?.result as string;
   
         if (profil) {
           setImgProfil(filePreview);
           setProfilFile(file);
-          setDataLocalStorage('profil', file.name); 
+          setDataLocalStorage('profil', event.target?.result as string); 
         } else {
           setImgBanner(filePreview); 
           setBannerFile(file); 
-          setDataLocalStorage('banner', file.name); 
+          setDataLocalStorage('banner', event.target?.result as string); 
         }
       };
-  
-      reader.readAsDataURL(file); // Lire le fichier pour l'affichage de l'aperçu
+      reader.readAsDataURL(file);
     }
   }
-
-  const REGEX_DATE_NAISSANCE: RegExp = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
-  const REGEX_TEXTE: RegExp = /^[a-zA-Z\s].{3,20}$/;
 
   // Permet de check le localStorage
   const checkFormText = ():void => {
@@ -122,6 +117,7 @@ const FormCreateProfil_2: React.FunctionComponent<IFormCreateProfil_2Props> = ()
     }
   }
 
+  // Check la date de naissance
   const checkFormDate = (): number | void => {
     const storedData = localStorage.getItem('formData');
     if (storedData) {
@@ -148,6 +144,7 @@ const FormCreateProfil_2: React.FunctionComponent<IFormCreateProfil_2Props> = ()
     }
   }
 
+  // Perment d'envoyer le formulaire
   const handleClick =  async (e: React.MouseEvent<HTMLButtonElement>): Promise<void | string> => {
     e.preventDefault();
 
@@ -168,16 +165,13 @@ const FormCreateProfil_2: React.FunctionComponent<IFormCreateProfil_2Props> = ()
         updateProfil.profil = profilFile;
         updateProfil.bg = bannerFile;
       }
-    }  
-
-
-    
-    if (!errors.errorFirstName && !errors.errorLastName && !errors.errorDate && !errors.errorCity && !errors.errorContent && id_user && token) {      
-      await ProfilController.updateProfil(updateProfil, Number(id_user), token);
-    } else {
-      console.error('Pb update profil')
-      return;
-    }
+    }      
+    // if (!errors.errorFirstName && !errors.errorLastName && !errors.errorDate && !errors.errorCity && !errors.errorContent && id_user && token) {      
+    //   await ProfilController.updateProfil(updateProfil, Number(id_user), token);
+    // } else {
+    //   console.error('Pb update profil')
+    //   return;
+    // }
   }
 
   return (

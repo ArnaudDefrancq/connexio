@@ -1,13 +1,15 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import Style from './FormCreateProfil.module.css';
 import FormCreateProfil_1 from './form_1/FormCreateProfil_1';
 import FormCreateProfil_2 from './form_2/FormCreateProfil_2';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import { UserContext } from '../../Context/UserContext';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface IFormCreateProfilProps {
+  id_user: number | null,
+  token: string | null
 }
 
 type StoredData = {
@@ -26,6 +28,7 @@ const FormCreateProfil: React.FunctionComponent<IFormCreateProfilProps> = () => 
 
   const [getForm, setGetForm] = useState<boolean>(true);
 
+  const { token, id_user } = useContext(UserContext);
   // Changement du Form
   const handleClick = () : void => {
     if (getForm) {
@@ -34,6 +37,7 @@ const FormCreateProfil: React.FunctionComponent<IFormCreateProfilProps> = () => 
       setGetForm(true);
     }
   }
+
 
   if (!localStorage.getItem('formData')) {
     const defaultValue : StoredData =  {
@@ -60,7 +64,7 @@ const FormCreateProfil: React.FunctionComponent<IFormCreateProfilProps> = () => 
         <div className={Style.formCreate}>
           <form className={`${Style.form} form`}>
           {
-            getForm ? <FormCreateProfil_1 /> : <FormCreateProfil_2 /> 
+            getForm ? <FormCreateProfil_1 /> : <FormCreateProfil_2 id_user={id_user} token={token}/> 
           }
           </form>
           <div className={Style.btnNextForm}>
