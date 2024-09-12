@@ -10,6 +10,18 @@ import { faArrowRight, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 interface IFormCreateProfilProps {
 }
 
+type StoredData = {
+  firstName:string, 
+  lastName: string, 
+  day: string,
+  month : string,
+  year : string
+  city: string, 
+  content :string,
+  profil : File | null,
+  banner : File | null
+}
+
 const FormCreateProfil: React.FunctionComponent<IFormCreateProfilProps> = () => {
 
   const [getForm, setGetForm] = useState<boolean>(true);
@@ -24,18 +36,7 @@ const FormCreateProfil: React.FunctionComponent<IFormCreateProfilProps> = () => 
   }
 
   if (!localStorage.getItem('formData')) {
-    interface storedData {
-      firstName:string, 
-      lastName: string, 
-      day: string,
-      month : string,
-      year : string
-      city: string, 
-      content :string,
-      profil : string,
-      banner : string
-    }
-    const defaultValue : storedData =  {
+    const defaultValue : StoredData =  {
       firstName : "",
       lastName: "",
       day: "",
@@ -43,8 +44,8 @@ const FormCreateProfil: React.FunctionComponent<IFormCreateProfilProps> = () => 
       year: "",
       city : "",
       content : "",
-      profil: "",
-      banner : ""
+      profil: null,
+      banner : null
     }
     localStorage.setItem('formData', JSON.stringify(defaultValue));
   }

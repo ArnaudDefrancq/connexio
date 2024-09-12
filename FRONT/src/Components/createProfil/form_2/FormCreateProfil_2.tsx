@@ -4,6 +4,9 @@ import { UserContext } from '../../../Context/UserContext';
 import Style from './FormCreateProfil_2.module.css';
 import { monthArray } from '../../../Tools/config';
 import { Security } from '../../../Tools/Security';
+import { ProfilController } from '../../../Controllers/ProfilController';
+import { UpdateProfil } from '../../../Types/Profil';
+
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface IFormCreateProfil_2Props {
 }
@@ -14,25 +17,35 @@ type Errors = {
   errorDate: boolean;
   errorCity: boolean;
   errorContent: boolean;
-  errorProfil: boolean;
-  errorBanner: boolean;
 }
 
 const FormCreateProfil_2: React.FunctionComponent<IFormCreateProfil_2Props> = () => {
   const { token, id_user } = useContext(UserContext);
+  console.log(id_user);
+    
 
   const [imgProfil, setImgProfil] = useState<string>('');
   const [imgBanner, setImgBanner] = useState<string>('');
+  const [profilFile, setProfilFile] = useState<File | null>(null); 
+  const [bannerFile, setBannerFile] = useState<File | null>(null);
 
   const [errors, setErrors] = useState<Errors>({
     errorFirstName: true,
     errorLastName: true,
     errorDate: true,
     errorCity: true,
-    errorContent: true,
-    errorProfil: true,
-    errorBanner: true,
+    errorContent: true
   })
+
+  const updateProfil : UpdateProfil = {
+    lastName: '',
+    firstName: "",
+    date: 0,
+    profil: null ,
+    bg: null ,
+    city: "",
+    content: "",
+  };
 
   // Permet de récup les données et de set les données dans les input
   useEffect(() => {
@@ -44,11 +57,13 @@ const FormCreateProfil_2: React.FunctionComponent<IFormCreateProfil_2Props> = ()
           setImgProfil(parseData.profil);      
         } else {
           setImgProfil('../../../../public/images/profilDefault.png')
+          setDataLocalStorage('profil', '../../../../public/images/profilDefault.png')
         }
         if (parseData.banner)  {
           setImgBanner(parseData.banner);      
         } else {
           setImgBanner('../../../../public/images/bannerDefault.png')
+          setDataLocalStorage('banner', '../../../../public/images/bannerDefault.png')
         }
       }
     }
@@ -71,17 +86,24 @@ const FormCreateProfil_2: React.FunctionComponent<IFormCreateProfil_2Props> = ()
   // Permet de visualiser la photo
   const previewImg = (e:React.ChangeEvent<HTMLInputElement>, profil: boolean = true):void => {
     if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
       const reader = new FileReader();
+  
       reader.onload = (event: ProgressEvent<FileReader>) => {
+        const filePreview = event.target?.result as string;
+  
         if (profil) {
-          setImgProfil(event.target?.result as string);
-          setDataLocalStorage('profil', event.target?.result as string)
+          setImgProfil(filePreview);
+          setProfilFile(file);
+          setDataLocalStorage('profil', file.name); 
         } else {
-          setImgBanner(event.target?.result as string);
-          setDataLocalStorage('banner', event.target?.result as string)
+          setImgBanner(filePreview); 
+          setBannerFile(file); 
+          setDataLocalStorage('banner', file.name); 
         }
       };
-      reader.readAsDataURL(e.target.files[0]);
+  
+      reader.readAsDataURL(file); // Lire le fichier pour l'affichage de l'aperçu
     }
   }
 
@@ -97,12 +119,10 @@ const FormCreateProfil_2: React.FunctionComponent<IFormCreateProfil_2Props> = ()
       Security.checkValidity(parseData.lastName, REGEX_TEXTE, 'errorLastName', setErrors)
       Security.checkValidity(parseData.city, REGEX_TEXTE, 'errorCity', setErrors)
       Security.checkValidity(parseData.content, REGEX_TEXTE, 'errorContent', setErrors)
-      Security.checkValidity(parseData.profil, REGEX_TEXTE, 'errorProfil', setErrors)
-      Security.checkValidity(parseData.banner, REGEX_TEXTE, 'errorBanner', setErrors)
     }
   }
 
-  const checkFormDate = ():void => {
+  const checkFormDate = (): number | void => {
     const storedData = localStorage.getItem('formData');
     if (storedData) {
       const parseData = JSON.parse(storedData);
@@ -112,6 +132,7 @@ const FormCreateProfil_2: React.FunctionComponent<IFormCreateProfil_2Props> = ()
 
       const [day, month, year] = dateNaissance.split('/').map(Number);
       const date = new Date(year, month - 1, day);
+      // console.log(date);
 
       if (date.getFullYear() !== year || date.getMonth() + 1 !== month || date.getDate() !== day) {
         return;
@@ -120,16 +141,44 @@ const FormCreateProfil_2: React.FunctionComponent<IFormCreateProfil_2Props> = ()
         ...prevErrors,
         errorDate: false, 
       }));
+
+      const timestamp = new Date(year, month - 1, day).getTime();      
+      
+      return timestamp / 1000;
     }
   }
 
-  // const handleClick = async (e: React.MouseEvent<HTMLButtonElement>): Promise<void | string> => {
-  //   e.preventDefault();
+  const handleClick =  async (e: React.MouseEvent<HTMLButtonElement>): Promise<void | string> => {
+    e.preventDefault();
 
-  //   if (!errors.errorFirstName && !errors.errorLastName && !errors.errorDate && !errors.errorCity && !errors.errorContent && !errors.errorProfil && !errors.errorBanner) {
-  //     await 
-  //   }
-  // }
+    checkFormText();
+    const date: number | void = checkFormDate();
+
+    if (typeof date != "number") return;
+
+    if (localStorage.getItem('formData')) {
+      const storedData = localStorage.getItem('formData');
+      if (storedData) {
+        const parseData = JSON.parse(storedData);
+        updateProfil.firstName = parseData.firstName;
+        updateProfil.lastName = parseData.lastName;
+        updateProfil.date = date;
+        updateProfil.city = parseData.city;
+        updateProfil.content = parseData.content;
+        updateProfil.profil = profilFile;
+        updateProfil.bg = bannerFile;
+      }
+    }  
+
+
+    
+    if (!errors.errorFirstName && !errors.errorLastName && !errors.errorDate && !errors.errorCity && !errors.errorContent && id_user && token) {      
+      await ProfilController.updateProfil(updateProfil, Number(id_user), token);
+    } else {
+      console.error('Pb update profil')
+      return;
+    }
+  }
 
   return (
     <>
@@ -141,7 +190,6 @@ const FormCreateProfil_2: React.FunctionComponent<IFormCreateProfil_2Props> = ()
             className={Style.input} 
             type="file" 
             id="fileProfil"
-            required
             onChange={(e) => previewImg(e)}
           />
         <label className={Style.label} htmlFor="fileProfil">Photo de profil </label>
@@ -155,11 +203,10 @@ const FormCreateProfil_2: React.FunctionComponent<IFormCreateProfil_2Props> = ()
             type="file" 
             id="fileBanner"
             onChange={(e) => previewImg(e, false)}
-            required
           />
         <label className={Style.label} htmlFor="fileBanner">Photo banner </label>
       </div>
-      <button className='btnValid'>Valider</button>
+      <button className='btnValid' onClick={(e) => handleClick(e)}>Valider</button>
     </>
   );
 };

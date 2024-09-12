@@ -1,8 +1,8 @@
 import { ProfilModel } from "../Models/ProfilModel";
-import Profil from "../Types/Profil";
+import { UpdateProfil } from "../Types/Profil";
 
 export class ProfilController {
-    static async updateProfil (profil: Profil, id: number, token: string): Promise<void | boolean> {
+    static async updateProfil (profil: UpdateProfil, id: number, token: string): Promise<void | boolean> {        
         return await ProfilModel.updateProfil(profil, id, token);
     }
 }

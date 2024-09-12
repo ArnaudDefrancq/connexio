@@ -41,10 +41,10 @@ export const updateProfil = async (req: AuthRequest, res: Response, next: NextFu
                         fs.unlinkSync(oldBgPath);
                     }
                 }
-    
+               
                 const updateProfil: Partial<Profil> = {
-                    nom: req.body.name || profil.nom,
-                    prenom: req.body.surname || profil.prenom,
+                    nom: req.body.lastName || profil.nom,
+                    prenom: req.body.firstName || profil.prenom,
                     date_naissance: Number(req.body.date) || profil.date_naissance,
                     img_profil: files?.profil  ? String(files?.profil[0].path.split('\\').at(-1)) : profil.img_profil,
                     img_bg: files?.bg ? String(files?.bg[0].path.split('\\').at(-1)) : profil.img_bg,
@@ -54,10 +54,14 @@ export const updateProfil = async (req: AuthRequest, res: Response, next: NextFu
                     updated_at: date
                 } 
 
+                console.log(updateProfil);
+                
     
                 profilModel.updateProfil(id, updateProfil, (error, affectedRows) => {
                     if (error) {
-                        return res.status(500).json({ error });
+                        console.log(error);
+                        
+                        return res.status(500).json({ error } + 'ici');
                     }
                     return res.status(201).json({ id: affectedRows });
                 })
