@@ -4,6 +4,7 @@ import Style from './SignIn.module.css'
 import { UserController } from '../../../Controllers/UserController';
 import { Security } from '../../../Tools/Security';
 import { useNavigate } from 'react-router-dom';
+import { deleteAndCreateLocalStorage } from '../../../Tools/function';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface ISignInProps {
@@ -25,7 +26,8 @@ const SignIn: React.FunctionComponent<ISignInProps> = () => {
         const connexion = await UserController.signIn(mail, password);
         if (typeof connexion !== 'boolean') {
           const encryptedData = Security.encryptData(connexion);
-          localStorage.setItem('data', encryptedData);
+          // localStorage.setItem('data', encryptedData);
+          deleteAndCreateLocalStorage('data', encryptedData);
           console.log( connexion.is_actif);
           
           if (connexion.is_actif == 1) {

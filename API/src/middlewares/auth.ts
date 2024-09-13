@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
-import { ProfilModel } from '../models/ProfilModel';
 
 dotenv.config();
 

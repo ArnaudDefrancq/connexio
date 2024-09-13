@@ -6,6 +6,7 @@ import FormCreateProfil_2 from './form_2/FormCreateProfil_2';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { UserContext } from '../../Context/UserContext';
+import { deleteAndCreateLocalStorage } from '../../Tools/function';
 
 interface IFormCreateProfilProps {
   id_user: number | null,
@@ -29,6 +30,19 @@ const FormCreateProfil: React.FunctionComponent<IFormCreateProfilProps> = () => 
   const [getForm, setGetForm] = useState<boolean>(true);
 
   const { token, id_user } = useContext(UserContext);
+
+  const defaultValue : StoredData =  {
+    firstName : "",
+    lastName: "",
+    day: "",
+    month: "",
+    year: "",
+    city : "",
+    content : "",
+    profil: null,
+    banner : null
+  }
+
   // Changement du Form
   const handleClick = () : void => {
     if (getForm) {
@@ -38,22 +52,10 @@ const FormCreateProfil: React.FunctionComponent<IFormCreateProfilProps> = () => 
     }
   }
 
+  // Permet de créer un item dans le localStorage
+  deleteAndCreateLocalStorage('formData', defaultValue);
 
-  if (!localStorage.getItem('formData')) {
-    const defaultValue : StoredData =  {
-      firstName : "",
-      lastName: "",
-      day: "",
-      month: "",
-      year: "",
-      city : "",
-      content : "",
-      profil: null,
-      banner : null
-    }
-    localStorage.setItem('formData', JSON.stringify(defaultValue));
-  }
-
+  // Gestion role du btn
   const roleButton = ():JSX.Element  => {
     return getForm ? <FontAwesomeIcon className={Style.icon} icon={faArrowRight}/> : <FontAwesomeIcon className={Style.icon} icon={faArrowLeft}/>;
   }

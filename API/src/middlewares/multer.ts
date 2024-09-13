@@ -1,6 +1,5 @@
 import multer from 'multer';
 import path from 'path';
-import { AuthRequest } from '../middlewares/auth'
 
 export const getMulterConfigProfil = (folder: string, id: number) => {
     const storage = multer.diskStorage({

@@ -5,6 +5,7 @@ import { monthArray } from '../../../Tools/config';
 import { Security } from '../../../Tools/Security';
 import { ProfilController } from '../../../Controllers/ProfilController';
 import { UpdateProfil } from '../../../Types/Profil';
+import { deleteAndCreateLocalStorage, setDataLocalStorage } from '../../../Tools/function';
 
 interface IFormCreateProfil_2Props {
   id_user: number | null,
@@ -57,31 +58,31 @@ const FormCreateProfil_2: React.FunctionComponent<IFormCreateProfil_2Props> = ({
           setImgProfil(parseData.profil);      
         } else {
           setImgProfil('../../../../public/images/profilDefault.png')
-          setDataLocalStorage('profil', '../../../../public/images/profilDefault.png')
+          setDataLocalStorage('formData', 'profil', '../../../../public/images/profilDefault.png')
         }
         if (parseData.banner)  {
           setImgBanner(parseData.banner);      
         } else {
           setImgBanner('../../../../public/images/bannerDefault.png')
-          setDataLocalStorage('banner', '../../../../public/images/bannerDefault.png')
+          setDataLocalStorage('formData', 'banner', '../../../../public/images/bannerDefault.png')
         }
       }
     }
   }, [])
   
   // Permet de set les données dans le localStorage
-  const setDataLocalStorage = (node:string, value: string):void => {
-    if (localStorage.getItem('formData')) {
-      const storedData = localStorage.getItem('formData');
-      if (storedData) {
-        const parseData = JSON.parse(storedData);
-        if (node in parseData) {          
-          parseData[node] = value
-        }
-        localStorage.setItem('formData', JSON.stringify(parseData))
-      }
-    }
-  }
+  // const setDataLocalStorage = (node:string, value: string):void => {
+  //   if (localStorage.getItem('formData')) {
+  //     const storedData = localStorage.getItem('formData');
+  //     if (storedData) {
+  //       const parseData = JSON.parse(storedData);
+  //       if (node in parseData) {          
+  //         parseData[node] = value
+  //       }
+  //       localStorage.setItem('formData', JSON.stringify(parseData))
+  //     }
+  //   }
+  // }
 
   // Permet de visualiser la photo
   const previewImg = (e:React.ChangeEvent<HTMLInputElement>, profil: boolean = true):void => {
@@ -94,11 +95,11 @@ const FormCreateProfil_2: React.FunctionComponent<IFormCreateProfil_2Props> = ({
         if (profil) {
           setImgProfil(filePreview);
           setProfilFile(file);
-          setDataLocalStorage('profil', event.target?.result as string); 
+          setDataLocalStorage('formData', 'profil', event.target?.result as string); 
         } else {
           setImgBanner(filePreview); 
           setBannerFile(file); 
-          setDataLocalStorage('banner', event.target?.result as string); 
+          setDataLocalStorage('formData', 'banner', event.target?.result as string); 
         }
       };
       reader.readAsDataURL(file);
@@ -128,7 +129,6 @@ const FormCreateProfil_2: React.FunctionComponent<IFormCreateProfil_2Props> = ({
 
       const [day, month, year] = dateNaissance.split('/').map(Number);
       const date = new Date(year, month - 1, day);
-      // console.log(date);
 
       if (date.getFullYear() !== year || date.getMonth() + 1 !== month || date.getDate() !== day) {
         return;
@@ -147,31 +147,33 @@ const FormCreateProfil_2: React.FunctionComponent<IFormCreateProfil_2Props> = ({
   // Perment d'envoyer le formulaire
   const handleClick =  async (e: React.MouseEvent<HTMLButtonElement>): Promise<void | string> => {
     e.preventDefault();
-
+    
     checkFormText();
     const date: number | void = checkFormDate();
+   
+    if (!errors.errorFirstName && !errors.errorLastName && !errors.errorDate && !errors.errorCity && !errors.errorContent && id_user && token) {  
+      if (typeof date != "number") return;
 
-    if (typeof date != "number") return;
-
-    if (localStorage.getItem('formData')) {
-      const storedData = localStorage.getItem('formData');
-      if (storedData) {
-        const parseData = JSON.parse(storedData);
-        updateProfil.firstName = parseData.firstName;
-        updateProfil.lastName = parseData.lastName;
-        updateProfil.date = date;
-        updateProfil.city = parseData.city;
-        updateProfil.content = parseData.content;
-        updateProfil.profil = profilFile;
-        updateProfil.bg = bannerFile;
-      }
-    }      
-    // if (!errors.errorFirstName && !errors.errorLastName && !errors.errorDate && !errors.errorCity && !errors.errorContent && id_user && token) {      
-    //   await ProfilController.updateProfil(updateProfil, Number(id_user), token);
-    // } else {
-    //   console.error('Pb update profil')
-    //   return;
-    // }
+      if (localStorage.getItem('formData')) {
+        const storedData = localStorage.getItem('formData');
+        if (storedData) {
+          const parseData = JSON.parse(storedData);
+          updateProfil.firstName = parseData.firstName;
+          updateProfil.lastName = parseData.lastName;
+          updateProfil.date = date;
+          updateProfil.city = parseData.city;
+          updateProfil.content = parseData.content;
+          updateProfil.profil = profilFile;
+          updateProfil.bg = bannerFile;
+        }
+      }       
+      await ProfilController.updateProfil(updateProfil, Number(id_user), token);
+      // Redirection vers les feeds
+    } else {
+      deleteAndCreateLocalStorage('formDataError', errors)
+      console.error('Pb update profil')
+      return;
+    }
   }
 
   return (

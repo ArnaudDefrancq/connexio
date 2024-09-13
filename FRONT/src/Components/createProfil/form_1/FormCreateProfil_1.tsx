@@ -2,7 +2,7 @@ import * as React from 'react';
 import Style from './FormCreateProfil_1.module.css'
 import { useState, useEffect } from 'react';
 import { dayArray, monthArray } from '../../../Tools/config.ts'
-import { allYears } from '../../../Tools/function.ts';
+import { allYears, setDataLocalStorage } from '../../../Tools/function.ts';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface IFormCreateProfil_1Props {
@@ -46,18 +46,19 @@ const FormCreateProfil_1: React.FunctionComponent<IFormCreateProfil_1Props> = ()
   }
 
   // Permet de set les données dans le localStorage
-  const setDataLocalStorage = (node:string, value: string):void => {
-    if (localStorage.getItem('formData')) {
-      const storedData = localStorage.getItem('formData');
-      if (storedData) {
-        const parseData = JSON.parse(storedData);
-        if (node in parseData) {          
-          parseData[node] = value
-        }
-        localStorage.setItem('formData', JSON.stringify(parseData))
-      }
-    }
-  }
+  // const setDataLocalStorage = (node:string, value: string):void => {
+  //   if (localStorage.getItem('formData')) {
+  //     const storedData = localStorage.getItem('formData');
+  //     if (storedData) {
+  //       const parseData = JSON.parse(storedData);
+  //       if (node in parseData) {          
+  //         parseData[node] = value
+  //       }
+  //       localStorage.setItem('formData', JSON.stringify(parseData))
+  //     }
+  //   }
+  // }
+
 
   return (
     <>
@@ -69,7 +70,7 @@ const FormCreateProfil_1: React.FunctionComponent<IFormCreateProfil_1Props> = ()
             id="firstName"
             placeholder=" "
             required
-            onChange={(e) => setDataLocalStorage('firstName', e.target.value)}
+            onChange={(e) => setDataLocalStorage('formData', 'firstName', e.target.value)}
           />
         <label className={Style.label} htmlFor="firstName">Prénom </label>
       </div>
@@ -81,7 +82,7 @@ const FormCreateProfil_1: React.FunctionComponent<IFormCreateProfil_1Props> = ()
             id="lastName"
             required
             placeholder=" "
-            onChange={(e) => setDataLocalStorage('lastName', e.target.value)}
+            onChange={(e) => setDataLocalStorage('formData', 'lastName', e.target.value)}
         />
         <label className={Style.label} htmlFor="lastName">Nom </label>
       </div>
@@ -93,7 +94,7 @@ const FormCreateProfil_1: React.FunctionComponent<IFormCreateProfil_1Props> = ()
                   className={Style.input} 
                   required
                   id="day"
-                  onChange={(e) => setDataLocalStorage('day', e.target.value)}
+                  onChange={(e) => setDataLocalStorage('formData', 'day', e.target.value)}
               >
                 {
                   (dayOption) ? <option defaultValue={dayOption}>{dayOption}</option> :  <option defaultValue="">Jour</option>
@@ -108,7 +109,7 @@ const FormCreateProfil_1: React.FunctionComponent<IFormCreateProfil_1Props> = ()
                   className={Style.input} 
                   required
                   id="month"
-                  onChange={(e) => setDataLocalStorage('month', e.target.value)}
+                  onChange={(e) => setDataLocalStorage('formData', 'month', e.target.value)}
                 >
                 {
                   (month) ? <option defaultValue={month}>{month}</option> : <option defaultValue="">Mois</option>
@@ -123,7 +124,7 @@ const FormCreateProfil_1: React.FunctionComponent<IFormCreateProfil_1Props> = ()
                   className={Style.input} 
                   required
                   id="year"
-                  onChange={(e) => setDataLocalStorage('year', e.target.value)}
+                  onChange={(e) => setDataLocalStorage('formData', 'year', e.target.value)}
               >
                 {
                   (year) ? <option defaultValue={year}>{year}</option> : <option defaultValue="">Année</option>
@@ -145,7 +146,7 @@ const FormCreateProfil_1: React.FunctionComponent<IFormCreateProfil_1Props> = ()
               type="text" 
               placeholder=" "
               id="city"
-              onChange={(e) => setDataLocalStorage('city', e.target.value)}
+              onChange={(e) => setDataLocalStorage('formData', 'city', e.target.value)}
             />
           <label className={Style.label} htmlFor="city">Ville </label>
       </div>
@@ -156,7 +157,7 @@ const FormCreateProfil_1: React.FunctionComponent<IFormCreateProfil_1Props> = ()
               defaultValue={content}
               placeholder=" "
               id="content"
-              onChange={(e) => setDataLocalStorage('content', e.target.value)}
+              onChange={(e) => setDataLocalStorage('formData', 'content', e.target.value)}
             />
           <label className={Style.label} htmlFor="content">Desciption </label>
       </div>
