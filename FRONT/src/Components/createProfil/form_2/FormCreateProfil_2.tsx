@@ -5,7 +5,7 @@ import { monthArray } from '../../../Tools/config';
 import { Security } from '../../../Tools/Security';
 import { ProfilController } from '../../../Controllers/ProfilController';
 import { UpdateProfil } from '../../../Types/Profil';
-import { deleteAndCreateLocalStorage, setDataLocalStorage } from '../../../Tools/function';
+import { dateToTimestamp, deleteAndCreateLocalStorage, setDataLocalStorage } from '../../../Tools/function';
 
 interface IFormCreateProfil_2Props {
   id_user: number | null,
@@ -24,6 +24,7 @@ const FormCreateProfil_2: React.FunctionComponent<IFormCreateProfil_2Props> = ({
 
   const [imgProfil, setImgProfil] = useState<string>('');
   const [imgBanner, setImgBanner] = useState<string>('');
+  const [naissance, setNaissance] = useState<string>('');
   const [profilFile, setProfilFile] = useState<File | null>(null); 
   const [bannerFile, setBannerFile] = useState<File | null>(null);
 
@@ -48,28 +49,6 @@ const FormCreateProfil_2: React.FunctionComponent<IFormCreateProfil_2Props> = ({
   const REGEX_DATE_NAISSANCE: RegExp = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
   const REGEX_TEXTE: RegExp = /^[a-zA-Z\s].{3,20}$/;
 
-  // Permet de récup les données et de set les données dans les input
-  useEffect(() => {
-    if (localStorage.getItem('formData')) {
-      const storedData = localStorage.getItem('formData');
-      if (storedData) {
-        const parseData = JSON.parse(storedData);
-        if (parseData.profil)  {
-          setImgProfil(parseData.profil);      
-        } else {
-          setImgProfil('../../../../public/images/profilDefault.png')
-          setDataLocalStorage('formData', 'profil', '../../../../public/images/profilDefault.png')
-        }
-        if (parseData.banner)  {
-          setImgBanner(parseData.banner);      
-        } else {
-          setImgBanner('../../../../public/images/bannerDefault.png')
-          setDataLocalStorage('formData', 'banner', '../../../../public/images/bannerDefault.png')
-        }
-      }
-    }
-  }, [])
-  
   // Permet de set les données dans le localStorage
   // const setDataLocalStorage = (node:string, value: string):void => {
   //   if (localStorage.getItem('formData')) {
@@ -119,45 +98,64 @@ const FormCreateProfil_2: React.FunctionComponent<IFormCreateProfil_2Props> = ({
   }
 
   // Check la date de naissance
-  const checkFormDate = (): number | void => {
-    const storedData = localStorage.getItem('formData');
-    if (storedData) {
-      const parseData = JSON.parse(storedData);
-      const dateNaissance:string = parseData.day + '/' + (monthArray.findIndex((elmnt) => elmnt == parseData.month) + 1).toString().padStart(2, '0') +'/' + parseData.year;
-      
-      if (!REGEX_DATE_NAISSANCE.test(dateNaissance)) return;
+  const checkFormDate = (): boolean | void => {
+    if (naissance) {
+      if (!REGEX_DATE_NAISSANCE.test(naissance)) return false;
 
-      const [day, month, year] = dateNaissance.split('/').map(Number);
+      const [day, month, year] = naissance.split('/').map(Number);
       const date = new Date(year, month - 1, day);
 
-      if (date.getFullYear() !== year || date.getMonth() + 1 !== month || date.getDate() !== day) {
-        return;
-      }
+      if (date.getFullYear() !== year || date.getMonth() + 1 !== month || date.getDate() !== day) return false;
+
       setErrors(prevErrors => ({
         ...prevErrors,
         errorDate: false, 
       }));
 
-      const timestamp = new Date(year, month - 1, day).getTime();      
-      
-      return timestamp / 1000;
+      return true;
     }
   }
+
+  // Permet de récup les données et de set les données dans les input
+  useEffect(() => {
+    if (localStorage.getItem('formData')) {
+      const storedData = localStorage.getItem('formData');
+      checkFormText();
+      checkFormDate();
+      if (storedData) {
+        const parseData = JSON.parse(storedData);
+        if (parseData.profil)  {
+          setImgProfil(parseData.profil);      
+        } else {
+          setImgProfil('../../../../public/images/profilDefault.png')
+          setDataLocalStorage('formData', 'profil', '../../../../public/images/profilDefault.png')
+        }
+        if (parseData.banner)  {
+          setImgBanner(parseData.banner);      
+        } else {
+          setImgBanner('../../../../public/images/bannerDefault.png')
+          setDataLocalStorage('formData', 'banner', '../../../../public/images/bannerDefault.png')
+        }
+        if (parseData.day && parseData.month && parseData.year) {
+          setNaissance(parseData.day + '/' + (monthArray.findIndex((elmnt) => elmnt == parseData.month) + 1).toString().padStart(2, '0') +'/' + parseData.year);
+        }
+      }
+    }
+  }, [])
 
   // Perment d'envoyer le formulaire
   const handleClick =  async (e: React.MouseEvent<HTMLButtonElement>): Promise<void | string> => {
     e.preventDefault();
-    
-    checkFormText();
-    const date: number | void = checkFormDate();
-   
+     
     if (!errors.errorFirstName && !errors.errorLastName && !errors.errorDate && !errors.errorCity && !errors.errorContent && id_user && token) {  
-      if (typeof date != "number") return;
 
       if (localStorage.getItem('formData')) {
         const storedData = localStorage.getItem('formData');
         if (storedData) {
           const parseData = JSON.parse(storedData);
+
+          const date: number = dateToTimestamp(naissance);
+
           updateProfil.firstName = parseData.firstName;
           updateProfil.lastName = parseData.lastName;
           updateProfil.date = date;

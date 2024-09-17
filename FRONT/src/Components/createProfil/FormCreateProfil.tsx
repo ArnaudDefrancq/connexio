@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import Style from './FormCreateProfil.module.css';
 import FormCreateProfil_1 from './form_1/FormCreateProfil_1';
 import FormCreateProfil_2 from './form_2/FormCreateProfil_2';
@@ -53,7 +53,9 @@ const FormCreateProfil: React.FunctionComponent<IFormCreateProfilProps> = () => 
   }
 
   // Permet de créer un item dans le localStorage
-  deleteAndCreateLocalStorage('formData', defaultValue);
+  useEffect(() => {
+    deleteAndCreateLocalStorage('formData', defaultValue);
+  }, [])
 
   // Gestion role du btn
   const roleButton = ():JSX.Element  => {

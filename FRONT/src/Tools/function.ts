@@ -37,6 +37,13 @@ export const deleteAndCreateLocalStorage = <T>(storageKey: string, data:T): bool
 }
 
 // Permet de prendre une date dd/mm/yyyy et de rendre un timestamp
-// export const dateToTimestamp = (date: string): number => {
+export const dateToTimestamp = (date: string): number => {
+    const [day, month, year] = date.split('/').map(Number);
+    const timestamp = new Date(year, month - 1, day).getTime();
+    return timestamp / 1000;
+}
 
-// }
+// Perme de donner la date à partir d'un timestamp
+export const timestampToDate = (timestamp: number): string => {
+    return (timestamp * 1000).toLocaleString('fr-FR');
+}
