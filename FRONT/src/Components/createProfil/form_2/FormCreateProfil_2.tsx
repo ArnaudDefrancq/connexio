@@ -1,11 +1,13 @@
 import * as React from 'react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import Style from './FormCreateProfil_2.module.css';
 import { monthArray } from '../../../Tools/config';
 import { Security } from '../../../Tools/Security';
 import { ProfilController } from '../../../Controllers/ProfilController';
 import { UpdateProfil } from '../../../Types/Profil';
 import { dateToTimestamp, deleteAndCreateLocalStorage, setDataLocalStorage } from '../../../Tools/function';
+import { useNavigate } from 'react-router-dom';
+import { UserContext } from '../../../Context/UserContext';
 
 interface IFormCreateProfil_2Props {
   id_user: number | null,
@@ -22,11 +24,13 @@ type Errors = {
 
 const FormCreateProfil_2: React.FunctionComponent<IFormCreateProfil_2Props> = ({id_user, token}) => {
 
+  const { updateUserContext } = useContext(UserContext);
+
   const [imgProfil, setImgProfil] = useState<string>('');
   const [imgBanner, setImgBanner] = useState<string>('');
-  const [naissance, setNaissance] = useState<string>('');
   const [profilFile, setProfilFile] = useState<File | null>(null); 
   const [bannerFile, setBannerFile] = useState<File | null>(null);
+  const [form, setForm] = useState<boolean>(false);
 
   const [errors, setErrors] = useState<Errors>({
     errorFirstName: true,
@@ -35,6 +39,8 @@ const FormCreateProfil_2: React.FunctionComponent<IFormCreateProfil_2Props> = ({
     errorCity: true,
     errorContent: true
   })
+  
+  const navigate = useNavigate();
 
   const updateProfil : UpdateProfil = {
     lastName: '',
@@ -98,21 +104,23 @@ const FormCreateProfil_2: React.FunctionComponent<IFormCreateProfil_2Props> = ({
   }
 
   // Check la date de naissance
-  const checkFormDate = (): boolean | void => {
-    if (naissance) {
-      if (!REGEX_DATE_NAISSANCE.test(naissance)) return false;
+  const checkFormDate = (dateUser: string): void => {
 
-      const [day, month, year] = naissance.split('/').map(Number);
+    if (dateUser) {
+      
+      if (!REGEX_DATE_NAISSANCE.test(dateUser)) return;
+
+      const [day, month, year] = dateUser.split('/').map(Number);
       const date = new Date(year, month - 1, day);
 
-      if (date.getFullYear() !== year || date.getMonth() + 1 !== month || date.getDate() !== day) return false;
+      if (date.getFullYear() !== year || date.getMonth() + 1 !== month || date.getDate() !== day) return;
 
       setErrors(prevErrors => ({
         ...prevErrors,
         errorDate: false, 
       }));
 
-      return true;
+      return;
     }
   }
 
@@ -121,7 +129,6 @@ const FormCreateProfil_2: React.FunctionComponent<IFormCreateProfil_2Props> = ({
     if (localStorage.getItem('formData')) {
       const storedData = localStorage.getItem('formData');
       checkFormText();
-      checkFormDate();
       if (storedData) {
         const parseData = JSON.parse(storedData);
         if (parseData.profil)  {
@@ -137,10 +144,11 @@ const FormCreateProfil_2: React.FunctionComponent<IFormCreateProfil_2Props> = ({
           setDataLocalStorage('formData', 'banner', '../../../../public/images/bannerDefault.png')
         }
         if (parseData.day && parseData.month && parseData.year) {
-          setNaissance(parseData.day + '/' + (monthArray.findIndex((elmnt) => elmnt == parseData.month) + 1).toString().padStart(2, '0') +'/' + parseData.year);
+          checkFormDate(parseData.day + '/' + (monthArray.findIndex((elmnt) => elmnt == parseData.month) + 1).toString().padStart(2, '0') +'/' + parseData.year);
         }
       }
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   // Perment d'envoyer le formulaire
@@ -154,7 +162,7 @@ const FormCreateProfil_2: React.FunctionComponent<IFormCreateProfil_2Props> = ({
         if (storedData) {
           const parseData = JSON.parse(storedData);
 
-          const date: number = dateToTimestamp(naissance);
+          const date: number = dateToTimestamp(parseData.day + '/' + (monthArray.findIndex((elmnt) => elmnt == parseData.month) + 1).toString().padStart(2, '0') +'/' + parseData.year);
 
           updateProfil.firstName = parseData.firstName;
           updateProfil.lastName = parseData.lastName;
@@ -163,13 +171,20 @@ const FormCreateProfil_2: React.FunctionComponent<IFormCreateProfil_2Props> = ({
           updateProfil.content = parseData.content;
           updateProfil.profil = profilFile;
           updateProfil.bg = bannerFile;
+
+          await ProfilController.updateProfil(updateProfil, Number(id_user), token);
+          // Redirection vers les feeds
+          localStorage.removeItem('formData');
+          localStorage.removeItem('formDataError');
+          updateUserContext('is_actif', 1);
+          navigate('/feeds', { replace: false});
+          window.location.href = '/feeds';
         }
       }       
-      await ProfilController.updateProfil(updateProfil, Number(id_user), token);
-      // Redirection vers les feeds
     } else {
-      deleteAndCreateLocalStorage('formDataError', errors)
-      console.error('Pb update profil')
+      deleteAndCreateLocalStorage('formDataError', errors);
+      console.error('Pb update profil');
+      setForm(true);
       return;
     }
   }
@@ -200,6 +215,9 @@ const FormCreateProfil_2: React.FunctionComponent<IFormCreateProfil_2Props> = ({
           />
         <label className={Style.label} htmlFor="fileBanner">Photo banner </label>
       </div>
+      {
+        (form) && (<p className={`messageError ${Style.p}`}>Input mal remplit.</p>)
+      }
       <button className='btnValid' onClick={(e) => handleClick(e)}>Valider</button>
     </>
   );

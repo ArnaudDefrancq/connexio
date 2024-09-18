@@ -8,6 +8,14 @@ import { allYears, setDataLocalStorage } from '../../../Tools/function.ts';
 interface IFormCreateProfil_1Props {
 }
 
+type Errors = {
+  errorFirstName: boolean;
+  errorLastName: boolean;
+  errorDate: boolean;
+  errorCity: boolean;
+  errorContent: boolean;
+}
+
 const FormCreateProfil_1: React.FunctionComponent<IFormCreateProfil_1Props> = () => {
 
   const [firstName, setFirstName] = useState<string>("");
@@ -17,6 +25,14 @@ const FormCreateProfil_1: React.FunctionComponent<IFormCreateProfil_1Props> = ()
   const [year, setYear] = useState<string>("");
   const [city, setCity] = useState<string>("");
   const [content, setContent] = useState<string>("");
+
+  const [errors, setErrors] = useState<Errors>({
+    errorFirstName: false,
+    errorLastName: false,
+    errorDate: false,
+    errorCity: false,
+    errorContent: false
+  })
   
   // Permet de récup les données et de set les données dans les input
   useEffect(() => {
@@ -33,7 +49,17 @@ const FormCreateProfil_1: React.FunctionComponent<IFormCreateProfil_1Props> = ()
         if (parseData.content) setContent(parseData.content);      
       }
     }
-  }, [])
+    if (localStorage.getItem('formDataError')) {
+      const dataError = localStorage.getItem('formDataError');
+      if (dataError) {
+        const test = JSON.parse(dataError);
+        setErrors({
+          ...test
+        })
+      }
+
+    }
+  }, []) 
 
   // Contruit le tableau avec les années 
   const yearsArray: Array<string> = allYears().reverse();
@@ -64,7 +90,7 @@ const FormCreateProfil_1: React.FunctionComponent<IFormCreateProfil_1Props> = ()
     <>
       <div className={`${Style.div} form-group`}>
         <input 
-            className={Style.input} 
+            className={`${Style.input} ${(errors.errorFirstName ? 'bad-input' : '')}`} 
             defaultValue={firstName}
             type="text" 
             id="firstName"
@@ -76,7 +102,7 @@ const FormCreateProfil_1: React.FunctionComponent<IFormCreateProfil_1Props> = ()
       </div>
       <div className={`${Style.div} form-group`}>
         <input 
-            className={Style.input} 
+            className={`${Style.input} ${(errors.errorLastName ? 'bad-input' : '')}`} 
             type="text" 
             defaultValue={lastName}
             id="lastName"
@@ -91,7 +117,7 @@ const FormCreateProfil_1: React.FunctionComponent<IFormCreateProfil_1Props> = ()
         <div className={Style.divNaissanceForm}>
           <div className={`${Style.div} `}>
               <select 
-                  className={Style.input} 
+                  className={`${Style.input} ${(errors.errorDate ? 'bad-input' : '')}`} 
                   required
                   id="day"
                   onChange={(e) => setDataLocalStorage('formData', 'day', e.target.value)}
@@ -106,7 +132,7 @@ const FormCreateProfil_1: React.FunctionComponent<IFormCreateProfil_1Props> = ()
           </div>
           <div className={`${Style.div} `}>
               <select 
-                  className={Style.input} 
+                  className={`${Style.input} ${(errors.errorDate ? 'bad-input' : '')}`} 
                   required
                   id="month"
                   onChange={(e) => setDataLocalStorage('formData', 'month', e.target.value)}
@@ -121,7 +147,7 @@ const FormCreateProfil_1: React.FunctionComponent<IFormCreateProfil_1Props> = ()
           </div>
           <div className={`${Style.div} `}>
               <select 
-                  className={Style.input} 
+                  className={`${Style.input} ${(errors.errorDate ? 'bad-input' : '')}`} 
                   required
                   id="year"
                   onChange={(e) => setDataLocalStorage('formData', 'year', e.target.value)}
@@ -140,7 +166,7 @@ const FormCreateProfil_1: React.FunctionComponent<IFormCreateProfil_1Props> = ()
       </div>
       <div className={`${Style.div} form-group`}>
           <input 
-              className={Style.input} 
+              className={`${Style.input} ${(errors.errorCity ? 'bad-input' : '')}`} 
               required
               defaultValue={city}
               type="text" 
@@ -152,7 +178,7 @@ const FormCreateProfil_1: React.FunctionComponent<IFormCreateProfil_1Props> = ()
       </div>
       <div className={`${Style.div} form-group`}>
           <textarea 
-              className={Style.input} 
+              className={`${Style.input} ${(errors.errorContent ? 'bad-input' : '')}`} 
               required
               defaultValue={content}
               placeholder=" "

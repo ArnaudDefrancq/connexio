@@ -3,7 +3,7 @@ import { Security } from '../Tools/Security';
 import { UserState } from '../Types/UserState';
 
 interface UserContextType extends UserState {
-    updateUserContext: (field: keyof UserState, value: string | boolean | null) => void;
+    updateUserContext: (field: keyof UserState, value: string | number  | null) => void;
     logoutUser: () => void;
 }
 
@@ -28,11 +28,12 @@ const UserProvider: FC<UserProviderProps> = ({ children }) => {
 
     const [user, setUser] = useState<UserState>(getInitialUserState);
     
-
-    const updateUserContext = (field: keyof UserState, value: string | boolean | null) => {
+    
+    const updateUserContext = (field: keyof UserState, value: string | number | null) => {
         setUser((prevUser) => {
             const updatedUser = { ...prevUser, [field]: value };
-            localStorage.setItem('data', JSON.stringify(updatedUser));
+            const encryptedData = Security.encryptData(updatedUser);
+            localStorage.setItem('data', encryptedData);
             return updatedUser;
         });
     };

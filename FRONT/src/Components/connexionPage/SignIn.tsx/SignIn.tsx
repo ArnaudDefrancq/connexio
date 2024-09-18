@@ -26,10 +26,7 @@ const SignIn: React.FunctionComponent<ISignInProps> = () => {
         const connexion = await UserController.signIn(mail, password);
         if (typeof connexion !== 'boolean') {
           const encryptedData = Security.encryptData(connexion);
-          // localStorage.setItem('data', encryptedData);
-          deleteAndCreateLocalStorage('data', encryptedData);
-          console.log( connexion.is_actif);
-          
+          deleteAndCreateLocalStorage('data', encryptedData);          
           if (connexion.is_actif == 1) {
             // Page feed
             navigate('/feeds', { replace: false});
