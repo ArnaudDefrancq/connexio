@@ -1,0 +1,41 @@
+.input {
+    display: none;
+}
+
+.formPost {
+    flex-direction: row !important;
+    width: 100%;
+    height: 80% !important;
+    justify-content: space-around !important;
+}
+
+.sectionPost {
+    background-color: var(--colorWhite);
+    width: 90%;
+    height: 125px;
+    margin: 10% auto;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 0 3px 0 black;
+}
+
+
+.group {
+    width: 90% !important;
+}
+
+.postDiv {
+    display: flex;
+}
+
+.contentDiv {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 80%;
+}
+
+.icon {
+    font-size: 20px;
+}
