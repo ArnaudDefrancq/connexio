@@ -2,7 +2,6 @@ import * as React from 'react';
 import { Dispatch, SetStateAction } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface INavBarProps {
     menu: boolean,
     setMenu: Dispatch<SetStateAction<boolean>>
