@@ -1,0 +1,17 @@
+header {
+    background-color: var(--colorWhite);
+    display: flex;
+    justify-content: space-between;
+}
+
+header img {
+    width: 40%;
+}
+
+header button {
+    margin-right: 8%;
+}
+
+.iconHeader {
+    font-size: 24px;
+}
