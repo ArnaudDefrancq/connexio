@@ -112,6 +112,10 @@ button {
   border: 1px solid var(--colorError) !important;
 }
 
+.bad-input-icon {
+  color: var(--colorError);
+}
+
 .form-group input::placeholder,
 .form-group textarea::placeholder {
   color: transparent;

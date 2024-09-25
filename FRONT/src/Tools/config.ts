@@ -5,3 +5,5 @@ export const dayArray: Array<string> = [
 export const monthArray: Array<string> = [
     'Javier', 'Fevrier', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'
 ]
+
+export const REGEX_TEXTE: RegExp = /^[a-zA-Z\s].{3,20}$/;
