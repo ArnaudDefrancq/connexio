@@ -13,16 +13,16 @@ interface ICreatePostProps {
 
 type Errors = {
     errorContent: boolean,
-    errorFile: boolean
+    errorFile: boolean,
   }
 
 const CreatePost: React.FunctionComponent<ICreatePostProps> = () => {
     const [content, setContent] = useState<string>("")
-    const [file, setFile] = useState<File| null>()
+    const [file, setFile] = useState<File| null>(null)
 
     const [errors, setErrors] = useState<Errors> ({
         errorContent: false,
-        errorFile: false
+        errorFile: false,
     });
 
     // Check input content
@@ -48,8 +48,18 @@ const CreatePost: React.FunctionComponent<ICreatePostProps> = () => {
     }
  
     // Permet d'envoyer le formulaire
-    const handleClick = (e: React.MouseEvent<HTMLButtonElement>): void => {
+    const handleClick = (e: React.MouseEvent<HTMLButtonElement>):void => {
+        checkInput(content); 
         e.preventDefault();
+        setTimeout(() => {
+            console.log(errors.errorContent);
+            if (!errors.errorContent && !errors.errorFile) {
+                console.log('bon');
+                
+            } else {
+                console.log('input pas OK');
+            }
+        }, 1000)
     }
 
   return (
@@ -59,11 +69,11 @@ const CreatePost: React.FunctionComponent<ICreatePostProps> = () => {
                 <div className={Style.contentDiv}>
                     <div className={`${Style.group} form-group`}>
                         <textarea  
-                            className={`${Style.input} `} 
+                            className={`${Style.input}  ${(errors.errorContent ? 'bad-input' : '')}`} 
                             required
                             placeholder=" "
                             id='content'
-                            onChange={(e) => {checkInput(e.target.value); setContent(e.target.value)}}
+                            onChange={(e) => {setContent(e.target.value)}}
                         />
                         <label className={''} htmlFor="content">Votre message </label>
                     </div>
@@ -78,7 +88,7 @@ const CreatePost: React.FunctionComponent<ICreatePostProps> = () => {
                         <label className={`${Style.label} ${(errors.errorFile) ? 'bad-input-icon' : ''}}`} htmlFor="files"><FontAwesomeIcon className={Style.icon} icon={faFile}/></label>
                     </div>
                 </div>
-                <button className=''><FontAwesomeIcon className={Style.icon} icon={faPaperPlane}/></button>
+                <button className='' onClick={(e) => handleClick(e)}><FontAwesomeIcon className={Style.icon} icon={faPaperPlane}/></button>
             </form>
         </section>
     </>
