@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useState, useEffect, useContext } from 'react';
-import Style  from './Feeds.module.css'
-import { Post } from '../../../Types/Post';
+// import Style  from './Feeds.module.css'
+import { PostWithProfil } from '../../../Types/Post';
 import Card from './card/Card';
 import { PostController } from '../../../Controllers/PostController';
 import { UserContext } from '../../../Context/UserContext';
@@ -13,7 +13,7 @@ interface IFeedsProps {
 const Feeds: React.FunctionComponent<IFeedsProps> = () => {
 
     const { token } = useContext(UserContext);
-    const [loadPost, setLoadPost] = useState<Array<Post> | null>();
+    const [loadPost, setLoadPost] = useState<Array<PostWithProfil> | null>();
 
     useEffect(() => {
         const fetchPosts = async () => {

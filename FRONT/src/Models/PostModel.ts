@@ -1,4 +1,4 @@
-import { Post } from "../Types/Post";
+import { Post, PostWithProfil } from "../Types/Post";
 import axios from "axios";
 
 export class PostModel implements Post {
@@ -35,7 +35,7 @@ export class PostModel implements Post {
         }
     }
 
-    static async getAllPost (token: string): Promise<Array<Post> | void> {
+    static async getAllPost (token: string): Promise<Array<PostWithProfil> | void> {
         try {
             const config = {
                 headers: {
@@ -44,10 +44,7 @@ export class PostModel implements Post {
                 }
             };
 
-            const allPost: Array<Post> = (await axios.get(import.meta.env.VITE_URL_POST, config)).data;
-
-            console.log(allPost);
-            
+            const allPost: Array<PostWithProfil> = (await axios.get(import.meta.env.VITE_URL_POST, config)).data;
 
             return allPost;
 

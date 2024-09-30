@@ -1,15 +1,15 @@
 import * as React from 'react';
-import { Post } from '../../../../Types/Post';
+import { PostWithProfil } from '../../../../Types/Post';
 
 interface ICardProps {
-    post: Post
+    post: PostWithProfil
 }
 
 const Card: React.FunctionComponent<ICardProps> = ({ post }) => {
   return (
     <>
       <div>
-        <h2>{post.content}</h2>
+        <h2>{post.nom}</h2>
         
       </div>
     </>
