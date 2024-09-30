@@ -44,8 +44,11 @@ export class PostModel implements Post {
                 }
             };
 
-            const allPost: Array<Post> = await axios.get(import.meta.env.VITE_URL_POST, config);
-    
+            const allPost: Array<Post> = (await axios.get(import.meta.env.VITE_URL_POST, config)).data;
+
+            console.log(allPost);
+            
+
             return allPost;
 
         } catch (error) {

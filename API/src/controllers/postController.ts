@@ -109,9 +109,13 @@ export const getAllPost = async (req: AuthRequest, res: Response, next: NextFunc
     try {
         const { actif } = req.auth || {};
         if (actif == '1') {
-            const postModel: PostModel = new PostModel();;
+            const postModel: PostModel = new PostModel();
+
+            const query = `SELECT post.id_post, post.content, post.media, post.created_at, post.updated_at,
+               profil.id_profil, profil.nom, profil.prenom FROM cx__post AS post JOIN cx__profil as profil ON post.id_profil = profil.id_profil`;
             
-            const arrayPost: Post[] = await postModel.findPost("");         
+            const arrayPost: Post[] = await postModel.findPost("", "*", query);       
+            
 
             res.status(200).json(arrayPost);
             return;

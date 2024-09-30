@@ -13,8 +13,8 @@ export class PostModel {
         return this.postDao.create(post, callback);
       }
     
-      public findPost(where: string, select: string = "*"): Promise<Post[]> {
-        return  this.postDao.find(where, select);
+      public findPost(where: string, select: string = "*", queryString?: string): Promise<Post[]> {
+        return  this.postDao.find(where, select, queryString);
       }
 
       public findById(id: number, select: string = "*"): Promise<Post[]> {

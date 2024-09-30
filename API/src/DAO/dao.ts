@@ -32,11 +32,11 @@ export class Dao<T> {
      * @param select Colonne (si empty "*") - string
      * @returns tableau d'objet
      */
-    public find(where: string, select: string = '*'): Promise<T[]> {
-        const queryString: string = `SELECT ${select} FROM cx__${this.tableName} ${where}`;
+    public find(where: string, select: string = '*', queryString?: string): Promise<T[]> {
+        const query: string = queryString || `SELECT ${select} FROM cx__${this.tableName} ${where}`;        
 
         return new Promise<T[]>((resolve, reject) => {
-            connection.query(queryString, (error, results) => {
+            connection.query(query, (error, results) => {
                 if (error) {
                     reject(error);
                 } else {

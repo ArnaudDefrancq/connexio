@@ -6,7 +6,14 @@ interface ICardProps {
 }
 
 const Card: React.FunctionComponent<ICardProps> = ({ post }) => {
-  return (<></>);
+  return (
+    <>
+      <div>
+        <h2>{post.content}</h2>
+        
+      </div>
+    </>
+  );
 };
 
 export default Card;
