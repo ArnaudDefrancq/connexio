@@ -7,4 +7,7 @@ export interface Post {
     id_profil: number
 };
 
-export default Post;
+export interface newPost {
+    content: string,
+    media?: File | null,
+}

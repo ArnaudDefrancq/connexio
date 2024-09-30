@@ -1,10 +1,13 @@
 import * as React from 'react';
 import Style from './CreatePost.module.css';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaperPlane, faFile } from '@fortawesome/free-solid-svg-icons';
 import { Security } from '../../../Tools/Security';
 import { REGEX_TEXTE } from '../../../Tools/config';
+import { PostController } from '../../../Controllers/PostController';
+import { newPost } from '../../../Types/Post';
+import { UserContext } from '../../../Context/UserContext';
 
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
@@ -17,6 +20,8 @@ type Errors = {
   }
 
 const CreatePost: React.FunctionComponent<ICreatePostProps> = () => {
+    const { token, id_user } = useContext(UserContext);
+
     const [content, setContent] = useState<string>("")
     const [file, setFile] = useState<File| null>(null)
     const [isClick, setIsClick] = useState<boolean>(false);
@@ -49,13 +54,17 @@ const CreatePost: React.FunctionComponent<ICreatePostProps> = () => {
     }
  
     // Permet d'envoyer le formulaire
-    const handleClick = (e: React.MouseEvent<HTMLButtonElement>):void => {
+    const handleClick = async (e: React.MouseEvent<HTMLButtonElement>):Promise<void> => {
        
         e.preventDefault();
         
-        console.log(errors.errorContent);
-        if (!errors.errorContent && !errors.errorFile) {
-            console.log('bon');
+        if (!errors.errorContent && !errors.errorFile && id_user && token) {
+            const newPost: newPost = {
+                content,
+                media: file
+            }
+
+            await PostController.createPost(newPost, Number(id_user), token)
             
         } else {
             console.log('input pas OK');
