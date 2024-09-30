@@ -1,4 +1,4 @@
-import Post from "../Types/Post";
+import { Post } from "../Types/Post";
 import axios from "axios";
 
 export class PostModel implements Post {
@@ -25,12 +25,31 @@ export class PostModel implements Post {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'multipart/form-data',
                 }
-            }
+            };
             await axios.post(`${import.meta.env.VITE_URL_POST}/${id}/post`, post, config);
 
             return;
         } catch (error) {
             console.log('Pb post' + error);
+            return;
+        }
+    }
+
+    static async getAllPost (token: string): Promise<Array<Post> | void> {
+        try {
+            const config = {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'multipart/form-data',
+                }
+            };
+
+            const allPost: Array<Post> = await axios.get(import.meta.env.VITE_URL_POST, config);
+    
+            return allPost;
+
+        } catch (error) {
+            console.log('Pb getAllPost' + error);
             return;
         }
     }
