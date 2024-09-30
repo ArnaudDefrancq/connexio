@@ -62,9 +62,11 @@ const CreatePost: React.FunctionComponent<ICreatePostProps> = () => {
             const newPost: newPost = {
                 content,
                 media: file
-            }
+            };
 
-            await PostController.createPost(newPost, Number(id_user), token)
+            await PostController.createPost(newPost, Number(id_user), token);
+            setContent('');
+            setFile(null);
             
         } else {
             console.log('input pas OK');
@@ -79,6 +81,7 @@ const CreatePost: React.FunctionComponent<ICreatePostProps> = () => {
                     <div className={`${Style.group} form-group`}>
                         <textarea  
                             className={`${Style.input}  ${((errors.errorContent && isClick) ? 'bad-input' : '')}`} 
+                            defaultValue={content}
                             required
                             placeholder=" "
                             id='content'
