@@ -112,7 +112,7 @@ export const getAllPost = async (req: AuthRequest, res: Response, next: NextFunc
             const postModel: PostModel = new PostModel();
 
             const query = `SELECT post.id_post, post.content, post.media, post.created_at, post.updated_at,
-               profil.id_profil, profil.nom, profil.prenom FROM cx__post AS post JOIN cx__profil as profil ON post.id_profil = profil.id_profil`;
+               profil.id_profil, profil.nom, profil.prenom, profil.img_profil FROM cx__post AS post JOIN cx__profil as profil ON post.id_profil = profil.id_profil`;
             
             const arrayPost: Post[] = await postModel.findPost("", "*", query);       
             

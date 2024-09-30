@@ -20,5 +20,6 @@ export interface PostWithProfil {
     updated_at: number,
     id_profil: number,
     nom: string,
-    prenom: string
+    prenom: string,
+    img_profil: string
 }
