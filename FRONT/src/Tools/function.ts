@@ -45,5 +45,5 @@ export const dateToTimestamp = (date: string): number => {
 
 // Perme de donner la date à partir d'un timestamp
 export const timestampToDate = (timestamp: number): string => {
-    return (timestamp * 1000).toLocaleString('fr-FR');
+    return new Date(timestamp * 1000).toLocaleDateString('fr-FR');
 }
