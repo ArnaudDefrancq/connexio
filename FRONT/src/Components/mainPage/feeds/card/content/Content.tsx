@@ -1,4 +1,6 @@
 import * as React from 'react';
+import Style from './Content.module.css'
+
 
 interface IContentProps {
   content: string,
@@ -10,7 +12,7 @@ const Content: React.FunctionComponent<IContentProps> = ({ content, media, id_pr
 
   let pathImg = '';
   if (media) {
-    pathImg = `http://localhost:5000/imgPost/${id_profil}/${media}`;
+    pathImg = `${import.meta.env.VITE_URL_IMG}/imgPost/${id_profil}/${media}`;
   }
 
   return (
@@ -18,7 +20,7 @@ const Content: React.FunctionComponent<IContentProps> = ({ content, media, id_pr
     <div>
       <p>{content}</p>
       {
-        (pathImg && <img src={pathImg} alt="photo poster" />)
+        (pathImg && <img src={pathImg} alt="photo poster" className={Style.imgPost}/>)
       }
     </div>
     </>

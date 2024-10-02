@@ -46,7 +46,7 @@ export class PostModel implements Post {
 
             const allPost: Array<PostWithProfil> = (await axios.get(import.meta.env.VITE_URL_POST, config)).data;
 
-            return allPost;
+            return allPost.reverse();
 
         } catch (error) {
             console.log('Pb getAllPost' + error);

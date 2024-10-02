@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState, useEffect, useContext } from 'react';
-// import Style  from './Feeds.module.css'
+import Style  from './Feeds.module.css'
 import { PostWithProfil } from '../../../Types/Post';
 import Card from './card/Card';
 import { PostController } from '../../../Controllers/PostController';
@@ -34,7 +34,7 @@ const Feeds: React.FunctionComponent<IFeedsProps> = () => {
 
     return (
         <>
-            <section>
+            <section className={Style.sectionFeeds}>
                 <p>Publications récentes</p>
                 {                    
                     loadPost?.map((post) => {

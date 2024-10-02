@@ -1,4 +1,5 @@
 import * as React from 'react';
+import Style from './Author.module.css';
 import { timestampToDate } from '../../../../../Tools/function';
 
 interface IAuthorProps {
@@ -12,12 +13,12 @@ interface IAuthorProps {
 
 const Author: React.FunctionComponent<IAuthorProps> = ({ nom, prenom, img, createdAt, updatedAt, id_profil }) => {
 
-  const pathImg = `http://localhost:5000/imgProfil/${id_profil}/profil/${img}`
+  const pathImg = `${import.meta.env.VITE_URL_IMG}/imgProfil/${id_profil}/profil/${img}`
 
   return (
     <>
       <div>
-        <img src={pathImg} alt="photo de profil" />
+        <img src={pathImg} alt="photo de profil" className={Style.imgProfil}/>
       </div>
       <div>
         <p>{nom} {prenom}</p> 

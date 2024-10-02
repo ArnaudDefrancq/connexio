@@ -249,3 +249,14 @@ nav ul li {
   }
 }
 /* ------------------- */
+/* Footer */
+footer {
+  background-color: var(--color5);
+  text-align: center;
+}
+footer p {
+  padding: 5%;
+  font-size: 14px;
+  color: var(--colorWhite);
+}
+/* ------------------- */
