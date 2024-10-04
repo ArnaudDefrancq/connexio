@@ -1,8 +1,8 @@
 import { PostModel } from "../Models/PostModel";
-import { Post, PostWithProfil } from "../Types/Post";
+import { newPost, PostWithProfil } from "../Types/Post";
 
 export class PostController {
-    static async createPost (post: Post, id: number, token: string): Promise<void> {
+    static async createPost (post: newPost, id: number, token: string): Promise<void> {
         return await PostModel.createPost(post, id, token);
     }
 

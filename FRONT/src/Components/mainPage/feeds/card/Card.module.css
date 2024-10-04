@@ -35,3 +35,12 @@
     top: 100%;
     background-color: var(--color5);
 }
+
+.button {
+    position: absolute;
+    right: 10%;
+}
+
+.icon {
+    font-size: 18px;
+}

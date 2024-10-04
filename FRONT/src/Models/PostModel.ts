@@ -1,4 +1,4 @@
-import { Post, PostWithProfil } from "../Types/Post";
+import { newPost, Post, PostWithProfil } from "../Types/Post";
 import axios from "axios";
 
 export class PostModel implements Post {
@@ -18,7 +18,7 @@ export class PostModel implements Post {
         this.id_profil = Number(data.id_profil);
     }
 
-    static async createPost (post: Post, id:number, token: string): Promise<void> {
+    static async createPost (post: newPost, id:number, token: string): Promise<void> {
         try {
             const config = {
                 headers: {
