@@ -1,0 +1,23 @@
+.card {
+    background-color: var(--colorWhite);
+    border-radius: 15px;
+    box-shadow: 0 0 3px 0 black;
+    margin: 2% 0;
+}
+
+.cardAuthor {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 5%;
+    position: relative;
+}
+
+.cardAuthor::after {
+    content: ' ';
+    position: absolute;
+    width: 90%;
+    height: 1px;
+    top: 100%;
+    background-color: var(--color5);
+}

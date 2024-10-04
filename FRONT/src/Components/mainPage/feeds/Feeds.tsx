@@ -35,7 +35,6 @@ const Feeds: React.FunctionComponent<IFeedsProps> = () => {
     return (
         <>
             <section className={Style.sectionFeeds}>
-                <p>Publications récentes</p>
                 {                    
                     loadPost?.map((post) => {
                         return <Card post={post} key={post.id_post}/>;

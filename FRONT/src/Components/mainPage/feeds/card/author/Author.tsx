@@ -17,13 +17,11 @@ const Author: React.FunctionComponent<IAuthorProps> = ({ nom, prenom, img, creat
 
   return (
     <>
-      <div>
-        <img src={pathImg} alt="photo de profil" className={Style.imgProfil}/>
-      </div>
-      <div>
-        <p>{nom} {prenom}</p> 
+      <img src={pathImg} alt="photo de profil" className={Style.imgProfil}/>
+      <div className={Style.divAuthor}>
+        <p className={Style.author}>{nom} {prenom}</p> 
         {
-          (updatedAt == createdAt) ? timestampToDate(createdAt) : timestampToDate(updatedAt)
+          (updatedAt == createdAt) ? <p className={Style.datePost}>{timestampToDate(createdAt)}</p> : <p className={Style.datePost}>{timestampToDate(updatedAt)}</p>
         }
       </div>
     </>

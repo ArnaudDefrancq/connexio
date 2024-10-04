@@ -1,3 +1,21 @@
 .imgProfil {
-    width: 15%;
+    width: 60px;
+    height: 60px;
+    border-radius: 50px;
+}
+
+.divAuthor {
+    margin-left: 5%;
+} 
+
+.author {
+    font-weight: bold;
+}
+
+.datePost {
+    font-size: 12px;
+    font-weight: lighter;
+    font-style: italic;
+    padding-top: 5%;
+    color: var(--color4);
 }
