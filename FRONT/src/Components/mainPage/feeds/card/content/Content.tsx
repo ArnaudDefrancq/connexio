@@ -19,9 +19,11 @@ const Content: React.FunctionComponent<IContentProps> = ({ content, media, id_pr
     <>
     <div>
       <p>{content}</p>
-      {
-        (pathImg && <img src={pathImg} alt="photo poster" className={Style.imgPost}/>)
-      }
+      <div className={Style.divImgPost}>
+        {
+          (pathImg && <img src={pathImg} alt="photo poster" className={Style.imgPost}/>)
+        }
+      </div>
     </div>
     </>
   );

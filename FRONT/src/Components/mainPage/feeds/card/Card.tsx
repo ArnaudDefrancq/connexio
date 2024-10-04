@@ -16,7 +16,7 @@ const Card: React.FunctionComponent<ICardProps> = ({ post }) => {
         <div className={Style.cardAuthor}>
           <Author nom={post.nom} prenom={post.prenom} img={post.img_profil} createdAt={post.created_at} updatedAt={post.updated_at} id_profil={post.id_profil} />
         </div>
-        <div>
+        <div className={Style.cardPost}>
           <Content content={post.content} media={post.media} id_profil={post.id_profil}/>
         </div>
         <div>

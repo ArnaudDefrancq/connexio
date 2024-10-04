@@ -7,6 +7,7 @@ interface ICommentaireProps {
 const Commentaire: React.FunctionComponent<ICommentaireProps> = () => {
   return (
     <>
+      <p>ICI les commentaires pour un post</p>
     </>
   );
 };

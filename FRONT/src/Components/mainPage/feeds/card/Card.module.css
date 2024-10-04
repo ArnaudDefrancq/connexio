@@ -21,3 +21,17 @@
     top: 100%;
     background-color: var(--color5);
 }
+
+.cardPost {
+    padding: 5%;
+    position: relative;
+}
+
+.cardPost::after {
+    content: ' ';
+    position: absolute;
+    width: 90%;
+    height: 1px;
+    top: 100%;
+    background-color: var(--color5);
+}
