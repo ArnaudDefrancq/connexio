@@ -13,8 +13,8 @@ export class CommentaireModel {
         return this.commentaireDao.create(commentaire, callback);
       }
     
-      public findCommentaire(where: string, select: string = "*"): Promise<Commentaire[]> {
-        return  this.commentaireDao.find(where, select);
+      public findCommentaire(where: string, select: string = "*", queryString?: string): Promise<Commentaire[]> {
+        return  this.commentaireDao.find(where, select, queryString);
       }
 
       public findById(id: number, select: string = "*"): Promise<Commentaire[]> {

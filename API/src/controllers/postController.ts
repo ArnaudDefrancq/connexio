@@ -2,9 +2,16 @@ import { PostModel } from "../models/PostModel";
 import { Request, Response, NextFunction } from 'express';
 import { Post } from '../types/Post';
 import fs from 'fs';
-import path from 'path';
+import path, { resolve } from 'path';
 import { AuthRequest } from '../middlewares/auth'
 import { Folder } from "../tools/Folder";
+import { CommentaireModel } from "../models/CommentaireModel";
+import Commentaire from "../types/Commentaire";
+import { error } from "console";
+import { CommentaireLikeModel } from "../models/CommentaireLikeModel";
+import { PostLikeModel } from "../models/PostLikeModel";
+import CommentaireLike from "../types/CommentaireLike";
+import PostLike from "../types/PostLike";
 
 export const createPost = async (req: AuthRequest, res: Response, next: NextFunction) : Promise<void> => {
     try {
@@ -173,8 +180,12 @@ export const deletePost = async (req: AuthRequest, res: Response, next: NextFunc
 
         if (actif == "1" || role == '1') {
             const postModel: PostModel = new PostModel();
-            let message;
+            const commentaireModel = new CommentaireModel();
+            const commentaireLikeModel = new CommentaireLikeModel();
+            const postLikeModel = new PostLikeModel();
 
+            let message;
+            
             const result: Post[] = await postModel.findById(id);
 
             if (result && result.length > 0) {
@@ -182,8 +193,63 @@ export const deletePost = async (req: AuthRequest, res: Response, next: NextFunc
                 const post: Post = result[0];
                 
                 if (post.id_profil == Number(userId) || role == '1') {
-                    if (post.media != null) Folder.deleteFolderPost(String(userId), post.media)
 
+                    
+                    if (post.media != null) Folder.deleteFolderPost(String(userId), post.media);
+                
+                    // Récup des com & delete com
+                    const allComPost: Array<Commentaire> = await commentaireModel.findCommentaire(`WHERE id_post=${id}`);
+                    
+                    const arrayIdComm: Array<number> = [];
+
+                    allComPost.forEach((com) => {
+                        arrayIdComm.push(Number(com.id_commentaire));
+                        
+                    });
+
+                    const allComLike: Array<CommentaireLike> = await commentaireLikeModel.findCommentaireLike(`WHERE id_commentaire IN (${arrayIdComm.join(", ")})`);                   
+
+                    // Delete Like Com
+                    allComLike.forEach(async (comLike) => {
+                        await new Promise<number>((resolve, reject) => {
+                            commentaireLikeModel.deleteCommentaireLike(Number(comLike.id_commentaire_like), (error, affectedRows) => {
+                                if (error) {
+                                    reject(error);
+                                } else {
+                                    resolve(affectedRows || 0);
+                                }
+                            })
+                        })
+                    });
+
+                    // Delete com
+                    allComPost.forEach(async (com) => {
+                        await new Promise<number>((resolve, reject) => {
+                            commentaireModel.deleteCommentaire(Number(com.id_commentaire), (error, affectedRows) => {
+                                if (error) {
+                                    reject(error);
+                                } else {
+                                    resolve(affectedRows || 0);
+                                }
+                            })
+                        })
+                    });
+                    
+
+                    // Récup les postLike & delete
+                    const allPostLike: Array<PostLike> = await postLikeModel.findPostLike(`WHERE id_post=${id}`);
+                    allPostLike.forEach(async (postLike) => {
+                        await new Promise<number>((resolve, reject) => {
+                            postLikeModel.deletePostLike(Number(postLike.id_post_like), (error, affectedRows) => {
+                                if (error) {
+                                    reject(error);
+                                } else {
+                                    resolve(affectedRows || 0);
+                                }
+                            })
+                        })
+                    })                    
+                        
                     const postDelete = await new Promise<number>((resolve, reject) => {
                         postModel.deletePost(id, (error, affectedRows) => {
                             if (error) {

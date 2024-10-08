@@ -53,4 +53,39 @@ export class PostModel implements Post {
             return;
         }
     }
+
+    static async updatePost (post: newPost, id: number, token: string): Promise<void> {
+        try {
+            const config = {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'multipart/form-data',
+                }
+            };
+
+            await axios.put(`${import.meta.env.VITE_URL_POST}/${id}/post`, post, config);
+
+            return;
+        } catch (error) {
+            console.log('Pb update' + error);
+            return;
+        }
+    }
+
+    static async deletePost (id: number, token: string): Promise<void> {
+        try {
+            const config = {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'multipart/form-data',
+                }
+            };
+
+            await axios.delete()
+
+        } catch (error) {
+            console.log('Pb delete Post' + error);
+            return; 
+        }
+    }
 }

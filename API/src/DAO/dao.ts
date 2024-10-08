@@ -92,8 +92,8 @@ export class Dao<T> {
      * @param callback Retour - Function
      */
     public delete(id: number, callback: (error: Error | null, affectedRows?: number) => void): void {
-        const queryString: string = `DELETE FROM cx__${this.tableName} WHERE id_${this.tableName} = ?`;
-        connection.query(queryString, [id], (error, result) => {
+        const query: string = `DELETE FROM cx__${this.tableName} WHERE id_${this.tableName} = ?`;
+        connection.query(query, [id], (error, result) => {
             if (error) {
                 return callback(error);
             }
