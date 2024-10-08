@@ -4,6 +4,8 @@ import { Commentaire } from '../types/Commentaire';
 import { AuthRequest } from '../middlewares/auth'
 import { PostModel } from "../models/PostModel";
 import { Post } from '../types/Post';
+import CommentaireLike from "../types/CommentaireLike";
+import { CommentaireLikeModel } from "../models/CommentaireLikeModel";
 
 export const createCommentaire= async (req: AuthRequest, res: Response, next: NextFunction) : Promise<void> => {
     try {
@@ -86,6 +88,8 @@ export const deleteCommentaire= async (req: AuthRequest, res: Response, next: Ne
 
         if (actif == "1" || role == '1') {
             const commentaireModel: CommentaireModel = new CommentaireModel();
+            const commentaireLikeModel: CommentaireLikeModel = new CommentaireLikeModel();
+
             let message;
 
             const result: Commentaire[] = await commentaireModel.findById(id);
@@ -95,6 +99,20 @@ export const deleteCommentaire= async (req: AuthRequest, res: Response, next: Ne
                 const commentaire: Commentaire = result[0];
                 
                 if (commentaire.id_profil == Number(userId) || role == '1') {
+
+                    const commentaireLike: Array<CommentaireLike> = await  commentaireLikeModel.findCommentaireLike(`WHERE id_commentaire=${id}`);
+
+                    commentaireLike.forEach(async (comLike) => {
+                        await new Promise<number>((resolve, reject) => {
+                            commentaireLikeModel.deleteCommentaireLike(Number(comLike.id_commentaire_like), (error, affectedRows) => {
+                                if (error) {
+                                    reject(error);
+                                } else {
+                                    resolve(affectedRows || 0);
+                                }
+                            })
+                        })
+                    });
 
                     const commentaireDelete = await new Promise<number>((resolve, reject) => {
                         commentaireModel.deleteCommentaire(id, (error, affectedRows) => {
