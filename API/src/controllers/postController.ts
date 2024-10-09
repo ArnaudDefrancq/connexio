@@ -196,60 +196,72 @@ export const deletePost = async (req: AuthRequest, res: Response, next: NextFunc
 
                     
                     if (post.media != null) Folder.deleteFolderPost(String(userId), post.media);
-                
+         
                     // Récup des com & delete com
                     const allComPost: Array<Commentaire> = await commentaireModel.findCommentaire(`WHERE id_post=${id}`);
+               
                     
-                    const arrayIdComm: Array<number> = [];
+                    if (allComPost && allComPost.length > 0 ) {
 
-                    allComPost.forEach((com) => {
-                        arrayIdComm.push(Number(com.id_commentaire));
-                        
-                    });
+                        const arrayIdComm: Array<number> = [];
+                        allComPost.forEach((com) => {
+                            arrayIdComm.push(Number(com.id_commentaire));
+                            
+                        });
 
-                    const allComLike: Array<CommentaireLike> = await commentaireLikeModel.findCommentaireLike(`WHERE id_commentaire IN (${arrayIdComm.join(", ")})`);                   
+                        const allComLike: Array<CommentaireLike> = await commentaireLikeModel.findCommentaireLike(`WHERE id_commentaire IN (${arrayIdComm.join(", ")})`);                   
 
-                    // Delete Like Com
-                    allComLike.forEach(async (comLike) => {
-                        await new Promise<number>((resolve, reject) => {
-                            commentaireLikeModel.deleteCommentaireLike(Number(comLike.id_commentaire_like), (error, affectedRows) => {
-                                if (error) {
-                                    reject(error);
-                                } else {
-                                    resolve(affectedRows || 0);
-                                }
-                            })
-                        })
-                    });
+
+                        // Delete Like Com
+                        if (allComLike && allComLike.length > 0) {
+                            allComLike.forEach(async (comLike) => {
+                                await new Promise<number>((resolve, reject) => {
+                                    commentaireLikeModel.deleteCommentaireLike(Number(comLike.id_commentaire_like), (error, affectedRows) => {
+                                        if (error) {
+                                            reject(error);
+                                        } else {
+                                            resolve(affectedRows || 0);
+                                        }
+                                    })
+                                })
+                            });
+                        }
+                    }
 
                     // Delete com
-                    allComPost.forEach(async (com) => {
-                        await new Promise<number>((resolve, reject) => {
-                            commentaireModel.deleteCommentaire(Number(com.id_commentaire), (error, affectedRows) => {
-                                if (error) {
-                                    reject(error);
-                                } else {
-                                    resolve(affectedRows || 0);
-                                }
+                    if (allComPost && allComPost.length > 0) {
+                        allComPost.forEach(async (com) => {
+                            await new Promise<number>((resolve, reject) => {
+                                commentaireModel.deleteCommentaire(Number(com.id_commentaire), (error, affectedRows) => {
+                                    if (error) {
+                                        reject(error);
+                                    } else {
+                                        resolve(affectedRows || 0);
+                                    }
+                                })
                             })
-                        })
-                    });
+                        });
+                    }
                     
 
                     // Récup les postLike & delete
                     const allPostLike: Array<PostLike> = await postLikeModel.findPostLike(`WHERE id_post=${id}`);
-                    allPostLike.forEach(async (postLike) => {
-                        await new Promise<number>((resolve, reject) => {
-                            postLikeModel.deletePostLike(Number(postLike.id_post_like), (error, affectedRows) => {
-                                if (error) {
-                                    reject(error);
-                                } else {
-                                    resolve(affectedRows || 0);
-                                }
+                    
+                    if (allPostLike && allPostLike.length > 0) {
+                        allPostLike.forEach(async (postLike) => {
+                            await new Promise<number>((resolve, reject) => {
+                                postLikeModel.deletePostLike(Number(postLike.id_post_like), (error, affectedRows) => {
+                                    if (error) {
+                                        reject(error);
+                                    } else {
+                                        resolve(affectedRows || 0);
+                                    }
+                                })
                             })
-                        })
-                    })                    
-                        
+                        })                    
+                    }
+        
+
                     const postDelete = await new Promise<number>((resolve, reject) => {
                         postModel.deletePost(id, (error, affectedRows) => {
                             if (error) {

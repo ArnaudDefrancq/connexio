@@ -81,7 +81,10 @@ export class PostModel implements Post {
                 }
             };
 
-            await axios.delete()
+            console.log(id + token);
+            
+
+            await axios.delete(`${import.meta.env.VITE_URL_POST}/${id}/delete`, config)
 
         } catch (error) {
             console.log('Pb delete Post' + error);

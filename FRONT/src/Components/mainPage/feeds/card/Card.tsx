@@ -8,6 +8,7 @@ import Author from './author/Author';
 import Content from './content/Content';
 import Commentaire from './commentaire/Commentaire';
 import { UserContext } from '../../../../Context/UserContext';
+import { PostController } from '../../../../Controllers/PostController';
 
 interface ICardProps {
     post: PostWithProfil
@@ -15,12 +16,21 @@ interface ICardProps {
 
 const Card: React.FunctionComponent<ICardProps> = ({ post }) => {
 
-  const { role, id_user } = useContext(UserContext);
+  const { role, id_user, token } = useContext(UserContext);
 
   const [isClick, setIsClick] = useState<boolean>(false);
 
   const handleClick = ():void => {
     setIsClick(prevState => !prevState);
+  }
+
+  const handleClickDelete =  async ():Promise<void> => {
+    try {
+      await PostController.deletePost(Number(post.id_post), String(token))
+    } catch (error) {
+      console.log(error + "PB DELETE");
+      
+    }
   }
 
   return (
@@ -35,7 +45,7 @@ const Card: React.FunctionComponent<ICardProps> = ({ post }) => {
             (isClick) && 
             <div className={Style.divTools}>
               <button><FontAwesomeIcon className={Style.iconTools} icon={faPencil}/><span>Modifier</span></button>
-              <button><FontAwesomeIcon className={Style.iconTools} icon={faTrash}/><span>Supprimer</span></button>
+              <button onClick={handleClickDelete}><FontAwesomeIcon className={Style.iconTools} icon={faTrash}/><span>Supprimer</span></button>
             </div> 
           }
         </div>

@@ -28,6 +28,7 @@ const Feeds: React.FunctionComponent<IFeedsProps> = () => {
         };
 
         fetchPosts();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [loadPost]);
 
 
