@@ -28,7 +28,7 @@ const CreatePost: React.FunctionComponent<ICreatePostProps> = () => {
 
     const [errors, setErrors] = useState<Errors> ({
         errorContent: true,
-        errorFile: false,
+        errorFile: true,
     });
 
     // Check input content
@@ -39,21 +39,28 @@ const CreatePost: React.FunctionComponent<ICreatePostProps> = () => {
     // Set le file
     const checkFile = (e:React.ChangeEvent<HTMLInputElement>):void => {
 
-
-        console.log(e);
-        
-        if (e.target.files && e.target.files[0]) {
+        if (e.target.files && e.target.files[0]) {           
             const file = e.target.files[0];
-            setFile(file);
-            setErrors(prevError => ({
-                ...prevError,
-                errorFile: false
-            }));
-        } else {
-            setErrors(prevError => ({
-                ...prevError,
-                errorFile: true
-            }));
+            const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+            
+                if (allowedTypes.includes(file.type)) {        
+                    setFile(file);
+                    setErrors(prevError => ({
+                        ...prevError,
+                        errorFile: false,
+                    }));
+                } else {
+                    console.error('Type de fichier non valide.');
+                    setErrors(prevError => ({
+                        ...prevError,
+                        errorFile: true,
+                    }));
+                }
+            } else {
+                setErrors(prevError => ({
+                    ...prevError,
+                    errorFile: true,
+                }));
         }
     }
  
@@ -101,7 +108,7 @@ const CreatePost: React.FunctionComponent<ICreatePostProps> = () => {
                             accept=".jpg, .jpeg, .png, .gif"
                             onChange={(e) => checkFile(e)}
                         />
-                        <label className={`${Style.label} ${(errors.errorFile) ? 'bad-input-icon' : 'test'}}`} htmlFor="files"><FontAwesomeIcon className={Style.icon} icon={faFile}/></label>
+                        <label className={`${Style.label} ${(errors.errorFile && isClick) ? 'bad-input-icon' : ''}`} htmlFor="files"><FontAwesomeIcon className={Style.icon} icon={faFile}/></label>
                     </div>
                 </div>
                 <button className='' onClick={(e) => {handleClick(e); setIsClick(true)}}><FontAwesomeIcon className={Style.icon} icon={faPaperPlane}/></button>

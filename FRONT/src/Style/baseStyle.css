@@ -33,9 +33,10 @@ body {
   background: var(--color1);
 }
 
-.test {
-  color: green;
+main {
+  min-height: 75vh;
 }
+
 /* Title */
 h1,
 h2,
