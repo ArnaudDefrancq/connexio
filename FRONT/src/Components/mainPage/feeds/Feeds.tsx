@@ -28,7 +28,7 @@ const Feeds: React.FunctionComponent<IFeedsProps> = () => {
         };
 
         fetchPosts();
-    }, [token]);
+    }, [loadPost]);
 
 
 

@@ -38,6 +38,10 @@ const CreatePost: React.FunctionComponent<ICreatePostProps> = () => {
 
     // Set le file
     const checkFile = (e:React.ChangeEvent<HTMLInputElement>):void => {
+
+
+        console.log(e);
+        
         if (e.target.files && e.target.files[0]) {
             const file = e.target.files[0];
             setFile(file);
@@ -81,7 +85,7 @@ const CreatePost: React.FunctionComponent<ICreatePostProps> = () => {
                     <div className={`${Style.group} form-group`}>
                         <textarea  
                             className={`${Style.input}  ${((errors.errorContent && isClick) ? 'bad-input' : '')}`} 
-                            defaultValue={content}
+                            value={content}
                             required
                             placeholder=" "
                             id='content'
@@ -97,7 +101,7 @@ const CreatePost: React.FunctionComponent<ICreatePostProps> = () => {
                             accept=".jpg, .jpeg, .png, .gif"
                             onChange={(e) => checkFile(e)}
                         />
-                        <label className={`${Style.label} ${(errors.errorFile) ? 'bad-input-icon' : ''}}`} htmlFor="files"><FontAwesomeIcon className={Style.icon} icon={faFile}/></label>
+                        <label className={`${Style.label} ${(errors.errorFile) ? 'bad-input-icon' : 'test'}}`} htmlFor="files"><FontAwesomeIcon className={Style.icon} icon={faFile}/></label>
                     </div>
                 </div>
                 <button className='' onClick={(e) => {handleClick(e); setIsClick(true)}}><FontAwesomeIcon className={Style.icon} icon={faPaperPlane}/></button>

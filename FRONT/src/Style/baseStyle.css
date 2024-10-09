@@ -32,6 +32,10 @@
 body {
   background: var(--color1);
 }
+
+.test {
+  color: green;
+}
 /* Title */
 h1,
 h2,

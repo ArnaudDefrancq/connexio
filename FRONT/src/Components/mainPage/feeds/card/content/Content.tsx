@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useState } from 'react';
 import Style from './Content.module.css'
 
 
@@ -10,6 +11,8 @@ interface IContentProps {
 
 const Content: React.FunctionComponent<IContentProps> = ({ content, media, id_profil }) => {
 
+  const [contentPost, setContentPost] = useState<string>(content);
+
   let pathImg = '';
   if (media) {
     pathImg = `${import.meta.env.VITE_URL_IMG}/imgPost/${id_profil}/${media}`;
@@ -18,7 +21,7 @@ const Content: React.FunctionComponent<IContentProps> = ({ content, media, id_pr
   return (
     <>
     <div>
-      <p>{content}</p>
+      <p>{contentPost}</p>
       <div className={Style.divImgPost}>
         {
           (pathImg && <img src={pathImg} alt="photo poster" className={Style.imgPost}/>)
