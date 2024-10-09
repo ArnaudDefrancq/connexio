@@ -6,3 +6,19 @@
 .divImgPost {
     text-align: center;
 }
+
+.formPost {
+    height: 100px !important;
+    align-items: flex-start !important;
+}
+
+.contentDiv {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 80%;
+}
+
+.inputFile {
+    display: none;
+}

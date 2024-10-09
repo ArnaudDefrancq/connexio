@@ -28,7 +28,7 @@ const CreatePost: React.FunctionComponent<ICreatePostProps> = () => {
 
     const [errors, setErrors] = useState<Errors> ({
         errorContent: true,
-        errorFile: true,
+        errorFile: false,
     });
 
     // Check input content

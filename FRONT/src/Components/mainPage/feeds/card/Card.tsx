@@ -19,8 +19,14 @@ const Card: React.FunctionComponent<ICardProps> = ({ post }) => {
   const { role, id_user, token } = useContext(UserContext);
 
   const [isClick, setIsClick] = useState<boolean>(false);
+  const [isUpdate, setIsUpdate] = useState<boolean>(false);
 
   const handleClick = ():void => {
+    setIsClick(prevState => !prevState);
+  }
+
+  const handleClickUpdate = ():void => {
+    setIsUpdate(prevState => !prevState);
     setIsClick(prevState => !prevState);
   }
 
@@ -44,13 +50,13 @@ const Card: React.FunctionComponent<ICardProps> = ({ post }) => {
           {
             (isClick) && 
             <div className={Style.divTools}>
-              <button><FontAwesomeIcon className={Style.iconTools} icon={faPencil}/><span>Modifier</span></button>
+              <button onClick={handleClickUpdate}><FontAwesomeIcon className={Style.iconTools} icon={faPencil}/><span>Modifier</span></button>
               <button onClick={handleClickDelete}><FontAwesomeIcon className={Style.iconTools} icon={faTrash}/><span>Supprimer</span></button>
             </div> 
           }
         </div>
         <div className={Style.cardPost}>
-          <Content content={post.content} media={post.media} id_profil={post.id_profil}/>
+          <Content content={post.content} media={post.media} id_profil={post.id_profil} isUpdate={isUpdate} setIsUpdate={setIsUpdate}/>
         </div>
         <div>
           <Commentaire id_post={post.id_post}/>

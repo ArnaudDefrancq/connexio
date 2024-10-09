@@ -79,10 +79,7 @@ export class PostModel implements Post {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'multipart/form-data',
                 }
-            };
-
-            console.log(id + token);
-            
+            };           
 
             await axios.delete(`${import.meta.env.VITE_URL_POST}/${id}/delete`, config)
 
