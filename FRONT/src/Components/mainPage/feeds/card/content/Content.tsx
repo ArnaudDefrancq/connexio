@@ -2,7 +2,7 @@ import * as React from 'react';
 import { SetStateAction, useState, useEffect } from 'react';
 import Style from './Content.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPaperPlane, faFile } from '@fortawesome/free-solid-svg-icons';
+import { faCircleCheck, faFile, faCircleXmark } from '@fortawesome/free-solid-svg-icons';
 
 
 interface IContentProps {
@@ -38,29 +38,42 @@ const Content: React.FunctionComponent<IContentProps> = ({ content, media, id_pr
           </div>
         </div>
       ) : (
-        <form  className={`${Style.formPost} form`}>
-          <div className={Style.contentDiv}>
-            <div className={`${Style.group} form-group`}>
-                <textarea  
-                    className={`${Style.input}`} 
-                    defaultValue={content}
-                    required
-                    placeholder=" "
-                    id='content'
-                />
-                <label className={''} htmlFor="content">Votre message </label>
-            </div>
-            <div className="">
-                <input 
-                    className={Style.inputFile} 
-                    type="file" 
-                    id="files"
-                    accept=".jpg, .jpeg, .png, .gif"
-                />
-                <label className={`${Style.label}`} htmlFor="files"><FontAwesomeIcon className={Style.icon} icon={faFile}/></label>
+        <div>
+          <form  className={`${Style.formPost} form`}>
+            <div className={Style.contentDiv}>
+                <div className={`${Style.group} form-group`}>
+                    <textarea  
+                        className={`${Style.input}`} 
+                        defaultValue={content}
+                        required
+                        placeholder=" "
+                        id='content'
+                    />
+                    <label className={''} htmlFor="content">Votre message </label>
+                </div>
+                <div className="">
+                    <input 
+                        className={Style.inputFile} 
+                        type="file" 
+                        id="files"
+                        accept=".jpg, .jpeg, .png, .gif"
+                    />
+                    <label className={`${Style.label}`} htmlFor="files"><FontAwesomeIcon className={Style.icon} icon={faFile}/></label>
+                </div>
+              </div>
+              <button className=''><FontAwesomeIcon className={Style.icon} icon={faCircleCheck}/></button>
+            </form>
+            <div className={Style.divImgPost}>
+              {
+                (imgPost && (
+                  <>
+                    <img src={imgPost} alt="photo poster" className={Style.imgPost} />
+                    <button className={Style.btnImg}><FontAwesomeIcon className={Style.icon} icon={faCircleXmark} /></button>
+                  </>
+                ))
+              }
             </div>
           </div>
-        </form>
       )
     }
     </>
