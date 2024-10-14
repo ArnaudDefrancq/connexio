@@ -35,7 +35,6 @@ const Card: React.FunctionComponent<ICardProps> = ({ post }) => {
       await PostController.deletePost(Number(post.id_post), String(token))
     } catch (error) {
       console.log(error + "PB DELETE");
-      
     }
   }
 
@@ -50,7 +49,7 @@ const Card: React.FunctionComponent<ICardProps> = ({ post }) => {
           {
             (isClick) && 
             <div className={Style.divTools}>
-              <button onClick={handleClickUpdate}><FontAwesomeIcon className={Style.iconTools} icon={faPencil}/><span>Modifier</span></button>
+              <button onClick={handleClickUpdate}><FontAwesomeIcon className={Style.iconTools} icon={faPencil}/><span>{isUpdate ? "Annuler" : " Modifier"}</span></button>
               <button onClick={handleClickDelete}><FontAwesomeIcon className={Style.iconTools} icon={faTrash}/><span>Supprimer</span></button>
             </div> 
           }
