@@ -17,7 +17,7 @@ interface ICreatePostProps {
 type Errors = {
     errorContent: boolean,
     errorFile: boolean,
-  }
+}
 
 const CreatePost: React.FunctionComponent<ICreatePostProps> = () => {
     const { token, id_user } = useContext(UserContext);
@@ -108,7 +108,7 @@ const CreatePost: React.FunctionComponent<ICreatePostProps> = () => {
                             accept=".jpg, .jpeg, .png, .gif"
                             onChange={(e) => checkFile(e)}
                         />
-                        <label className={`${Style.label} ${(errors.errorFile && isClick) ? 'bad-input-icon' : ''}`} htmlFor="files"><FontAwesomeIcon className={Style.icon} icon={faFile}/></label>
+                        <label className={`${Style.label} ${(errors.errorFile && isClick) ? 'bad-input-icon' : ''} ${(file !== null) && 'good-input-icon'}`} htmlFor="files"><FontAwesomeIcon className={Style.icon} icon={faFile}/></label>
                     </div>
                 </div>
                 <button className='' onClick={(e) => {handleClick(e); setIsClick(true)}}><FontAwesomeIcon className={Style.icon} icon={faPaperPlane}/></button>

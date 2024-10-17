@@ -54,7 +54,7 @@ export class PostModel implements Post {
         }
     }
 
-    static async updatePost (post: newPost, id: number, token: string): Promise<void> {
+    static async updatePost (post: newPost, idUser: number, idPost: number, token: string): Promise<void> {
         try {
             const config = {
                 headers: {
@@ -63,7 +63,7 @@ export class PostModel implements Post {
                 }
             };
 
-            await axios.put(`${import.meta.env.VITE_URL_POST}/${id}/post`, post, config);
+            await axios.put(`${import.meta.env.VITE_URL_POST}/${idUser}/update/${idPost}`, post, config);
 
             return;
         } catch (error) {

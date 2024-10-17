@@ -7,7 +7,6 @@ import { AuthRequest } from '../middlewares/auth'
 import { Folder } from "../tools/Folder";
 import { CommentaireModel } from "../models/CommentaireModel";
 import Commentaire from "../types/Commentaire";
-import { error } from "console";
 import { CommentaireLikeModel } from "../models/CommentaireLikeModel";
 import { PostLikeModel } from "../models/PostLikeModel";
 import CommentaireLike from "../types/CommentaireLike";
@@ -73,21 +72,28 @@ export const updatePost = async (req: AuthRequest, res: Response, next: NextFunc
                 const date: number = Math.floor(Date.now() / 1000);
                 const post: Post = result[0];
 
-                const files = req.files as { [fieldname: string]: Express.Multer.File[] };
+                var updatePost: Partial<Post>;                
 
-                if (files?.media || post.media != null ) {
+                const files = req.files as { [fieldname: string]: Express.Multer.File[] };                
+
+                if (files?.media || req.body.media == "null" ) {
+                    
                     const oldImagePath = path.join(__dirname, '../img/imgPost/', String(idUser), String(post.media));
                     if (fs.existsSync(oldImagePath)) {
                         fs.unlinkSync(oldImagePath);
                     }
+                    
+                    updatePost = {
+                        content: req.body.content,
+                        media: files?.media ? String(files?.media[0].path.split('\\').at(-1)) : null,
+                        updated_at: date
+                    } 
+                } else {                    
+                    updatePost = {
+                        content: req.body.content,
+                        updated_at: date
+                    } 
                 }
-    
-                const updatePost: Partial<Post> = {
-                    content: req.body.content || "",
-                    media: files?.media ? String(files?.media[0].path.split('\\').at(-1)) : null,
-                    updated_at: date
-                } 
-
     
                 postModel.updatePost(idPost, updatePost, (error, affectedRows) => {
                     if (error) {

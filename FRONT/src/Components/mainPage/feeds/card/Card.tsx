@@ -55,7 +55,7 @@ const Card: React.FunctionComponent<ICardProps> = ({ post }) => {
           }
         </div>
         <div className={Style.cardPost}>
-          <Content content={post.content} media={post.media} id_profil={post.id_profil} isUpdate={isUpdate} setIsUpdate={setIsUpdate}/>
+          <Content id_post={post.id_post} content={post.content} media={post.media} id_profil={post.id_profil} isUpdate={isUpdate} setIsUpdate={setIsUpdate}/>
         </div>
         <div>
           <Commentaire id_post={post.id_post}/>

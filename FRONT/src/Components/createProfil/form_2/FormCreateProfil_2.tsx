@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useState, useEffect, useContext } from 'react';
 import Style from './FormCreateProfil_2.module.css';
-import { monthArray } from '../../../Tools/config';
+import { monthArray, REGEX_DATE_NAISSANCE, REGEX_TEXTE_PROFIL } from '../../../Tools/config';
 import { Security } from '../../../Tools/Security';
 import { ProfilController } from '../../../Controllers/ProfilController';
 import { UpdateProfil } from '../../../Types/Profil';
@@ -52,9 +52,6 @@ const FormCreateProfil_2: React.FunctionComponent<IFormCreateProfil_2Props> = ({
     content: "",
   };
 
-  const REGEX_DATE_NAISSANCE: RegExp = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
-  const REGEX_TEXTE: RegExp = /^[a-zA-Z\s].{3,20}$/;
-
   // Permet de set les données dans le localStorage
   // const setDataLocalStorage = (node:string, value: string):void => {
   //   if (localStorage.getItem('formData')) {
@@ -96,10 +93,10 @@ const FormCreateProfil_2: React.FunctionComponent<IFormCreateProfil_2Props> = ({
     const storedData = localStorage.getItem('formData');
     if (storedData) {
       const parseData = JSON.parse(storedData);
-      Security.checkValidity(parseData.firstName, REGEX_TEXTE, 'errorFirstName', setErrors)
-      Security.checkValidity(parseData.lastName, REGEX_TEXTE, 'errorLastName', setErrors)
-      Security.checkValidity(parseData.city, REGEX_TEXTE, 'errorCity', setErrors)
-      Security.checkValidity(parseData.content, REGEX_TEXTE, 'errorContent', setErrors)
+      Security.checkValidity(parseData.firstName, REGEX_TEXTE_PROFIL, 'errorFirstName', setErrors)
+      Security.checkValidity(parseData.lastName, REGEX_TEXTE_PROFIL, 'errorLastName', setErrors)
+      Security.checkValidity(parseData.city, REGEX_TEXTE_PROFIL, 'errorCity', setErrors)
+      Security.checkValidity(parseData.content, REGEX_TEXTE_PROFIL, 'errorContent', setErrors)
     }
   }
 

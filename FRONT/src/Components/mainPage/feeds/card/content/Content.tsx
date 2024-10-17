@@ -1,11 +1,17 @@
 import * as React from 'react';
-import { SetStateAction, useState, useEffect } from 'react';
+import { SetStateAction, useState, useEffect, useContext } from 'react';
 import Style from './Content.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleCheck, faFile, faCircleXmark } from '@fortawesome/free-solid-svg-icons';
+import { Security } from '../../../../../Tools/Security';
+import { REGEX_TEXTE } from '../../../../../Tools/config';
+import { UserContext } from '../../../../../Context/UserContext';
+import { PostController } from '../../../../../Controllers/PostController';
+import { newPost } from '../../../../../Types/Post';
 
 
 interface IContentProps {
+  id_post: number | undefined,
   content: string,
   media: string | null | undefined,
   id_profil: number | undefined,
@@ -13,13 +19,56 @@ interface IContentProps {
   setIsUpdate: React.Dispatch<SetStateAction<boolean>>
 }
 
-const Content: React.FunctionComponent<IContentProps> = ({ content, media, id_profil, isUpdate, setIsUpdate }) => {
+type Errors = {
+  errorContent: boolean,
+  errorFile: boolean,
+}
+
+const Content: React.FunctionComponent<IContentProps> = ({ id_post, content, media, id_profil, isUpdate }) => {
+
+  const { token, id_user } = useContext(UserContext);
 
   const [contentPost, setContentPost] = useState<string>(content);
   const [imgPost, setImgPost] = useState<string>("");
   const [imgPostUpdate, setImgPostUpdate] = useState<string>("");
-  const [imgPostFile, setImgPostFile] = useState<File | null>(null);
+  const [imgPostFile, setImgPostFile] = useState<File | null | string | undefined>(media);
   const [deletePicture, setDeletePicture] = useState<boolean>(false);
+
+  const [errors, setErrors] = useState<Errors> ({
+    errorContent: false,
+    errorFile: false,
+  }); 
+
+  const checkInput = (value: string): void => {
+    Security.checkValidity(value, REGEX_TEXTE, 'errorContent', setErrors);
+  }
+
+  const checkFile = (e:React.ChangeEvent<HTMLInputElement>):void => {
+
+    if (e.target.files && e.target.files[0]) {           
+        const file = e.target.files[0];
+        const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+        
+            if (allowedTypes.includes(file.type)) {        
+              setImgPostFile(file);
+                setErrors(prevError => ({
+                    ...prevError,
+                    errorFile: false,
+                }));
+            } else {
+                console.error('Type de fichier non valide.');
+                setErrors(prevError => ({
+                    ...prevError,
+                    errorFile: true,
+                }));
+            }
+        } else {
+            setErrors(prevError => ({
+                ...prevError,
+                errorFile: true,
+            }));
+    }
+}
 
   const previewImg = (e:React.ChangeEvent<HTMLInputElement>):void => {    
     if (e.target.files && e.target.files[0]) {
@@ -42,13 +91,27 @@ const Content: React.FunctionComponent<IContentProps> = ({ content, media, id_pr
 
   useEffect(() => {
     setImgPostUpdate('');
-    setImgPostFile(null);
+    setImgPostFile(media);
     setDeletePicture(false);
     if (media) {
       setImgPost(`${import.meta.env.VITE_URL_IMG}/imgPost/${id_profil}/${media}`);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isUpdate])
+
+  const handleClickUpdatePost = async (e:React.MouseEvent<HTMLButtonElement>):Promise<void> => {
+    e.preventDefault();
+    if (!errors.errorContent && !errors.errorFile && id_user && id_post && token) {
+      const newPost: newPost = {
+          content: contentPost,
+          media: (imgPostFile ? imgPostFile : "null")
+      };
+      await PostController.updatePost(newPost, id_user, id_post, token)   
+    } else {
+        console.log('input pas OK');
+    }
+  }
+
 
   return (
     <>
@@ -73,6 +136,7 @@ const Content: React.FunctionComponent<IContentProps> = ({ content, media, id_pr
                         required
                         placeholder=" "
                         id='content'
+                        onChange={(e) => {setContentPost(e.target.value); checkInput(e.target.value)}}
                     />
                     <label className={''} htmlFor="content">Votre message </label>
                 </div>
@@ -82,16 +146,16 @@ const Content: React.FunctionComponent<IContentProps> = ({ content, media, id_pr
                         type="file" 
                         id="fileUpdate"
                         accept=".jpg, .jpeg, .png, .gif"
-                        onChange={(e) => previewImg(e)}
+                        onChange={(e) => {previewImg(e); checkFile(e)}}
                     />
                     <label className={`${Style.label}`} htmlFor="fileUpdate"><FontAwesomeIcon className={Style.icon} icon={faFile}/></label>
                 </div>
               </div>
-              <button className=''><FontAwesomeIcon className={Style.icon} icon={faCircleCheck}/></button>
+              <button className='' onClick={handleClickUpdatePost}><FontAwesomeIcon className={Style.icon} icon={faCircleCheck}/></button>
             </form>
             <div className={Style.divImgPost}>
               {
-                ((imgPost && !deletePicture) && (
+                (((imgPost || imgPostUpdate ) && !deletePicture) && (
                   <>
                     <img src={(imgPostUpdate !== "") ? imgPostUpdate : imgPost} alt="photo poster" className={Style.imgPost} />
                     <button className={Style.btnImg} onClick={deleteImg}><FontAwesomeIcon className={Style.icon} icon={faCircleXmark} /></button>

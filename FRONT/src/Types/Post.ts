@@ -9,7 +9,7 @@ export interface Post {
 
 export interface newPost {
     content: string,
-    media?: File | null,
+    media?: File | string | null,
 }
 
 export interface PostWithProfil {

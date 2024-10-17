@@ -6,4 +6,6 @@ export const monthArray: Array<string> = [
     'Javier', 'Fevrier', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'
 ]
 
-export const REGEX_TEXTE: RegExp = /^[a-zA-Z\s].{3,20}$/;
+export const REGEX_TEXTE_PROFIL: RegExp = /^[a-zA-Z\s].{3,20}$/;
+export const REGEX_TEXTE: RegExp = /^[a-zA-Z\s].{3,200}$/;
+export const REGEX_DATE_NAISSANCE: RegExp = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;

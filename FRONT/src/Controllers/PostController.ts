@@ -10,8 +10,8 @@ export class PostController {
         return await PostModel.getAllPost(token);
     }
 
-    static async updatePost (post: newPost, id: number, token: string): Promise<void> {
-        return await PostModel.updatePost(post, id, token);
+    static async updatePost (post: newPost, idUser: number, idPost: number, token: string): Promise<void> {
+        return await PostModel.updatePost(post, idUser, idPost, token);
     }
 
     static async deletePost (id: number, token: string): Promise<void> {
