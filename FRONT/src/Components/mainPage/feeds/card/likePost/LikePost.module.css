@@ -1,0 +1,15 @@
+.likeDiv {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-right: 5%;
+}
+
+.likeDiv p {
+    font-size: 18px;
+    padding-right: 3%;
+}
+
+.icon {
+    font-size: 18px;
+}

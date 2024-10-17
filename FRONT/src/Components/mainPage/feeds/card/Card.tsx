@@ -9,6 +9,7 @@ import Content from './content/Content';
 import Commentaire from './commentaire/Commentaire';
 import { UserContext } from '../../../../Context/UserContext';
 import { PostController } from '../../../../Controllers/PostController';
+import LikePost from './likePost/LikePost';
 
 interface ICardProps {
     post: PostWithProfil
@@ -56,6 +57,9 @@ const Card: React.FunctionComponent<ICardProps> = ({ post }) => {
         </div>
         <div className={Style.cardPost}>
           <Content id_post={post.id_post} content={post.content} media={post.media} id_profil={post.id_profil} isUpdate={isUpdate} setIsUpdate={setIsUpdate}/>
+        </div>
+        <div className={`${Style.cardPost} ${Style.divLike}`}>
+          <LikePost id_post={post.id_post} />
         </div>
         <div>
           <Commentaire id_post={post.id_post}/>
