@@ -9,28 +9,41 @@ import { CommentaireLikeModel } from "../models/CommentaireLikeModel";
 
 export const createCommentaire= async (req: AuthRequest, res: Response, next: NextFunction) : Promise<void> => {
     try {
-        const { actif } = req.auth || {};
+        const { actif, userId } = req.auth || {};
 
         if (actif == '1') {
             const commentaireModel: CommentaireModel = new CommentaireModel();
-            const date: number = Math.floor(Date.now() / 1000);
+            const postModel: PostModel = new PostModel();
 
-            const newCommentaire: Commentaire = {
-                content: req.body.content,
-                created_at: date,
-                id_profil: req.body.id_profil,
-                id_post: req.body.id_post
-            } 
+            const post: Array<Post> = await postModel.findById(req.body.id_post);
 
-            commentaireModel.createCommentaire(newCommentaire, (error, insertId) => {
-                if (error) {
-                    return res.status(500).json({ error });
+            if (post && post.length == 1) {
+                if (req.body.id_profil == userId) {
+                    const date: number = Math.floor(Date.now() / 1000);
+        
+                    const newCommentaire: Commentaire = {
+                        content: req.body.content,
+                        created_at: date,
+                        id_profil: req.body.id_profil,
+                        id_post: req.body.id_post
+                    } 
+        
+                    commentaireModel.createCommentaire(newCommentaire, (error, insertId) => {
+                        if (error) {
+                            return res.status(500).json({ error });
+                        }
+                        return res.status(201).json({ id: insertId });
+                    });
+                    return;
+                } else {
+                    res.status(400).json({error: 'les Id ne correspondent pas'});
+                    return;
                 }
-                return res.status(201).json({ id: insertId });
-            });
-            return;
+            } else {
+                res.status(400).json({error: 'Post pas trouvé'});
+                return;
+            }
         }
-
         res.status(401).json({error: 'Compte pas actif'});
         return;
 
