@@ -1,5 +1,5 @@
 .formCom {
-    height: 130px !important;
+    height: 100px !important;
     flex-direction: row !important;
     justify-content: flex-start;
     padding: 5%;
@@ -9,6 +9,11 @@
     width: 80%;
 }
 
+.input {
+    height: 50px;
+}
+
 .icon {
     margin-left: 100%;
+    font-size: 18px;
 }
