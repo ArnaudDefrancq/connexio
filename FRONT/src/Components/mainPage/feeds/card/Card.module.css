@@ -74,4 +74,12 @@
 
 .divLike {
     padding: 3% 5% !important;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.divLike button {
+    font-size: 14px;
+    text-decoration: underline;
 }

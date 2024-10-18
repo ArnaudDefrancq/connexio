@@ -21,6 +21,7 @@ const Card: React.FunctionComponent<ICardProps> = ({ post }) => {
 
   const [isClick, setIsClick] = useState<boolean>(false);
   const [isUpdate, setIsUpdate] = useState<boolean>(false);
+  const [showCommentaire, setShowCommentaire] = useState<boolean>(false);
 
   const handleClick = ():void => {
     setIsClick(prevState => !prevState);
@@ -37,6 +38,10 @@ const Card: React.FunctionComponent<ICardProps> = ({ post }) => {
     } catch (error) {
       console.log(error + "PB DELETE");
     }
+  }
+
+  const handleClickCommentaire = (): void => {
+    setShowCommentaire(prevState => !prevState);
   }
 
   return (
@@ -59,10 +64,13 @@ const Card: React.FunctionComponent<ICardProps> = ({ post }) => {
           <Content id_post={post.id_post} content={post.content} media={post.media} id_profil={post.id_profil} isUpdate={isUpdate} setIsUpdate={setIsUpdate}/>
         </div>
         <div className={`${Style.cardPost} ${Style.divLike}`}>
+          <button onClick={handleClickCommentaire}>Commentaires</button>
           <LikePost id_post={post.id_post} />
         </div>
         <div>
-          <Commentaire id_post={post.id_post}/>
+          {
+            (showCommentaire) && <Commentaire id_post={post.id_post}/> 
+          }
         </div>
       </div>
     </>
