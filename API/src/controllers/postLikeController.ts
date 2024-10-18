@@ -76,6 +76,34 @@ export const getAllPostLike = async (req: AuthRequest, res: Response, next: Next
     }
 } 
 
+export const getOnePostLike = async (req: AuthRequest, res: Response, next: NextFunction) : Promise<void> => {
+    try {
+        const { userId, actif } = req.auth || {};
+        if (actif == '1') {
+            const postLikeModel: PostLikeModel = new PostLikeModel();
+
+            const like: Array<PostLike> = await postLikeModel.findPostLike(`WHERE id_post=${req.params.idPost} AND id_profil=${userId}`);
+
+            console.log(like);
+            
+
+            if (like && like.length != 0) {
+                res.status(200).json(like);
+                return;
+            } else {
+                res.status(400).json({message: 'Rien trouvé'});
+                return;
+            }
+        } else {
+            res.status(401).json({error: 'Compte pas actif'});
+            return;
+        }
+    } catch (error) {
+        res.status(500).json({ error: 'Erreur interne du serveur' });    
+        return;
+    }
+}
+
 export const deletePostLike = async (req: AuthRequest, res: Response, next: NextFunction) : Promise<void> => {
     try {
         const { userId, role, actif } = req.auth || {};
