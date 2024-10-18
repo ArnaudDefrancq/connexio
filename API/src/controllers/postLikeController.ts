@@ -12,23 +12,28 @@ export const createPostLike = async (req: AuthRequest, res: Response, next: Next
         if (actif == '1') {
             const postLikeModel: PostLikeModel = new PostLikeModel();
 
-            const newPostLike: PostLike = {
-                id_profil: Number(userId),
-                id_post: req.body.id_post
-            } 
-
-            postLikeModel.createPostLike(newPostLike, (error, insertId) => {
-                if (error) {
-                    return res.status(500).json({ error });
-                }
-                return res.status(201).json({ id: insertId });
-            });
+            const like: Array<PostLike> = await postLikeModel.findPostLike(`WHERE id_post=${req.params.idPost} AND id_profil=${userId}`);
+            
+            if (like && like.length == 0) {
+                const newPostLike: PostLike = {
+                    id_profil: Number(userId),
+                    id_post: Number(req.params.idPost)
+                }              
+    
+                postLikeModel.createPostLike(newPostLike, (error, insertId) => {
+                    if (error) {
+                        return res.status(500).json({ error });
+                    }
+                    return res.status(201).json({ id: insertId });
+                });
+            } else {
+                res.status(404).json({error: 'Déjà like'});
+                return;
+            }
+        } else {
+            res.status(401).json({error: 'Compte pas actif'});
             return;
         }
-
-        res.status(401).json({error: 'Compte pas actif'});
-        return;
-
     } catch (error) {
         res.status(500).json({ error: 'Erreur interne du serveur' });    
         return;
@@ -40,7 +45,7 @@ export const getAllPostLike = async (req: AuthRequest, res: Response, next: Next
         const { actif } = req.auth || {};
 
         const id: number = Number(req.params.idPost);
-        if (actif !== '1') {        
+        if (actif != '1') {        
             res.status(404).json({ error : 'Pas autorisé'})
             return;
         }
@@ -104,14 +109,14 @@ export const deletePostLike = async (req: AuthRequest, res: Response, next: Next
                     });
 
                     message = postLikeDelete;
-                    res.status(200).json({ message: 'commentaire supprimé avec succès ligne affecté => '  + message});
+                    res.status(200).json({ message: 'like supprimé avec succès ligne affecté => '  + message});
                     return;
                 } else {
                     res.status(401).json({error : "Unauthorize"})
                     return;
                 }
             } else {
-                res.status(404).json({ error: 'commentaire non trouvé' });
+                res.status(404).json({ error: 'like non trouvé' });
                 return;
             }
         }
