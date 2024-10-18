@@ -21,7 +21,7 @@ export class PostLikeModel implements PostLike {
                 }
             };
 
-            await axios.post(`${import.meta.env.VITE_URL_POST_LIKE}/${idPost}`, config);
+            await axios.post(`${import.meta.env.VITE_URL_POST_LIKE}/${idPost}`, "", config);
 
             return;
 
