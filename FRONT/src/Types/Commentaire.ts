@@ -6,4 +6,8 @@ export interface Commentaire {
     id_profil: number
 };
 
-export default Commentaire;
+export interface NewCommentaire {
+    content: string,
+    id_post: number,
+    id_profil: number
+}
