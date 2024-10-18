@@ -31,4 +31,60 @@ export class PostLikeModel implements PostLike {
         }
     }
 
+    static async getAllPostLike (idPost: number, token: string): Promise<Array<PostLike> | void>{
+        try {
+            const config = {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'multipart/form-data',
+                }
+            };
+
+            const res = await axios.get(`${import.meta.env.VITE_URL_POST_LIKE}/${idPost}`, config);
+            const allPostLike: Array<PostLike> = res.data;
+            
+            return allPostLike;
+        } catch (error) {
+            console.log('pb get All postLike' + error);
+            return;
+        }
+    }
+
+    static async getOnePostLike (idPost: number, token: string): Promise<Array<PostLike> | void> {
+        try {
+            const config = {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'multipart/form-data',
+                }
+            };
+
+            const res = await axios.get(`${import.meta.env.VITE_URL_POST_LIKE}/${idPost}/like`, config);
+            const onePostLike: Array<PostLike> = res.data;
+
+            return onePostLike;
+        } catch (error) {
+            console.log('pb get one postLike' + error);
+            return;
+        }
+    }
+
+    static async deletePostLike (idPostLike: number, token: string): Promise<void> {
+        try {
+            const config = {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'multipart/form-data',
+                }
+            };
+
+            const res = await axios.delete(`${import.meta.env.VITE_URL_POST_LIKE}/${idPostLike}`, config)
+
+            return res.data;
+        } catch (error) {
+            console.log('pb delete postLike' + error);
+            return;
+        }
+    }
+
 }
