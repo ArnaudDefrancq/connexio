@@ -1,0 +1,14 @@
+.formCom {
+    height: 130px !important;
+    flex-direction: row !important;
+    justify-content: flex-start;
+    padding: 5%;
+}
+
+.contentDiv {
+    width: 80%;
+}
+
+.icon {
+    margin-left: 100%;
+}
