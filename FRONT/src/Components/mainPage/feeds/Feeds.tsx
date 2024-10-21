@@ -13,22 +13,23 @@ interface IFeedsProps {
 const Feeds: React.FunctionComponent<IFeedsProps> = () => {
 
     const { token } = useContext(UserContext);
-    const [loadPost, setLoadPost] = useState<Array<PostWithProfil> | null>();
+    const [loadPost, setLoadPost] = useState<Array<PostWithProfil>>([]);
+    const fetchPosts = async () => {
+        if (token) {
+            try {
+                const allPosts = await PostController.getAllPost(token);
+
+                if (allPosts && allPosts.length > 0) {
+                    setLoadPost(allPosts); 
+                }
+            } catch (err) {
+                console.log(err);
+            } 
+        } 
+    };
 
     useEffect(() => {
-        const fetchPosts = async () => {
-            if (token) {
-                try {
-                    const allPosts = await PostController.getAllPost(token);
-                    setLoadPost(allPosts || []); 
-                } catch (err) {
-                    console.log(err);
-                } 
-            } 
-        };
-
         fetchPosts();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [loadPost]);
 
 

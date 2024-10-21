@@ -1,10 +1,13 @@
 .formCom {
     height: 100px !important;
     flex-direction: row !important;
-    justify-content: flex-start;
+    justify-content: flex-start !important;
     padding: 5%;
 }
 
+.group {
+    width: 100% !important;
+}
 .contentDiv {
     width: 80%;
 }

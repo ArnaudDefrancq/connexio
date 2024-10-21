@@ -66,7 +66,7 @@ const LikePost: React.FunctionComponent<ILikePostProps> = ({ id_post }) => {
     useEffect(() => {
       getNbLike();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [nbLike])
+    }, [])
 
   return (
     <> 
