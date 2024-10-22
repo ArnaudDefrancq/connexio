@@ -16,7 +16,6 @@ interface ICardProps {
 }
 
 const Card: React.FunctionComponent<ICardProps> = ({ post }) => {
-
   const { role, id_user, token } = useContext(UserContext);
 
   const [isClick, setIsClick] = useState<boolean>(false);

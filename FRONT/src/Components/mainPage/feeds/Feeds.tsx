@@ -1,44 +1,19 @@
 import * as React from 'react';
-import { useState, useEffect, useContext } from 'react';
 import Style  from './Feeds.module.css'
-import { PostWithProfil } from '../../../Types/Post';
 import Card from './card/Card';
-import { PostController } from '../../../Controllers/PostController';
-import { UserContext } from '../../../Context/UserContext';
-
+import { useAppSelector } from '../../../Store/store';
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface IFeedsProps {
 }
 
 const Feeds: React.FunctionComponent<IFeedsProps> = () => {
-
-    const { token } = useContext(UserContext);
-    const [loadPost, setLoadPost] = useState<Array<PostWithProfil>>([]);
-    const fetchPosts = async () => {
-        if (token) {
-            try {
-                const allPosts = await PostController.getAllPost(token);
-
-                if (allPosts && allPosts.length > 0) {
-                    setLoadPost(allPosts); 
-                }
-            } catch (err) {
-                console.log(err);
-            } 
-        } 
-    };
-
-    useEffect(() => {
-        fetchPosts();
-    }, [loadPost]);
-
-
+    const { posts } = useAppSelector(state => state.post);   
 
     return (
         <>
             <section className={Style.sectionFeeds}>
                 {                    
-                    loadPost?.map((post) => {
+                    posts?.map((post) => {
                         return <Card post={post} key={post.id_post}/>;
                     })
                 }

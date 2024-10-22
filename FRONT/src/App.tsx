@@ -12,7 +12,7 @@ function App() {
   const { is_actif } = useContext(UserContext);
 
   return (
-    <>
+    <>      
       <Router>
         <Routes>
           <Route path='/' element={<ConnexionPage />} />
@@ -31,7 +31,6 @@ function App() {
           <Route path='*' element={<ErrorPage />} />
         </Routes>
       </Router>
-
     </>
   )
 }

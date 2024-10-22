@@ -5,9 +5,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaperPlane, faFile } from '@fortawesome/free-solid-svg-icons';
 import { Security } from '../../../Tools/Security';
 import { REGEX_TEXTE } from '../../../Tools/config';
-import { PostController } from '../../../Controllers/PostController';
 import { newPost } from '../../../Types/Post';
 import { UserContext } from '../../../Context/UserContext';
+import { useAppDispatch } from '../../../Store/store';
+import { createPost } from '../../../Store/Post/postSlice';
 
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
@@ -21,6 +22,8 @@ type Errors = {
 
 const CreatePost: React.FunctionComponent<ICreatePostProps> = () => {
     const { token, id_user } = useContext(UserContext);
+
+    const dispatch = useAppDispatch();
 
     const [content, setContent] = useState<string>("")
     const [file, setFile] = useState<File| null>(null)
@@ -65,7 +68,7 @@ const CreatePost: React.FunctionComponent<ICreatePostProps> = () => {
     }
  
     // Permet d'envoyer le formulaire
-    const handleClick = async (e: React.MouseEvent<HTMLButtonElement>):Promise<void> => {
+    const handleClick = (e: React.MouseEvent<HTMLButtonElement>):void => {
        
         e.preventDefault();
         
@@ -74,8 +77,7 @@ const CreatePost: React.FunctionComponent<ICreatePostProps> = () => {
                 content,
                 media: file
             };
-
-            await PostController.createPost(newPost, Number(id_user), token);
+            dispatch(createPost({newPost, id_user, token}))
             setContent('');
             setFile(null);
             

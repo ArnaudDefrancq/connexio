@@ -6,7 +6,7 @@ export class PostController {
         return await PostModel.createPost(post, id, token);
     }
 
-    static async getAllPost (token: string): Promise<Array<PostWithProfil> | void> {
+    static async getAllPost (token: string): Promise<Array<PostWithProfil>> {
         return await PostModel.getAllPost(token);
     }
 

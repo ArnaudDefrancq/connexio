@@ -28,14 +28,14 @@ export class PostModel implements Post {
             };
             await axios.post(`${import.meta.env.VITE_URL_POST}/${id}/post`, post, config);
 
-            return;
+            return ;
         } catch (error) {
             console.log('Pb post' + error);
-            return;
+            throw error;
         }
     }
 
-    static async getAllPost (token: string): Promise<Array<PostWithProfil> | void> {
+    static async getAllPost (token: string): Promise<Array<PostWithProfil>> {
         try {
             const config = {
                 headers: {
@@ -50,7 +50,7 @@ export class PostModel implements Post {
 
         } catch (error) {
             console.log('Pb getAllPost' + error);
-            return;
+            return [];
         }
     }
 
