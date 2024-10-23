@@ -89,7 +89,7 @@ export class PostModel implements Post {
         }
     }
 
-    static async getOnePost (idPost: number, token: string): Promise<Array<PostWithProfil>> {
+    static async getOnePost (idPost: number, token: string): Promise<PostWithProfil> {
         try {
             const config = {
                 headers: {
@@ -98,12 +98,12 @@ export class PostModel implements Post {
                 }
             };
 
-            const postWithProfil: Array<PostWithProfil> = (await axios.get(`${import.meta.env.VITE_URL_POST}/${idPost}`, config)).data;
+            const postWithProfil: PostWithProfil = (await axios.get(`${import.meta.env.VITE_URL_POST}/${idPost}`, config)).data;            
 
             return postWithProfil;
         } catch (error) {
             console.log("Pb error getOnePostProfil" + error);
-           return []; 
+           throw error; 
         }
     }
 }

@@ -41,14 +41,8 @@ export const createPost = createAsyncThunk("createPost",   async ({ newPost, id_
 export const updatePost = createAsyncThunk("updatePost", async({newPost, id_user, id_post, token}: { newPost: NewPost; id_user: number; id_post: number; token: string}, thunkAPI): Promise<PostWithProfil> => {
     try {
         await PostController.updatePost(newPost, id_user, id_post, token);
-
         const updatePost = await PostController.getOnePost(id_post, token);
-
-        console.log(updatePost);
-        
-        
-        return updatePost[0];
-
+        return updatePost;
     } catch (error) {
         console.log('Pb store update post' + error);
         throw error;
@@ -74,7 +68,7 @@ export const PostSlice = createSlice({
                 if (updatedPost && updatedPost.id_post) {
                     const index = state.posts.findIndex(post => post.id_post === updatedPost.id_post);
                     if (index !== -1) {
-                        state.posts[index] = updatedPost; // Remplacer le post par sa version mise à jour
+                        state.posts[index] = updatedPost;
                     }
                 }
             })

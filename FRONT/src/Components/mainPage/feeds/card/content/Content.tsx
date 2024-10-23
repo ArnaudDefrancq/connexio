@@ -6,7 +6,6 @@ import { faCircleCheck, faFile, faCircleXmark } from '@fortawesome/free-solid-sv
 import { Security } from '../../../../../Tools/Security';
 import { REGEX_TEXTE } from '../../../../../Tools/config';
 import { UserContext } from '../../../../../Context/UserContext';
-import { PostController } from '../../../../../Controllers/PostController';
 import { NewPost } from '../../../../../Types/Post';
 import { useAppDispatch } from '../../../../../Store/store';
 import { updatePost } from '../../../../../Store/Post/postSlice';

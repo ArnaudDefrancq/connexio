@@ -18,7 +18,7 @@ export class PostController {
         return await PostModel.deletePost(id, token);
     }
     
-    static async getOnePost (idPost: number, token: string): Promise<Array<PostWithProfil>> {
+    static async getOnePost (idPost: number, token: string): Promise<PostWithProfil> {
         return await PostModel.getOnePost(idPost, token);
     }
 }
