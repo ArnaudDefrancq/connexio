@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Commentaire, NewCommentaire } from "../Types/Commentaire";
+import { Commentaire, CommentaireWithProfil, NewCommentaire } from "../Types/Commentaire";
 
 export class CommentaireModel implements Commentaire {
     id_commentaire?: number;
@@ -34,5 +34,58 @@ export class CommentaireModel implements Commentaire {
         }
     }
 
-    static async getAllCommentaire (idPost: number, token: string): Promise<>
+    static async getAllCommentaireWithProfil (idPost: number, token: string): Promise<Array<CommentaireWithProfil>> {
+        try {
+            const config = {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'multipart/form-data',
+                }
+            };
+
+            const allCommentaire: Array<CommentaireWithProfil> = (await axios.get(`${import.meta.env.VITE_URL_COMMENTAIRE}/${idPost}`, config)).data;
+
+            return allCommentaire.reverse();
+
+        } catch (error) {
+            console.log('Pb getAllCommentaire' + error);
+            return [];
+        }
+    }
+
+    static async getOneCommentaireWithProfil (idCommentaire: number, token: string): Promise<CommentaireWithProfil> {
+        try {
+            const config = {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'multipart/form-data',
+                }
+            };
+
+            const comWithProfil: CommentaireWithProfil = (await axios.get(`${import.meta.env.VITE_URL_COMMENTAIRE}/${idCommentaire}/commentaire`, config)).data;            
+
+            return comWithProfil;
+        } catch (error) {
+            console.log("Pb error getOneCom" + error);
+           throw error; 
+        }
+    }
+
+    static async deleteCommentaire (idCommentaire: number, token: string): Promise<void> {
+        try {
+            const config = {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'multipart/form-data',
+                }
+            };           
+
+            await axios.delete(`${import.meta.env.VITE_URL_COMMENTAIRE}/${idCommentaire}`, config)
+
+            return;
+        } catch (error) {
+            console.log('Pb delete Com' + error);
+            throw error; 
+        }
+    }
 }
