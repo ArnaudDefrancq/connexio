@@ -7,7 +7,9 @@ import { Security } from '../../../../../Tools/Security';
 import { REGEX_TEXTE } from '../../../../../Tools/config';
 import { UserContext } from '../../../../../Context/UserContext';
 import { PostController } from '../../../../../Controllers/PostController';
-import { newPost } from '../../../../../Types/Post';
+import { NewPost } from '../../../../../Types/Post';
+import { useAppDispatch } from '../../../../../Store/store';
+import { updatePost } from '../../../../../Store/Post/postSlice';
 
 
 interface IContentProps {
@@ -24,9 +26,11 @@ type Errors = {
   errorFile: boolean,
 }
 
-const Content: React.FunctionComponent<IContentProps> = ({ id_post, content, media, id_profil, isUpdate }) => {
+const Content: React.FunctionComponent<IContentProps> = ({ id_post, content, media, id_profil, isUpdate, setIsUpdate }) => {
 
   const { token, id_user } = useContext(UserContext);
+
+  const dispatch = useAppDispatch();
 
   const [contentPost, setContentPost] = useState<string>(content);
   const [imgPost, setImgPost] = useState<string>("");
@@ -99,14 +103,16 @@ const Content: React.FunctionComponent<IContentProps> = ({ id_post, content, med
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isUpdate])
 
-  const handleClickUpdatePost = async (e:React.MouseEvent<HTMLButtonElement>):Promise<void> => {
+  const handleClickUpdatePost = (e:React.MouseEvent<HTMLButtonElement>):void => {
     e.preventDefault();
     if (!errors.errorContent && !errors.errorFile && id_user && id_post && token) {
-      const newPost: newPost = {
+      const newPost: NewPost = {
           content: contentPost,
           media: (imgPostFile ? imgPostFile : "null")
       };
-      await PostController.updatePost(newPost, id_user, id_post, token)   
+      // await PostController.updatePost(newPost, id_user, id_post, token);
+      dispatch(updatePost({ newPost, id_user, id_post, token }))
+      setIsUpdate(prev => !prev);
     } else {
         console.log('input pas OK');
     }

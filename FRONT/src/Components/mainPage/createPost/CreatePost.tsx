@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaperPlane, faFile } from '@fortawesome/free-solid-svg-icons';
 import { Security } from '../../../Tools/Security';
 import { REGEX_TEXTE } from '../../../Tools/config';
-import { newPost } from '../../../Types/Post';
+import { NewPost } from '../../../Types/Post';
 import { UserContext } from '../../../Context/UserContext';
 import { useAppDispatch } from '../../../Store/store';
 import { createPost } from '../../../Store/Post/postSlice';
@@ -73,7 +73,7 @@ const CreatePost: React.FunctionComponent<ICreatePostProps> = () => {
         e.preventDefault();
         
         if (!errors.errorContent && !errors.errorFile && id_user && token) {
-            const newPost: newPost = {
+            const newPost: NewPost = {
                 content,
                 media: file
             };

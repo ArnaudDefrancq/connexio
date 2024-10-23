@@ -7,7 +7,7 @@ export interface Post {
     id_profil: number
 };
 
-export interface newPost {
+export interface NewPost {
     content: string,
     media?: File | string | null,
 }
