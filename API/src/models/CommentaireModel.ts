@@ -17,8 +17,8 @@ export class CommentaireModel {
         return  this.commentaireDao.find(where, select, queryString);
       }
 
-      public findById(id: number, select: string = "*"): Promise<Commentaire[]> {
-        return this.commentaireDao.findById(id, select);
+      public findById(id: number, select: string = "*", queryString?: string): Promise<Commentaire[]> {
+        return this.commentaireDao.findById(id, select, queryString);
       }
     
       public updateCommentaire(id: number, commentaire: Partial<Commentaire>, callback: (error: Error | null, affectedRows?: number) => void): void {

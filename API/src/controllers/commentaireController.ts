@@ -53,12 +53,12 @@ export const createCommentaire= async (req: AuthRequest, res: Response, next: Ne
     }
 }
 
-export const getAllCommentaire= async (req: AuthRequest, res: Response, next: NextFunction) : Promise<void> => {
+export const getAllCommentaireWithProfil = async (req: AuthRequest, res: Response, next: NextFunction) : Promise<void> => {
     try {
         const { actif } = req.auth || {};
 
         const id: number = Number(req.params.idPost);
-        if (actif !== '1') {        
+        if (actif != '1') {        
             res.status(404).json({ error : 'Pas autorisé'})
             return;
         }
@@ -74,8 +74,11 @@ export const getAllCommentaire= async (req: AuthRequest, res: Response, next: Ne
 
         if (result && result.length > 0) {
             const commentaireModel: CommentaireModel = new CommentaireModel();
+            const query = `SELECT com.id_commentaire, com.content, com.created_at, com.id_post, com.id_profil,
+            profil.nom, profil.prenom, profil.img_profil FROM cx__commentaire AS com JOIN cx__profil as profil ON com.id_profil = profil.id_profil`;
+
             
-            const arrayCommentaire: Commentaire[] = await commentaireModel.findCommentaire(`WHERE id_post = ${id}`);         
+            const arrayCommentaire: Commentaire[] = await commentaireModel.findCommentaire(``, "", query);         
 
             res.status(200).json(arrayCommentaire);
             return;

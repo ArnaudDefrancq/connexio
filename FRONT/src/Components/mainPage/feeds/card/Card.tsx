@@ -8,7 +8,6 @@ import Author from './author/Author';
 import Content from './content/Content';
 import Commentaire from './commentaire/Commentaire';
 import { UserContext } from '../../../../Context/UserContext';
-import { PostController } from '../../../../Controllers/PostController';
 import LikePost from './likePost/LikePost';
 import { useAppDispatch } from '../../../../Store/store';
 import { deletePost } from '../../../../Store/Post/postSlice';

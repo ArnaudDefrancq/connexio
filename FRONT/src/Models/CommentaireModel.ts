@@ -33,4 +33,6 @@ export class CommentaireModel implements Commentaire {
             return;
         }
     }
+
+    static async getAllCommentaire (idPost: number, token: string): Promise<>
 }
