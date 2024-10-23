@@ -1,4 +1,4 @@
-import { newPost, Post, PostWithProfil } from "../Types/Post";
+import { NewPost, Post, PostWithProfil } from "../Types/Post";
 import axios from "axios";
 
 export class PostModel implements Post {
@@ -18,7 +18,7 @@ export class PostModel implements Post {
         this.id_profil = Number(data.id_profil);
     }
 
-    static async createPost (post: newPost, id:number, token: string): Promise<void> {
+    static async createPost (post: NewPost, id:number, token: string): Promise<void> {
         try {
             const config = {
                 headers: {
@@ -54,7 +54,7 @@ export class PostModel implements Post {
         }
     }
 
-    static async updatePost (post: newPost, idUser: number, idPost: number, token: string): Promise<void> {
+    static async updatePost (post: NewPost, idUser: number, idPost: number, token: string): Promise<void> {
         try {
             const config = {
                 headers: {
@@ -86,6 +86,24 @@ export class PostModel implements Post {
         } catch (error) {
             console.log('Pb delete Post' + error);
             return; 
+        }
+    }
+
+    static async getOnePost (idPost: number, token: string): Promise<Array<PostWithProfil>> {
+        try {
+            const config = {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'multipart/form-data',
+                }
+            };
+
+            const postWithProfil: Array<PostWithProfil> = (await axios.get(`${import.meta.env.VITE_URL_POST}/${idPost}`, config)).data;
+
+            return postWithProfil;
+        } catch (error) {
+            console.log("Pb error getOnePostProfil" + error);
+           return []; 
         }
     }
 }
