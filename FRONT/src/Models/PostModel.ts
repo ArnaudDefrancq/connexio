@@ -72,7 +72,7 @@ export class PostModel implements Post {
         }
     }
 
-    static async deletePost (id: number, token: string): Promise<void> {
+    static async deletePost (id: number, token: string): Promise<number> {
         try {
             const config = {
                 headers: {
@@ -81,11 +81,12 @@ export class PostModel implements Post {
                 }
             };           
 
-            await axios.delete(`${import.meta.env.VITE_URL_POST}/${id}/delete`, config)
+            const res: number = (await axios.delete(`${import.meta.env.VITE_URL_POST}/${id}/delete`, config)).data
 
+            return res;
         } catch (error) {
             console.log('Pb delete Post' + error);
-            return; 
+            throw error; 
         }
     }
 

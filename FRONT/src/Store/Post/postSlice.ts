@@ -49,6 +49,19 @@ export const updatePost = createAsyncThunk("updatePost", async({newPost, id_user
     }
 });
 
+export const deletePost = createAsyncThunk("deletePost", async({id_post, token}: {id_post: number; token: string}, thunkAPI): Promise<PostWithProfil> => {
+    try {
+        const postDelete: PostWithProfil = await PostController.getOnePost(id_post, token); 
+        await PostController.deletePost(id_post, token);
+        
+        return postDelete;
+
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+})
+
 export const PostSlice = createSlice({
     name: "post",
     initialState,
@@ -69,6 +82,15 @@ export const PostSlice = createSlice({
                     const index = state.posts.findIndex(post => post.id_post === updatedPost.id_post);
                     if (index !== -1) {
                         state.posts[index] = updatedPost;
+                    }
+                }
+            })
+            .addCase(deletePost.fulfilled, (state, action) => {
+                const deletePost = action.payload;
+                if (deletePost && deletePost.id_post) {
+                    const index = state.posts.findIndex(post => post.id_post === deletePost.id_post);
+                    if (index !== -1) {                        
+                        state.posts.splice(index, 1)
                     }
                 }
             })

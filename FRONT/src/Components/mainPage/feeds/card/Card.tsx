@@ -10,6 +10,9 @@ import Commentaire from './commentaire/Commentaire';
 import { UserContext } from '../../../../Context/UserContext';
 import { PostController } from '../../../../Controllers/PostController';
 import LikePost from './likePost/LikePost';
+import { useAppDispatch } from '../../../../Store/store';
+import { deletePost } from '../../../../Store/Post/postSlice';
+import { isEmpty } from '../../../../Tools/function';
 
 interface ICardProps {
     post: PostWithProfil
@@ -17,6 +20,8 @@ interface ICardProps {
 
 const Card: React.FunctionComponent<ICardProps> = ({ post }) => {
   const { role, id_user, token } = useContext(UserContext);
+
+  const dispatch = useAppDispatch();
 
   const [isClick, setIsClick] = useState<boolean>(false);
   const [isUpdate, setIsUpdate] = useState<boolean>(false);
@@ -31,9 +36,13 @@ const Card: React.FunctionComponent<ICardProps> = ({ post }) => {
     setIsClick(prevState => !prevState);
   }
 
-  const handleClickDelete =  async ():Promise<void> => {
+  const handleClickDelete =  ():void => {
     try {
-      await PostController.deletePost(Number(post.id_post), String(token))
+      if (token && !isEmpty(token) && post.id_post) {
+        const id_post: number = post.id_post;
+        dispatch(deletePost({ id_post, token }))
+        setIsClick(prevState => !prevState);
+      }
     } catch (error) {
       console.log(error + "PB DELETE");
     }
