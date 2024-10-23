@@ -17,8 +17,8 @@ export class PostModel {
         return  this.postDao.find(where, select, queryString);
       }
 
-      public findById(id: number, select: string = "*"): Promise<Post[]> {
-        return this.postDao.findById(id, select);
+      public findById(id: number, select: string = "*", queryString?: string): Promise<Post[]> {
+        return this.postDao.findById(id, select, queryString);
       }
     
       public updatePost(id: number, post: Partial<Post>, callback: (error: Error | null, affectedRows?: number) => void): void {

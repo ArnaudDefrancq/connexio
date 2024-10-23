@@ -118,7 +118,7 @@ export const updatePost = async (req: AuthRequest, res: Response, next: NextFunc
     }
 }
 
-export const getAllPost = async (req: AuthRequest, res: Response, next: NextFunction) : Promise<void> => {
+export const getAllPostWithProfil = async (req: AuthRequest, res: Response, next: NextFunction) : Promise<void> => {
     try {
         const { actif } = req.auth || {};
         if (actif == '1') {
@@ -142,7 +142,7 @@ export const getAllPost = async (req: AuthRequest, res: Response, next: NextFunc
     }
 }
 
-export const getOnePost = async (req: AuthRequest, res: Response, next: NextFunction) : Promise<void> => {
+export const getOnePostWithProfil = async (req: AuthRequest, res: Response, next: NextFunction) : Promise<void> => {
     try {
         const { role, actif } = req.auth || {};
         const id: number = Number(req.params.id);
@@ -154,7 +154,11 @@ export const getOnePost = async (req: AuthRequest, res: Response, next: NextFunc
 
         if (actif == '1' || role == '1') {
             const postModel: PostModel = new PostModel();
-            const result: Post[] = await postModel.findById(id);
+
+            const query: string = `SELECT post.id_post, post.content, post.media, post.created_at, post.updated_at,
+               profil.id_profil, profil.nom, profil.prenom, profil.img_profil FROM cx__post AS post JOIN cx__profil as profil ON post.id_profil = profil.id_profil WHERE id_post=${id}`;
+
+            const result: Post[] = await postModel.findById(id, '', query);
 
             if (result && result.length > 0) {
                 const post: Post = result[0];

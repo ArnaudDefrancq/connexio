@@ -54,11 +54,11 @@ export class Dao<T> {
      * @param select Colonne (si empty "*") - string
      * @returns Object
      */
-    public findById(id: number, select: string = '*'): Promise<T[]> {
-        const queryString: string = `SELECT ${select} FROM cx__${this.tableName} WHERE id_${this.tableName} = ?`;
+    public findById(id: number, select: string = '*', queryString?: string): Promise<T[]> {
+        const query: string = queryString || `SELECT ${select} FROM cx__${this.tableName} WHERE id_${this.tableName} = ?`;
 
         return new Promise<T[]>((resolve, reject) => {
-            connection.query(queryString, [id], (error, results) => {
+            connection.query(query, [id], (error, results) => {
                 if (error) {
                     reject(error);
                 } else {
