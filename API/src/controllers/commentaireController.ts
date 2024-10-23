@@ -92,6 +92,40 @@ export const getAllCommentaireWithProfil = async (req: AuthRequest, res: Respons
     }
 }
 
+export const getOneCommentaireWithProfil = async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
+    try {
+        const { role, actif } = req.auth || {};
+        const idPost: number = Number(req.params.idPost);
+
+        if (isNaN(idPost)) {
+            res.status(400).json({ error: 'ID no valable' });
+            return;
+        }
+
+        if (actif == '1' || role == '1') {
+            const commentaireModel: CommentaireModel = new CommentaireModel();
+
+            const query = `SELECT com.id_commentaire, com.content, com.created_at, com.id_post, com.id_profil,
+            profil.nom, profil.prenom, profil.img_profil FROM cx__commentaire AS com JOIN cx__profil as profil ON com.id_profil = profil.id_profil WHERE id_post=${idPost}`;
+
+            const result: Commentaire[] = await commentaireModel.findById(idPost, '', query);
+
+            if (result && result.length > 0) {
+                const commentaire: Commentaire = result[0];
+
+                res.status(200).json(commentaire);
+                return
+            }
+        } else {
+            res.status(404).json({ error: 'Post non trouvé' });
+            return;
+        }
+    } catch (error) {
+        res.status(500).json({ error: 'Erreur interne du serveur' });    
+        return;
+    }
+}
+
 export const deleteCommentaire= async (req: AuthRequest, res: Response, next: NextFunction) : Promise<void> => {
     try {
         const { userId, role, actif } = req.auth || {};
