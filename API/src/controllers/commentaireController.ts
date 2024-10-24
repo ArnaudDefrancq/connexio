@@ -16,8 +16,8 @@ export const createCommentaire= async (req: AuthRequest, res: Response, next: Ne
             const postModel: PostModel = new PostModel();
 
             const post: Array<Post> = await postModel.findById(req.body.id_post);
-
-            if (post && post.length == 1) {
+            
+            if (post && post.length === 1) {
                 if (req.body.id_profil == userId) {
                     const date: number = Math.floor(Date.now() / 1000);
         

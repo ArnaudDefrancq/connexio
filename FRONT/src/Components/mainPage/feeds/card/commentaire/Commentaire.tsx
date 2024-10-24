@@ -7,7 +7,9 @@ import { UserContext } from '../../../../../Context/UserContext';
 import { Security } from '../../../../../Tools/Security';
 import { REGEX_TEXTE } from '../../../../../Tools/config';
 import { NewCommentaire } from '../../../../../Types/Commentaire';
-import { CommentaireController } from '../../../../../Controllers/CommentaireController';
+import { useAppDispatch } from '../../../../../Store/store';
+import { createCommentaire } from '../../../../../Store/Commentaire/commentaireSlice';
+import { isEmpty } from '../../../../../Tools/function';
 
 interface ICommentaireProps {
   id_post: number | undefined
@@ -21,6 +23,8 @@ const Commentaire: React.FunctionComponent<ICommentaireProps> = ({ id_post }) =>
 
   const { id_user, token } = useContext(UserContext);
 
+  const dispatch = useAppDispatch();
+
   const [content, setContent] = useState<string>("");
   const [errors, setErrors] = useState<Errors>({
     errorContent: true
@@ -31,7 +35,7 @@ const Commentaire: React.FunctionComponent<ICommentaireProps> = ({ id_post }) =>
     Security.checkValidity(value, REGEX_TEXTE, 'errorContent', setErrors);
   }
 
-  const handleClick = async(e:React.MouseEvent<HTMLButtonElement>): Promise<void> => {
+  const handleClick = (e:React.MouseEvent<HTMLButtonElement>): void => {
     e.preventDefault()
 
     if (!errors.errorContent && id_user && token && id_post) {
@@ -43,7 +47,9 @@ const Commentaire: React.FunctionComponent<ICommentaireProps> = ({ id_post }) =>
 
       console.log(newCommentaire);
       
-      await CommentaireController.createCommentaire(newCommentaire, token);
+      if (token && !isEmpty(token)) {
+        dispatch(createCommentaire({ newCommentaire, token }))
+      }
     } else {
       console.log('aie');
     }
