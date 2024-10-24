@@ -6,12 +6,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsisVertical, faPencil, faTrash } from '@fortawesome/free-solid-svg-icons';
 import Author from './author/Author';
 import Content from './content/Content';
-import Commentaire from './commentaire/Commentaire';
+import CreateCommentaire from './createCommentaire/CreateCommentaire';
 import { UserContext } from '../../../../Context/UserContext';
 import LikePost from './likePost/LikePost';
 import { useAppDispatch } from '../../../../Store/store';
 import { deletePost } from '../../../../Store/Post/postSlice';
 import { isEmpty } from '../../../../Tools/function';
+import FeedCommentaire from './feedCommentaire/FeedCommentaire.tsx';
 
 interface ICardProps {
     post: PostWithProfil
@@ -76,7 +77,17 @@ const Card: React.FunctionComponent<ICardProps> = ({ post }) => {
         </div>
         <div>
           {
-            (showCommentaire) && <Commentaire id_post={post.id_post}/> 
+            (showCommentaire) && 
+            (
+              <>
+                <div> 
+                <CreateCommentaire id_post={post.id_post}/>
+                </div>
+                <div>
+                  <FeedCommentaire id_post={post.id_post}/>
+                </div>
+              </>
+            ) 
           }
         </div>
       </div>

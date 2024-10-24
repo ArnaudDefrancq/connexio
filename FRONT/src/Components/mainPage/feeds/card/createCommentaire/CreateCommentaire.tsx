@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useState, useContext } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
-import Style from './Commentaire.module.css'
+import Style from './CreateCommentaire.module.css'
 import { UserContext } from '../../../../../Context/UserContext';
 import { Security } from '../../../../../Tools/Security';
 import { REGEX_TEXTE } from '../../../../../Tools/config';

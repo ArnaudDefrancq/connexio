@@ -55,7 +55,7 @@ const LikePost: React.FunctionComponent<ILikePostProps> = ({ id_post }) => {
     }
         
     useEffect(() => {
-        if (token && id_post !== undefined && !isEmpty(token)) {
+        if (token && !isEmpty(token)) {
             dispatch(getAllPostLike({ id_post, token }));
         }
     }, [])
