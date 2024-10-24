@@ -1,26 +1,22 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { CommentaireWithProfil, NewCommentaire } from "../../Types/Commentaire";
 import { CommentaireController } from "../../Controllers/CommentaireController";
-import { isEmpty } from "../../Tools/function";
 
 interface CommentaireState {
-    commentaires: Array<CommentaireWithProfil>
+    commentaires: { [id_post:number]:Array<CommentaireWithProfil>}
 }
 
 const initialState: CommentaireState = {
     commentaires: []
 }
 
-export const getAllCommentaire = createAsyncThunk("getAllCommentaire", async({idPost, token}: {idPost: number; token: string}, thunkAPI): Promise<Array<CommentaireWithProfil>> => {
+export const getAllCommentaire = createAsyncThunk("getAllCommentaire", async({idPost, token}: {idPost: number; token: string}, thunkAPI): Promise<{ id_post: number, res: Array<CommentaireWithProfil> }> => {
     try {       
-        if (token && !isEmpty(token)) {
-            const response: Array<CommentaireWithProfil> = await CommentaireController.getAllCommentaireWithProfil(idPost, token);
-            return response;
-        }
-        return [];
+        const response: Array<CommentaireWithProfil> = await CommentaireController.getAllCommentaireWithProfil(idPost, token);
+        return {id_post: idPost, res: response};
     } catch (error) {
         console.log(error);
-        return [];
+        throw error;
     }
 })
 
@@ -57,17 +53,19 @@ export const CommentaireSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(getAllCommentaire.fulfilled, (state, action) => {
-                state.commentaires = action.payload
+                const { id_post, res } = action.payload;
+                state.commentaires[id_post] = res;
             })
-            .addCase(createCommentaire.fulfilled, (state, action) => {                
-                state.commentaires.unshift(action.payload);
+            .addCase(createCommentaire.fulfilled, (state, action) => {   
+                const id = action.payload.id_post;             
+                state.commentaires[id].unshift(action.payload);
             })
             .addCase(deleteCommentaire.fulfilled, (state, action) => {
                 const deleteCom = action.payload;
                 if (deleteCom && deleteCom.id_commentaire) {
-                    const index = state.commentaires.findIndex(com => com.id_commentaire === deleteCom.id_commentaire);
+                    const index = state.commentaires[deleteCom.id_post].findIndex(com => com.id_commentaire === deleteCom.id_commentaire);
                     if (index !== -1) {                        
-                        state.commentaires.splice(index, 1)
+                        state.commentaires[deleteCom.id_post].splice(index, 1)
                     }
                 }
             })

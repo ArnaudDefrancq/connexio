@@ -4,8 +4,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 import Style from './LikePost.module.css'
 import { UserContext } from '../../../../../Context/UserContext';
-import { PostLikeController } from '../../../../../Controllers/PostLikeController';
-import { PostLike } from '../../../../../Types/PostLike';
 import { useAppDispatch, useAppSelector } from '../../../../../Store/store';
 import { createPostLike, deletePostLike, getAllPostLike } from '../../../../../Store/PostLike/postLikeSlice';
 import { isEmpty } from '../../../../../Tools/function';
