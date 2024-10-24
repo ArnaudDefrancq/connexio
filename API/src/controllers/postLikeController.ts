@@ -84,9 +84,6 @@ export const getOnePostLike = async (req: AuthRequest, res: Response, next: Next
 
             const like: Array<PostLike> = await postLikeModel.findPostLike(`WHERE id_post=${req.params.idPost} AND id_profil=${userId}`);
 
-            console.log(like);
-            
-
             if (like && like.length != 0) {
                 res.status(200).json(like);
                 return;

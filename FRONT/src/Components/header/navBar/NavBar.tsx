@@ -35,6 +35,12 @@ const NavBar: React.FunctionComponent<INavBarProps> = ({ menu, setMenu }) => {
         
     }
 
+    if (menu) {
+        document.body.style.overflowY = "hidden";
+    } else {
+        document.body.style.overflowY = "auto"
+    }
+
     const logOut = ():void => {
         localStorage.clear();
     }

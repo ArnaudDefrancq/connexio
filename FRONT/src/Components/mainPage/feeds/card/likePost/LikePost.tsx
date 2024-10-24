@@ -5,7 +5,7 @@ import { faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 import Style from './LikePost.module.css'
 import { UserContext } from '../../../../../Context/UserContext';
 import { PostLikeController } from '../../../../../Controllers/PostLikeController';
-import PostLike from '../../../../../Types/PostLike';
+import { PostLike } from '../../../../../Types/PostLike';
 
 interface ILikePostProps {
     id_post: number | undefined

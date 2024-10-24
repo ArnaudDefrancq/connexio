@@ -43,12 +43,10 @@ const Commentaire: React.FunctionComponent<ICommentaireProps> = ({ id_post }) =>
         content,
         id_post: Number(id_post),
         id_profil: Number(id_user)
-      }
-
-      console.log(newCommentaire);
-      
+      }      
       if (token && !isEmpty(token)) {
-        dispatch(createCommentaire({ newCommentaire, token }))
+        dispatch(createCommentaire({ newCommentaire, token }));
+        setContent('');
       }
     } else {
       console.log('aie');

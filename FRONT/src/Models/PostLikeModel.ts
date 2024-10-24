@@ -1,5 +1,5 @@
 import axios from "axios";
-import PostLike from "../Types/PostLike";
+import { PostLike } from "../Types/PostLike";
 
 export class PostLikeModel implements PostLike {
     id_post_like?: number;
@@ -31,7 +31,7 @@ export class PostLikeModel implements PostLike {
         }
     }
 
-    static async getAllPostLike (idPost: number, token: string): Promise<Array<PostLike> | void>{
+    static async getAllPostLike (idPost: number, token: string): Promise<Array<PostLike>>{
         try {
             const config = {
                 headers: {
@@ -43,14 +43,14 @@ export class PostLikeModel implements PostLike {
             const res = await axios.get(`${import.meta.env.VITE_URL_POST_LIKE}/${idPost}`, config);
             const allPostLike: Array<PostLike> = res.data;
             
-            return allPostLike;
+            return allPostLike.reverse();
         } catch (error) {
             console.log('pb get All postLike' + error);
-            return;
+            return [];
         }
     }
 
-    static async getOnePostLike (idPost: number, token: string): Promise<Array<PostLike> | void> {
+    static async getOnePostLike (idPost: number, token: string): Promise<PostLike> {
         try {
             const config = {
                 headers: {
@@ -62,10 +62,10 @@ export class PostLikeModel implements PostLike {
             const res = await axios.get(`${import.meta.env.VITE_URL_POST_LIKE}/${idPost}/like`, config);
             const onePostLike: Array<PostLike> = res.data;
 
-            return onePostLike;
+            return onePostLike[0];
         } catch (error) {
             console.log('pb get one postLike' + error);
-            return;
+            throw error;
         }
     }
 
