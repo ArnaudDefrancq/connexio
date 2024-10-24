@@ -6,72 +6,75 @@ import Style from './LikePost.module.css'
 import { UserContext } from '../../../../../Context/UserContext';
 import { PostLikeController } from '../../../../../Controllers/PostLikeController';
 import { PostLike } from '../../../../../Types/PostLike';
+import { useAppDispatch, useAppSelector } from '../../../../../Store/store';
+import { createPostLike, deletePostLike, getAllPostLike } from '../../../../../Store/PostLike/postLikeSlice';
+import { isEmpty } from '../../../../../Tools/function';
 
 interface ILikePostProps {
-    id_post: number | undefined
+    id_post: number
 }
 
 const LikePost: React.FunctionComponent<ILikePostProps> = ({ id_post }) => {
 
-    const [nbLike, setNbLike] = useState<Array<PostLike>>([]);
+    const dispatch = useAppDispatch();
     const [isLike, setIsLike] = useState<boolean>();
+    const { postLike } = useAppSelector(state => state.postLike);
+    const { token, id_user } = useContext(UserContext);
 
-    const { token } = useContext(UserContext);
-
-    const handleClickLike = async(): Promise<void> => {
+    const handleClickLike = (): void => {
         try {              
-            if (id_post && token) {
-                await PostLikeController.createPostLike(id_post, token);
+            if (id_post && token && !isEmpty(token) && id_post !== undefined) {
+                dispatch(createPostLike({ id_post, token }))
             }
         } catch (error) {
             console.log(error);
         }
     }
 
-    const handleClickUnlike = async(): Promise<void> => {
+    const handleClickUnlike = (): void => {
         try {              
-            if (id_post && token) {
-                
-                const arrayOnePostLike: Array<PostLike> | void = await PostLikeController.getAllPostLike(id_post, token);     
-
-                if (arrayOnePostLike && arrayOnePostLike.length > 0) {
-                    const postLike: PostLike = arrayOnePostLike[0];
-
-                    if (postLike.id_post_like) {
-                        await PostLikeController.deletePostLike(postLike.id_post_like, token);
-                        setIsLike(false);
-                    }
-                }
+            if (id_post && token) { 
+                dispatch(deletePostLike({id_post, token}))
+                setIsLike(false);
             }
         } catch (error) {
             console.log(error);
         }
     }
 
-    const getNbLike = async(): Promise<void> => {
-        if (token && id_post) {
-            const arrayPostLike: Array<PostLike> | void = await PostLikeController.getAllPostLike(id_post, token);         
+    const getNbLike = (id: number): number => {
+        if (postLike && postLike[id] && Array.isArray(postLike[id])) {
+            return postLike[id].length;
+        }
+        return 0;
+    }
 
-            if (arrayPostLike && arrayPostLike.length >= 0) {
-                setNbLike(arrayPostLike);
-            }
-
-            const arrayOnePostLike: Array<PostLike> | void = await PostLikeController.getAllPostLike(id_post, token);     
-            if (arrayOnePostLike && arrayOnePostLike.length > 0) {
-                setIsLike(true);
-            }
+    const postIsLike = (id: number) : void => {
+        if (postLike && postLike[id] && Array.isArray(postLike[id])) {
+            const onePostLike = postLike[id].find((like) => like.id_profil === id_user);
+            setIsLike(!!onePostLike);
         }
     }
+        
+    useEffect(() => {
+        if (token && id_post !== undefined && !isEmpty(token)) {
+            dispatch(getAllPostLike({ id_post, token }));
+        }
+    }, [])
 
     useEffect(() => {
-      getNbLike();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+        if (postLike) postIsLike(id_post);
+    }, [postLike])
+    
 
   return (
     <> 
         <div className={Style.likeDiv}>
-            <p>{nbLike.length}</p>
+            <p>
+                {
+                    getNbLike(id_post)
+                }
+            </p>
             {
                 isLike ? <button onClick={handleClickUnlike}><FontAwesomeIcon className={`${Style.icon} ${Style.isLike}`} icon={faThumbsUp}/></button> : <button onClick={handleClickLike}><FontAwesomeIcon className={Style.icon} icon={faThumbsUp}/></button> 
             }

@@ -4,11 +4,11 @@ import { PostLikeController } from '../../Controllers/PostLikeController';
 import { isEmpty } from '../../Tools/function';
 
 interface PostLikeState {
-    postLike: Array<PostLike>
+    postLike: { [id_post: number]: Array<PostLike>}
 }
 
 const initialState: PostLikeState = {
-    postLike: []
+    postLike: {}
 }
 
 export const createPostLike = createAsyncThunk("createPostLike", async ({ id_post, token }: {id_post: number; token: string}, thunkAPI): Promise<PostLike> => {
@@ -24,10 +24,10 @@ export const createPostLike = createAsyncThunk("createPostLike", async ({ id_pos
     }
 })
 
-export const getAllPostLike = createAsyncThunk("getAllPostLike", async ({ id_post, token }: {id_post: number; token: string}, thunkAPI): Promise<Array<PostLike>> => {
+export const getAllPostLike = createAsyncThunk("getAllPostLike", async ({ id_post, token }: {id_post: number; token: string}, thunkAPI): Promise<{ id_post: number; res: Array<PostLike>}> => {
     try {
         const res: Array<PostLike> = await PostLikeController.getAllPostLike(id_post, token);
-        return res;
+        return {id_post, res};
     } catch (error) {
         console.log("Pb store getAllPostLike" + error);
         throw error;
@@ -55,17 +55,20 @@ export const PostLikeSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(createPostLike.fulfilled, (state, action) => {
-                state.postLike.unshift (action.payload)
+                const id = action.payload.id_post;
+                if (!state.postLike[id]) state.postLike[id] = []
+                state.postLike[id].unshift (action.payload)
             })
             .addCase(getAllPostLike.fulfilled, (state, action) => {
-                state.postLike = action.payload
+                const { id_post, res } = action.payload;
+                state.postLike[id_post] = res;
             })
             .addCase(deletePostLike.fulfilled, (state, action) => {
                 const deletePostLike = action.payload;
                 if (deletePostLike && deletePostLike.id_post_like) {
-                    const index = state.postLike.findIndex(postLike => postLike.id_post_like === deletePostLike.id_post_like);
+                    const index = state.postLike[deletePostLike.id_post].findIndex(postLike => postLike.id_post_like === deletePostLike.id_post_like);
                     if (index !== -1) {
-                        state.postLike.splice(index, 1)
+                        state.postLike[deletePostLike.id_post].splice(index, 1)
                     }
                 }
             })

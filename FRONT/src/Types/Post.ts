@@ -1,5 +1,5 @@
 export interface Post {
-    id_post?: number,
+    id_post: number,
     content: string,
     media?: string | null,
     created_at: number,
@@ -13,7 +13,7 @@ export interface NewPost {
 }
 
 export interface PostWithProfil {
-    id_post?: number,
+    id_post: number,
     content: string,
     media?: string | null,
     created_at: number,
