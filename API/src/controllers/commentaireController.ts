@@ -75,7 +75,7 @@ export const getAllCommentaireWithProfil = async (req: AuthRequest, res: Respons
         if (result && result.length > 0) {
             const commentaireModel: CommentaireModel = new CommentaireModel();
             const query = `SELECT com.id_commentaire, com.content, com.created_at, com.id_post, com.id_profil,
-            profil.nom, profil.prenom, profil.img_profil FROM cx__commentaire AS com JOIN cx__profil as profil ON com.id_profil = profil.id_profil`;
+            profil.nom, profil.prenom, profil.img_profil FROM cx__commentaire AS com JOIN cx__profil as profil ON com.id_profil = profil.id_profil WHERE com.id_post=${id}`;
 
             
             const arrayCommentaire: Commentaire[] = await commentaireModel.findCommentaire(``, "", query);         
@@ -95,9 +95,9 @@ export const getAllCommentaireWithProfil = async (req: AuthRequest, res: Respons
 export const getOneCommentaireWithProfil = async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
         const { role, actif } = req.auth || {};
-        const idPost: number = Number(req.params.idPost);
+        const idCommentaire: number = Number(req.params.idPost);
 
-        if (isNaN(idPost)) {
+        if (isNaN(idCommentaire)) {
             res.status(400).json({ error: 'ID no valable' });
             return;
         }
@@ -106,9 +106,9 @@ export const getOneCommentaireWithProfil = async (req: AuthRequest, res: Respons
             const commentaireModel: CommentaireModel = new CommentaireModel();
 
             const query = `SELECT com.id_commentaire, com.content, com.created_at, com.id_post, com.id_profil,
-            profil.nom, profil.prenom, profil.img_profil FROM cx__commentaire AS com JOIN cx__profil as profil ON com.id_profil = profil.id_profil WHERE id_post=${idPost}`;
+            profil.nom, profil.prenom, profil.img_profil FROM cx__commentaire AS com JOIN cx__profil as profil ON com.id_profil = profil.id_profil WHERE id_commentaire=${idCommentaire}`;
 
-            const result: Commentaire[] = await commentaireModel.findById(idPost, '', query);
+            const result: Commentaire[] = await commentaireModel.findById(idCommentaire, '', query);
 
             if (result && result.length > 0) {
                 const commentaire: Commentaire = result[0];
