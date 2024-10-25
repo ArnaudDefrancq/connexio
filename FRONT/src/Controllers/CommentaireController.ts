@@ -7,14 +7,14 @@ export class CommentaireController {
     }
 
     static async getAllCommentaireWithProfil (idPost: number, token: string): Promise<Array<CommentaireWithProfil>> {
-        return await CommentaireController.getAllCommentaireWithProfil(idPost, token);
+        return await CommentaireModel.getAllCommentaireWithProfil(idPost, token);
     }
 
     static async getOneCommentaireWithProfil (idCommentaire: number, token: string): Promise<CommentaireWithProfil> {
-        return await CommentaireController.getOneCommentaireWithProfil(idCommentaire, token);
+        return await CommentaireModel.getOneCommentaireWithProfil(idCommentaire, token);
     }
 
     static async deleteCommentaire (idCommentaire: number, token: string): Promise<void> {
-        return await CommentaireController.deleteCommentaire(idCommentaire, token);
+        return await CommentaireModel.deleteCommentaire(idCommentaire, token);
     }
 }

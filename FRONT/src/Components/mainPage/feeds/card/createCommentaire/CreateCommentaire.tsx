@@ -66,7 +66,7 @@ const Commentaire: React.FunctionComponent<ICommentaireProps> = ({ id_post }) =>
                     id='commentaire'
                     onChange={(e) => {setContent(e.target.value); checkInput(e.target.value)}}
                 />
-                <label className={''} htmlFor="commentaire">Votre commentaire </label>
+                <label className={Style.label} htmlFor="commentaire">Votre commentaire </label>
             </div>
         </div>
         <button className='' onClick={(e) => {handleClick(e); setIsClick(true)}}><FontAwesomeIcon className={Style.icon} icon={faPaperPlane}/></button>

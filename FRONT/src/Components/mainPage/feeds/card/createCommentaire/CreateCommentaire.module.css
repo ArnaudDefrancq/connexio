@@ -1,8 +1,8 @@
 .formCom {
-    height: 100px !important;
+    height: 90px !important;
     flex-direction: row !important;
     justify-content: flex-start !important;
-    padding: 5%;
+    padding: 0% 5%;
 }
 
 .group {
@@ -13,7 +13,12 @@
 }
 
 .input {
-    height: 50px;
+    height: 40px;
+    font-size: 14px ;
+}
+
+.label {
+    font-size: 14px !important;
 }
 
 .icon {

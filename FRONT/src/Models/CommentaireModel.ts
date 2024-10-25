@@ -38,12 +38,11 @@ export class CommentaireModel implements Commentaire {
             const config = {
                 headers: {
                     'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'multipart/form-data',
                 }
             };
 
-            const allCommentaire: Array<CommentaireWithProfil> = (await axios.get(`${import.meta.env.VITE_URL_COMMENTAIRE}/${idPost}`, config)).data;
-
+            const res = await axios.get(`${import.meta.env.VITE_URL_COMMENTAIRE}/${idPost}`, config);
+            const allCommentaire: Array<CommentaireWithProfil> = res.data;
             return allCommentaire.reverse();
 
         } catch (error) {

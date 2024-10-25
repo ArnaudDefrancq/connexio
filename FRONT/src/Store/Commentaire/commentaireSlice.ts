@@ -3,7 +3,7 @@ import { CommentaireWithProfil, NewCommentaire } from "../../Types/Commentaire";
 import { CommentaireController } from "../../Controllers/CommentaireController";
 
 interface CommentaireState {
-    commentaires: { [id_post: number]:Array<CommentaireWithProfil>}
+    commentaires: { [id_post: number]: Array<CommentaireWithProfil>}
 }
 
 const initialState: CommentaireState = {
@@ -12,8 +12,8 @@ const initialState: CommentaireState = {
 
 export const getAllCommentaire = createAsyncThunk("getAllCommentaire", async({id_post, token}: {id_post: number; token: string}, thunkAPI): Promise<{ id_post: number, res: Array<CommentaireWithProfil> }> => {
     try {       
-        const response: Array<CommentaireWithProfil> = await CommentaireController.getAllCommentaireWithProfil(id_post, token);
-        return {id_post , res: response};
+        const res: Array<CommentaireWithProfil> = await CommentaireController.getAllCommentaireWithProfil(id_post, token);        
+        return {id_post , res};
     } catch (error) {
         console.log(error);
         throw error;
@@ -54,7 +54,9 @@ export const CommentaireSlice = createSlice({
         builder
             .addCase(getAllCommentaire.fulfilled, (state, action) => {
                 const { id_post, res } = action.payload;
+                console.log(id_post);
                 console.log(res);
+                
                 
                 state.commentaires[id_post] = res;
             })

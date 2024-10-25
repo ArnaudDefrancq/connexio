@@ -16,21 +16,27 @@ const FeedCommentaire: React.FunctionComponent<IFeedCommentaireProps> = ({ id_po
 
     const { token } = useContext(UserContext);
     const { commentaires } = useAppSelector(state => state.commentaire);
+    
     useEffect(() => {
         if (token && !isEmpty(token)) {
             dispatch(getAllCommentaire({ id_post, token }));
         }
     }, [])
-  
-console.log(commentaires);
+
+    // console.log(commentaires);
+
+    console.log(id_post);
+    
+    
 
   return (
     <>
-        {/* {
+        {
             commentaires[id_post]?.map((com) => {
-                return <Commentaire com={com} key={com.id_commentaire}/>
+                return <Commentaire com={com} id_post={id_post} key={com.id_commentaire}/>
             })
-        } */}
+        }
+
     </>
   );
 };
