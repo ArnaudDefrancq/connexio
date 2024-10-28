@@ -1,0 +1,21 @@
+.likeDiv {
+    text-align: right;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-right: 5%;
+    margin-bottom: 2%;
+}
+
+.likeDiv p {
+    font-size: 14px;
+    padding-right: 5%;
+}
+
+.icon {
+    font-size: 14px;
+}
+
+.isLike {
+    color: var(--color2);
+}

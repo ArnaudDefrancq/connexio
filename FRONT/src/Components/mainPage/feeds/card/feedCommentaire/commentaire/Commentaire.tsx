@@ -54,7 +54,7 @@ const Commentaire: React.FunctionComponent<ICommentaireProps> = ({ com }) => {
           <AuthorCom nom={com.nom} prenom={com.prenom} img={com.img_profil} id_profil={com.id_profil} createdAt={com.created_at}/>
         </div>
         <p className={Style.content}>{com.content}</p>
-        <ComLike />
+        <ComLike id_commentaire={com.id_commentaire}/>
       </div>
     </>
   ) ;

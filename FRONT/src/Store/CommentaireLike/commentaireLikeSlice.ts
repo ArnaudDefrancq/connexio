@@ -64,11 +64,11 @@ export const CommentaireLikeSlice = createSlice({
                 state.commentaireLike[id_commentaire] = res;
             })
             .addCase(deleteCommentaireLike.fulfilled, (state, action) => {
-                const deleteCommentaireLike = action.payload;
-                if (deleteCommentaireLike && deleteCommentaireLike.id_commentaire_like) {
-                    const index = state.commentaireLike[deleteCommentaireLike.id_commentaire_like].findIndex(commentaireLike => commentaireLike.id_commentaire_like === deleteCommentaireLike.id_commentaire_like);
+                const deleteCommentaireLike = action.payload;                
+                if (deleteCommentaireLike && deleteCommentaireLike.id_commentaire) {                    
+                    const index = state.commentaireLike[deleteCommentaireLike.id_commentaire].findIndex(commentaireLike => commentaireLike.id_commentaire_like === deleteCommentaireLike.id_commentaire_like);
                     if (index !== -1) {
-                        state.commentaireLike[deleteCommentaireLike.id_commentaire_like].splice(index, 1)
+                        state.commentaireLike[deleteCommentaireLike.id_commentaire].splice(index, 1)
                     }
                 }
             })
