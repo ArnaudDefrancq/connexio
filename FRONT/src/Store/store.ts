@@ -3,12 +3,14 @@ import { PostSlice } from "./Post/postSlice";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { CommentaireSlice } from "./Commentaire/commentaireSlice";
 import { PostLikeSlice } from "./PostLike/postLikeSlice";
+import { CommentaireLikeSlice } from "./CommentaireLike/commentaireLikeSlice";
 
 export const store = configureStore({
     reducer: {
         post: PostSlice.reducer,
         commentaire: CommentaireSlice.reducer,
-        postLike: PostLikeSlice.reducer
+        postLike: PostLikeSlice.reducer,
+        commentaireLike: CommentaireLikeSlice.reducer
     }
 })
 
