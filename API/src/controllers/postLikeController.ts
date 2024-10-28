@@ -12,12 +12,12 @@ export const createPostLike = async (req: AuthRequest, res: Response, next: Next
         if (actif == '1') {
             const postLikeModel: PostLikeModel = new PostLikeModel();
 
-            const like: Array<PostLike> = await postLikeModel.findPostLike(`WHERE id_post=${req.params.idPost} AND id_profil=${userId}`);
+            const like: Array<PostLike> = await postLikeModel.findPostLike(`WHERE id_post=${req.body.idPost} AND id_profil=${userId}`);
             
             if (like && like.length == 0) {
                 const newPostLike: PostLike = {
                     id_profil: Number(userId),
-                    id_post: Number(req.params.idPost)
+                    id_post: Number(req.body.idPost)
                 }              
     
                 postLikeModel.createPostLike(newPostLike, (error, insertId) => {
