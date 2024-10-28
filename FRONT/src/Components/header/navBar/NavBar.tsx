@@ -1,6 +1,8 @@
 import * as React from 'react';
+import { useContext } from 'react';
 import { Dispatch, SetStateAction } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { UserContext } from '../../../Context/UserContext';
 
 interface INavBarProps {
     menu: boolean,
@@ -9,6 +11,7 @@ interface INavBarProps {
 
 const NavBar: React.FunctionComponent<INavBarProps> = ({ menu, setMenu }) => {
 
+    const { id_user } = useContext(UserContext);
     const navigate = useNavigate();
 
     const handleClick = (e:React.MouseEvent<HTMLLIElement>): void => {
@@ -23,7 +26,7 @@ const NavBar: React.FunctionComponent<INavBarProps> = ({ menu, setMenu }) => {
                 break;
             case 'profil' :
                 setMenu(false);
-                path = '/profil';
+                path = `/profil/${id_user}`;
                 navigate(path);
                 break;
             case 'deconnexion' :

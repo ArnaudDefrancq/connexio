@@ -16,10 +16,7 @@ const ComLike: React.FunctionComponent<IComLikeProps> = ({ id_commentaire }) => 
 
   const { token, id_user } = useContext(UserContext);
   const { commentaireLike } = useAppSelector(state => state.commentaireLike);
-  const [isLike, setIsLike] = useState<boolean>();
-
-  console.log(commentaireLike);
-  
+  const [isLike, setIsLike] = useState<boolean>();  
 
   const dispatch = useAppDispatch();
 
