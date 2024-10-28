@@ -16,12 +16,11 @@ export class PostLikeModel implements PostLike {
         try {
             const config = {
                 headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'multipart/form-data',
+                    'Authorization': `Bearer ${token}`
                 }
             };
 
-            await axios.post(`${import.meta.env.VITE_URL_POST_LIKE}/${idPost}`, "", config);
+            await axios.post(`${import.meta.env.VITE_URL_POST_LIKE}`, { idPost }, config);
 
             return;
 
