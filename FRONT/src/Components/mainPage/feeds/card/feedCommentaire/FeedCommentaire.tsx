@@ -27,7 +27,7 @@ const FeedCommentaire: React.FunctionComponent<IFeedCommentaireProps> = ({ id_po
     <>
         {
             commentaires[id_post]?.map((com) => {
-                return <Commentaire com={com} id_post={id_post} key={com.id_commentaire}/>
+                return <Commentaire com={com} key={com.id_commentaire}/>
             })
         }
 

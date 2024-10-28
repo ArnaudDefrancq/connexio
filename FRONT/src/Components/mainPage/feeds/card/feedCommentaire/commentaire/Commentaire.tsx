@@ -6,23 +6,36 @@ import AuthorCom from './authorCom/AuthorCom';
 import ComLike from './comLike/ComLike';
 import { UserContext } from '../../../../../../Context/UserContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEllipsisVertical, faPencil, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faEllipsisVertical, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { useAppDispatch } from '../../../../../../Store/store';
+import { isEmpty } from '../../../../../../Tools/function';
+import { deleteCommentaire } from '../../../../../../Store/Commentaire/commentaireSlice';
 
 interface ICommentaireProps {
     com: CommentaireWithProfil,
-    id_post: number
 }
 
-const Commentaire: React.FunctionComponent<ICommentaireProps> = ({ com, id_post }) => {
+const Commentaire: React.FunctionComponent<ICommentaireProps> = ({ com }) => {
   
-  const { role, id_user } = useContext(UserContext);
+  const { role, id_user, token } = useContext(UserContext);
   const [isClick, setIsClick] = useState<boolean>(false);
+
+  const dispatch = useAppDispatch();
 
   const handleClick = ():void => {
     setIsClick(prevState => !prevState);
   }
 
-  const handleClickDelete =  ():void => {}
+  const handleClickDelete =  ():void => {
+    try {
+      if (token && !isEmpty(token) && com.id_commentaire) {
+        dispatch(deleteCommentaire({idCommentaire: com.id_commentaire, token}));
+        setIsClick(prev => !prev);
+      }
+    } catch (error) {
+      console.log(error + "Pb delete Com")
+    }
+  }
 
 
   return (
