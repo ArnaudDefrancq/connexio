@@ -16,7 +16,7 @@ const Header: React.FunctionComponent<IHeaderProps> = () => {
   return (
   <>
     <header>
-        <img src="./public/images/logo.png" alt="Logo" />
+        <img src="/public/images/logo.png" alt="Logo" />
         <button className={Style.btn} onClick={() => !menu ? setMenu(true) : setMenu(false)}>
             {!menu ? <FontAwesomeIcon icon={faBars} className={'iconHeader'} /> : <FontAwesomeIcon icon={faTimes} className={'iconHeader'} />}
         </button>
