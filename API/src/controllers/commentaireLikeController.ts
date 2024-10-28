@@ -12,18 +12,25 @@ export const createCommentaireLike = async (req: AuthRequest, res: Response, nex
         if (actif == '1') {
             const commentaireLikeModel: CommentaireLikeModel = new CommentaireLikeModel();
 
-            const newCommentaireLike: CommentaireLike = {
-                id_profil: Number(userId),
-                id_commentaire: req.body.id_post
-            } 
+            const like: Array<CommentaireLike> = await commentaireLikeModel.findCommentaireLike(`WHERE id_commentaire=${req.body.idCommentaire} AND id_profil=${userId}`);
 
-            commentaireLikeModel.createCommentaireLike(newCommentaireLike, (error, insertId) => {
-                if (error) {
-                    return res.status(500).json({ error });
-                }
-                return res.status(201).json({ id: insertId });
-            });
-            return;
+            if (like && like.length == 0) {
+                const newCommentaireLike: CommentaireLike = {
+                    id_profil: Number(userId),
+                    id_commentaire: Number(req.body.idCommentaire)
+                } 
+    
+                commentaireLikeModel.createCommentaireLike(newCommentaireLike, (error, insertId) => {
+                    if (error) {
+                        return res.status(500).json({ error });
+                    }
+                    return res.status(201).json({ id: insertId });
+                });
+                return;
+            } else {
+                res.status(404).json({error: 'Déjà like'});
+                return;
+            }
         }
 
         res.status(401).json({error: 'Compte pas actif'});
@@ -40,7 +47,7 @@ export const getAllCommentaireLike = async (req: AuthRequest, res: Response, nex
         const { actif } = req.auth || {};
 
         const id: number = Number(req.params.idCommentaire);
-        if (actif !== '1') {        
+        if (actif != '1') {        
             res.status(404).json({ error : 'Pas autorisé'})
             return;
         }
@@ -70,6 +77,31 @@ export const getAllCommentaireLike = async (req: AuthRequest, res: Response, nex
         return;
     }
 } 
+
+export const getOneCommentaireLike = async (req: AuthRequest, res: Response, next: NextFunction) : Promise<void> => {
+    try {
+        const { userId, actif } = req.auth || {};
+        if (actif == '1') {
+            const commentaireLikeModel: CommentaireLikeModel = new CommentaireLikeModel();
+
+            const like: Array<CommentaireLike> = await commentaireLikeModel.findCommentaireLike(`WHERE id_commentaire=${req.params.idCommentaire} AND id_profil=${userId}`);
+
+            if (like && like.length != 0) {
+                res.status(200).json(like);
+                return;
+            } else {
+                res.status(400).json({message: 'Rien trouvé'});
+                return;
+            }
+        } else {
+            res.status(401).json({error: 'Compte pas actif'});
+            return;
+        }
+    } catch (error) {
+        res.status(500).json({ error: 'Erreur interne du serveur' });    
+        return;
+    }
+}
 
 export const deleteCommentaireLike = async (req: AuthRequest, res: Response, next: NextFunction) : Promise<void> => {
     try {
