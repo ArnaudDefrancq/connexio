@@ -80,10 +80,8 @@ const Card: React.FunctionComponent<ICardProps> = ({ post }) => {
             (showCommentaire) && 
             (
               <>
-                <div> 
                 <CreateCommentaire id_post={post.id_post}/>
-                </div>
-                <div>
+                <div className={Style.cardCom}>
                   <FeedCommentaire id_post={post.id_post}/>
                 </div>
               </>

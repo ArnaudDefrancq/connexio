@@ -21,13 +21,7 @@ const FeedCommentaire: React.FunctionComponent<IFeedCommentaireProps> = ({ id_po
         if (token && !isEmpty(token)) {
             dispatch(getAllCommentaire({ id_post, token }));
         }
-    }, [])
-
-    // console.log(commentaires);
-
-    console.log(id_post);
-    
-    
+    }, [])    
 
   return (
     <>

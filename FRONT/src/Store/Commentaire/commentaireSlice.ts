@@ -54,10 +54,6 @@ export const CommentaireSlice = createSlice({
         builder
             .addCase(getAllCommentaire.fulfilled, (state, action) => {
                 const { id_post, res } = action.payload;
-                console.log(id_post);
-                console.log(res);
-                
-                
                 state.commentaires[id_post] = res;
             })
             .addCase(createCommentaire.fulfilled, (state, action) => {   
