@@ -1,9 +1,20 @@
 .sectionProfil {
-    height: 250px;
+    height: 300px;
+    margin-top: 3%;
+    background-color: var(--colorWhite);
+    z-index: -1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
 }
 
 .divImg {
     position: relative;
+    display: flex;
+    height: 70%;
+    align-items: end;
+    padding: 3%;
+    flex-grow: 1;
 }
 
 .imgBg {
@@ -16,6 +27,32 @@
 }
 
 .imgProfil {
-    height: 50%;
-    width: 50%;
+    height: 100px;
+    width: 100px;
+    border-radius: 50%;
+}
+
+.divInfo {
+    margin-left: 8%;
+}
+
+.divInfo p {
+    font-size: 14px;  
+    font-style: italic;
+}
+
+.divContent {
+    padding: 3%;
+    flex-grow: 5;
+    display: flex;
+    align-items: center;
+}
+
+.divContent h2 {
+    font-size: 16px;
+}
+
+.divContent span {
+    font-weight: lighter;
+    font-size: 14px;
 }

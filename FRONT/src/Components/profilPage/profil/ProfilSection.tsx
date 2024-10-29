@@ -49,13 +49,13 @@ const ProfilSection: React.FunctionComponent<IProfilSectionProps> = () => {
                             <img className={Style.imgBg} src={`${import.meta.env.VITE_URL_IMG}/imgProfil/${user.id_profil}/bg/${user.img_bg}`} alt="photo de profil" />
                             <div className={Style.divInfo}>
                                 <div>
-                                    <h1>{user.nom} <span>{user.prenom}</span></h1>
+                                    <h1>{user.nom} {user.prenom}</h1>
                                     <p><FontAwesomeIcon className={Style.iconTools} icon={faCakeCandles}/> {timestampToDate(user.date_naissance)}</p>
                                 </div>
                                 <p>Membre depuis le : <span>{timestampToDate(user.created_at)}</span></p>
                             </div>
                         </div>
-                        <div>
+                        <div className={Style.divContent}>
                             <h2>Descritpion : <span>{user.description}</span></h2>
                         </div>
                     </>
