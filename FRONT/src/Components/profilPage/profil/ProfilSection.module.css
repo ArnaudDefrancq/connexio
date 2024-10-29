@@ -1,7 +1,21 @@
 .sectionProfil {
-    
+    height: 250px;
 }
 
-.divImg img {
-    height: 200px;
+.divImg {
+    position: relative;
+}
+
+.imgBg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: -1;
+}
+
+.imgProfil {
+    height: 50%;
+    width: 50%;
 }

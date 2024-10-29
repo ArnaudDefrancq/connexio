@@ -41,7 +41,9 @@ body {
 }
 
 main {
-  /* min-height: 100vh; */
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
 }
 
 /* Title */
@@ -269,6 +271,7 @@ nav ul li {
 footer {
   background-color: var(--color5);
   text-align: center;
+  margin-top: 10%;
 }
 footer p {
   padding: 5%;

@@ -45,8 +45,8 @@ const ProfilSection: React.FunctionComponent<IProfilSectionProps> = () => {
                 (user && !isEmpty(user)) && (
                     <>
                         <div className={Style.divImg}>
-                            <img src={`${import.meta.env.VITE_URL_IMG}/imgProfil/${user.id_profil}/profil/${user.img_profil}`} alt="photo de profil" />
-                            <img src={`${import.meta.env.VITE_URL_IMG}/imgProfil/${user.id_profil}/bg/${user.img_bg}`} alt="photo de profil" />
+                            <img className={Style.imgProfil} src={`${import.meta.env.VITE_URL_IMG}/imgProfil/${user.id_profil}/profil/${user.img_profil}`} alt="photo de profil" />
+                            <img className={Style.imgBg} src={`${import.meta.env.VITE_URL_IMG}/imgProfil/${user.id_profil}/bg/${user.img_bg}`} alt="photo de profil" />
                             <div className={Style.divInfo}>
                                 <div>
                                     <h1>{user.nom} <span>{user.prenom}</span></h1>

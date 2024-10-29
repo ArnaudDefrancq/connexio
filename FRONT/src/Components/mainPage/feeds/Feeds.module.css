@@ -1,6 +1,6 @@
 .sectionFeeds {
     width: 90%;
-    margin: 10% auto;
+    margin: 0 auto;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
