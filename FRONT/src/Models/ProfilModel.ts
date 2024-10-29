@@ -1,4 +1,4 @@
-import Profil, { UpdateProfil } from "../Types/Profil";
+import { UpdateProfil, Profil } from "../Types/Profil";
 import axios from 'axios';
 
 export class ProfilModel implements Profil {
@@ -42,13 +42,27 @@ export class ProfilModel implements Profil {
             const res = await axios.put(`${import.meta.env.VITE_URL_PROFIL}/${id}/update`, profil, config)
 
             if(res) {
-                console.log(res.status);
-                console.log('Profil update')
                 return true;
             }
         } catch (error) {
             console.error('Erreur profil update: ', error);
             return false;
+        }
+    }
+
+    static async getOneProfil (idProfil: number, token: string): Promise<Profil> {
+        try {
+            const config = {
+                headers : {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'multipart/form-data',
+                }
+            }
+            const res = await axios.get(`${import.meta.env.VITE_URL_PROFIL}/${idProfil}/profil`, config);
+            return res.data;
+        } catch (error) {
+            console.error(error + "Pb getOneProfil");
+            throw error;
         }
     }
 }
