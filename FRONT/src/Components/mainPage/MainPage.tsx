@@ -15,7 +15,7 @@ interface IMainPageProps {
 const MainPage: React.FunctionComponent<IMainPageProps> = () => {
 
   const { token } = useContext(UserContext);
-
+  const profilPost = false;
   const dispatch = useAppDispatch();
   useEffect(() => {
     if (token && !isEmpty(token)) dispatch(getAllPost(token))
@@ -25,7 +25,7 @@ const MainPage: React.FunctionComponent<IMainPageProps> = () => {
     <>
         <main>
             <CreatePost />
-            <Feeds />
+            <Feeds profilPost={profilPost}/>
         </main>
     </>
   );

@@ -4,12 +4,15 @@ import Style from "./ProfilSection.module.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCakeCandles } from '@fortawesome/free-solid-svg-icons';
 import { Profil } from '../../../Types/Profil';
+import Feeds from '../../mainPage/feeds/Feeds';
 
 interface IProfilSectionProps {
     user: Profil | undefined
 }
 
 const ProfilSection: React.FunctionComponent<IProfilSectionProps> = ({ user }) => {
+
+    const profilPost = true;
 
   return (
     <>
@@ -27,7 +30,7 @@ const ProfilSection: React.FunctionComponent<IProfilSectionProps> = ({ user }) =
                                 </div>
                                 <p>Membre depuis le : <span>{timestampToDate(user.created_at)}</span></p>
                             </div>
-                        </div>
+                        </div>  
                         <div className={Style.divContent}>
                             <h2>Descritpion : <span>{user.description}</span></h2>
                         </div>
@@ -35,6 +38,7 @@ const ProfilSection: React.FunctionComponent<IProfilSectionProps> = ({ user }) =
                 )
             }
         </section>
+        <Feeds profilPost={profilPost} />
     </>
   );
 };

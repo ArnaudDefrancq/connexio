@@ -1,6 +1,6 @@
 .sectionProfil {
     height: 250px;
-    margin-top: 3%;
+    margin: 4% 0;
     background-color: var(--colorWhite);
     z-index: -1;
     display: flex;
@@ -34,6 +34,9 @@
 
 .divInfo {
     margin-left: 8%;
+    padding: 2%;
+    border-radius: 15px;
+    background: #ffffffbf;
 }
 
 .divInfo p {

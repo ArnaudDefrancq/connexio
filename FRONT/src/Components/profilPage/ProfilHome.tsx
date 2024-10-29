@@ -5,6 +5,7 @@ import { UserContext } from '../../Context/UserContext';
 import { Profil } from '../../Types/Profil';
 import { isEmpty } from '../../Tools/function';
 import { ProfilController } from '../../Controllers/ProfilController';
+import { useAppSelector } from '../../Store/store';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface IProfilHomeProps {
@@ -14,6 +15,9 @@ const ProfilHome: React.FunctionComponent<IProfilHomeProps> = () => {
 
   const { id_user, token } = useContext(UserContext);
   const [user, setUser] = useState<Profil>()
+  const { posts } = useAppSelector(state => state.post);
+  console.log(posts);
+  
 
   const getProfil = async (idProfil: number, token: string): Promise<void> => {
       try {
