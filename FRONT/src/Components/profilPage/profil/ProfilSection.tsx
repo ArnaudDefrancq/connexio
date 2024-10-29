@@ -1,42 +1,15 @@
 import * as React from 'react';
-import { useContext,  useState, useEffect } from 'react';
-import { UserContext } from '../../../Context/UserContext';
-import { Profil } from '../../../Types/Profil';
-import { ProfilController } from '../../../Controllers/ProfilController';
 import { isEmpty, timestampToDate } from '../../../Tools/function';
 import Style from "./ProfilSection.module.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCakeCandles } from '@fortawesome/free-solid-svg-icons';
+import { Profil } from '../../../Types/Profil';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface IProfilSectionProps {
+    user: Profil | undefined
 }
 
-const ProfilSection: React.FunctionComponent<IProfilSectionProps> = () => {
-
-  const { id_user, token } = useContext(UserContext);
-  const [user, setUser] = useState<Profil>()
-
-    const getProfil = async (idProfil: number, token: string): Promise<void> => {
-        try {
-            if (token && !isEmpty(token) && idProfil) {
-                const profil: Profil = await ProfilController.getOneProfil(idProfil, token);
-              
-                
-                setUser(profil);
-                return;
-            }
-        } catch (error) {
-            console.log(error + 'Pb get Profil');
-            throw error;
-        }
-    }
-
-    useEffect(() => {
-        if (id_user && token) {
-            getProfil(id_user, token);
-        }
-    }, [])
+const ProfilSection: React.FunctionComponent<IProfilSectionProps> = ({ user }) => {
 
   return (
     <>
