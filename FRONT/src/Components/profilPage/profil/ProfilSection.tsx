@@ -7,6 +7,7 @@ import { faCakeCandles, faGear } from '@fortawesome/free-solid-svg-icons';
 import { Profil } from '../../../Types/Profil';
 import Feeds from '../../mainPage/feeds/Feeds';
 import { UserContext } from '../../../Context/UserContext';
+import { useNavigate } from 'react-router-dom';
 
 interface IProfilSectionProps {
     user: Profil | undefined
@@ -16,6 +17,13 @@ const ProfilSection: React.FunctionComponent<IProfilSectionProps> = ({ user }) =
 
     const { id_user } = useContext(UserContext);
     const profilPost = true;
+    const navigate = useNavigate();
+
+
+    const settingsProfil = (e:React.MouseEvent<HTMLButtonElement>): void => {
+        e.preventDefault();
+        navigate(`/update-profil/${user?.id_profil}`);
+    }
     
   return (
     <>
@@ -25,7 +33,7 @@ const ProfilSection: React.FunctionComponent<IProfilSectionProps> = ({ user }) =
                     <>
                         <div className={Style.divImg}>
                             {
-                                (id_user == user.id_user) && <button><FontAwesomeIcon className={Style.iconTools} icon={faGear}/></button>
+                                (id_user == user.id_user) && <button className={Style.btnTools} onClick={(e) => settingsProfil(e)}><FontAwesomeIcon className={Style.iconSetting} icon={faGear}/></button>
                             }
                             <img className={Style.imgProfil} src={`${import.meta.env.VITE_URL_IMG}/imgProfil/${user.id_profil}/profil/${user.img_profil}`} alt="photo de profil" />
                             <img className={Style.imgBg} src={`${import.meta.env.VITE_URL_IMG}/imgProfil/${user.id_profil}/bg/${user.img_bg}`} alt="photo de profil" />

@@ -21,6 +21,7 @@ function App() {
               <>
                 <Route path='/feeds' element={<HomePage />} />
                 <Route path='/profil/:id' element={<ProfilPage />} />
+                <Route path='/update-profil/:id' element={<CreateProfil />} />
               </>
             ) : (
               <>
