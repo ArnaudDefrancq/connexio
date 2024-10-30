@@ -17,7 +17,7 @@ interface ICommentaireProps {
 
 const Commentaire: React.FunctionComponent<ICommentaireProps> = ({ com }) => {
   
-  const { role, id_user, token } = useContext(UserContext);
+  const { id_role, id_user, token } = useContext(UserContext);
   const [isClick, setIsClick] = useState<boolean>(false);
 
   const dispatch = useAppDispatch();
@@ -42,7 +42,7 @@ const Commentaire: React.FunctionComponent<ICommentaireProps> = ({ com }) => {
     <>
       <div className={Style.divCom}>
         {
-          (role == 1 || com.id_profil == id_user) && <button className={Style.button} onClick={handleClick}><FontAwesomeIcon className={Style.icon} icon={faEllipsisVertical}/></button>
+          (id_role == 1 || com.id_profil == id_user) && <button className={Style.button} onClick={handleClick}><FontAwesomeIcon className={Style.icon} icon={faEllipsisVertical}/></button>
         }
         {
           (isClick) && 

@@ -19,8 +19,7 @@ interface ICardProps {
 }
 
 const Card: React.FunctionComponent<ICardProps> = ({ post }) => {
-  const { role, id_user, token } = useContext(UserContext);
-
+  const { id_role, id_user, token } = useContext(UserContext);  
   const dispatch = useAppDispatch();
 
   const [isClick, setIsClick] = useState<boolean>(false);
@@ -58,7 +57,7 @@ const Card: React.FunctionComponent<ICardProps> = ({ post }) => {
         <div className={Style.cardAuthor}>
           <Author nom={post.nom} prenom={post.prenom} img={post.img_profil} createdAt={post.created_at} updatedAt={post.updated_at} id_profil={post.id_profil} />
           {
-            (role === 1 || id_user === post.id_profil) && <button className={Style.button} onClick={handleClick}><FontAwesomeIcon className={Style.icon} icon={faEllipsisVertical}/></button>
+            (id_role == 1 || id_user === post.id_profil) && <button className={Style.button} onClick={handleClick}><FontAwesomeIcon className={Style.icon} icon={faEllipsisVertical}/></button>
           }
           {
             (isClick) && 

@@ -61,6 +61,7 @@ const Commentaire: React.FunctionComponent<ICommentaireProps> = ({ id_post }) =>
             <div className={`${Style.group} form-group`}>
                 <textarea  
                     className={`${Style.input} ${((errors.errorContent && isClick) ? 'bad-input' : '')}`} 
+                    value={content}
                     required
                     placeholder=" "
                     id='commentaire'
