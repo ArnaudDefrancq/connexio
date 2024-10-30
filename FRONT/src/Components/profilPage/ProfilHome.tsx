@@ -5,7 +5,9 @@ import { UserContext } from '../../Context/UserContext';
 import { Profil } from '../../Types/Profil';
 import { isEmpty } from '../../Tools/function';
 import { ProfilController } from '../../Controllers/ProfilController';
-import { useAppSelector } from '../../Store/store';
+import { useParams } from 'react-router-dom';
+import { useAppDispatch } from '../../Store/store';
+import { getAllPost } from '../../Store/Post/postSlice';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface IProfilHomeProps {
@@ -15,9 +17,8 @@ const ProfilHome: React.FunctionComponent<IProfilHomeProps> = () => {
 
   const { id_user, token } = useContext(UserContext);
   const [user, setUser] = useState<Profil>()
-  const { posts } = useAppSelector(state => state.post);
-  console.log(posts);
-  
+  const idProfilShow = useParams();
+  const dispatch = useAppDispatch();
 
   const getProfil = async (idProfil: number, token: string): Promise<void> => {
       try {
@@ -34,7 +35,8 @@ const ProfilHome: React.FunctionComponent<IProfilHomeProps> = () => {
 
   useEffect(() => {
     if (id_user && token) {
-        getProfil(id_user, token);
+        getProfil(Number(idProfilShow.id), token);
+        dispatch(getAllPost(token));
     }
   }, [])
   return (

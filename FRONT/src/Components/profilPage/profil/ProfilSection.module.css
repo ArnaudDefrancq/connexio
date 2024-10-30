@@ -59,3 +59,8 @@
     font-weight: lighter;
     font-size: 14px;
 }
+
+.iconTools {
+    position: absolute;
+    top: 0;
+}
