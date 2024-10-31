@@ -3,13 +3,13 @@ import axios from 'axios';
 
 export class ProfilModel implements Profil {
     id_profil?: number;
-    nom?: string;
-    prenom?: string;
-    date_naissance?: number;
-    img_profil?: string;
-    img_bg?: string;
-    ville?: string;
-    description?: string;
+    nom: string;
+    prenom: string;
+    date_naissance: number;
+    img_profil: string;
+    img_bg: string;
+    ville: string;
+    description: string;
     actif: number;
     created_at: number;
     updated_at: number;
@@ -58,7 +58,7 @@ export class ProfilModel implements Profil {
                     'Content-Type': 'multipart/form-data',
                 }
             }
-            const res = await axios.get(`${import.meta.env.VITE_URL_PROFIL}/${idProfil}/profil`, config);
+            const res = await axios.get(`${import.meta.env.VITE_URL_PROFIL}/${idProfil}/profil`, config);       
             return res.data;
         } catch (error) {
             console.error(error + "Pb getOneProfil");

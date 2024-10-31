@@ -6,7 +6,10 @@ import FormCreateProfil_2 from './form_2/FormCreateProfil_2';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { UserContext } from '../../Context/UserContext';
-import { deleteAndCreateLocalStorage } from '../../Tools/function';
+import { deleteAndCreateLocalStorage, isEmpty, timestampToDate } from '../../Tools/function';
+import { useParams } from 'react-router-dom';
+import { Profil } from '../../Types/Profil';
+import { ProfilController } from '../../Controllers/ProfilController';
 
 interface IFormCreateProfilProps {
   id_user: number | null,
@@ -21,14 +24,14 @@ type StoredData = {
   year : string
   city: string, 
   content :string,
-  profil : File | null,
-  banner : File | null
+  profil : File | null | string,
+  banner : File | null | string
 }
 
 const FormCreateProfil: React.FunctionComponent<IFormCreateProfilProps> = () => {
 
+  const idParams = useParams();
   const [getForm, setGetForm] = useState<boolean>(true);
-
   const { token, id_user } = useContext(UserContext);
 
   const defaultValue : StoredData =  {
@@ -43,6 +46,34 @@ const FormCreateProfil: React.FunctionComponent<IFormCreateProfilProps> = () => 
     banner : null
   }
 
+  const getBirht = (date: string): Array<string> => {
+    return date.split('/');
+  }
+
+
+  const getProfil = async(id: number, token: string): Promise<void> => {
+    try {
+      const res = await ProfilController.getOneProfil(id, token);
+      const profilUser: Profil = res;
+      defaultValue.firstName = profilUser.prenom;
+      defaultValue.lastName = profilUser.nom;
+      defaultValue.city = profilUser.ville;
+      defaultValue.content = profilUser.description;
+      defaultValue.profil = profilUser.img_profil;
+      defaultValue.banner = profilUser.img_bg
+      defaultValue.day = getBirht(timestampToDate(profilUser.date_naissance))[0];
+      defaultValue.month = getBirht(timestampToDate(profilUser.date_naissance))[1];
+      defaultValue.year = getBirht(timestampToDate(profilUser.date_naissance))[2];
+
+      deleteAndCreateLocalStorage('formData', defaultValue);
+      return;
+      
+    } catch (error) {
+      console.log(error + "Pg update Get Profil");
+      throw error;
+    }
+  }
+
   // Changement du Form
   const handleClick = () : void => {
     if (getForm) {
@@ -54,7 +85,11 @@ const FormCreateProfil: React.FunctionComponent<IFormCreateProfilProps> = () => 
 
   // Permet de créer un item dans le localStorage
   useEffect(() => {
-    deleteAndCreateLocalStorage('formData', defaultValue);
+    if (idParams.id && !isEmpty(idParams.id) && token) {
+      getProfil(Number(idParams.id), token);      
+    } else {
+      deleteAndCreateLocalStorage('formData', defaultValue);
+    }
   }, [])
 
   // Gestion role du btn
@@ -70,7 +105,7 @@ const FormCreateProfil: React.FunctionComponent<IFormCreateProfilProps> = () => 
         <div className={Style.formCreate}>
           <form className={`${Style.form} form`}>
           {
-            getForm ? <FormCreateProfil_1 /> : <FormCreateProfil_2 id_user={id_user} token={token}/> 
+            getForm ? <FormCreateProfil_1 /> : <FormCreateProfil_2 id_user={id_user} token={token} idParams={idParams.id}/> 
           }
           </form>
           <div className={Style.btnNextForm}>

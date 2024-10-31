@@ -5,13 +5,14 @@ import { monthArray, REGEX_DATE_NAISSANCE, REGEX_TEXTE_PROFIL } from '../../../T
 import { Security } from '../../../Tools/Security';
 import { ProfilController } from '../../../Controllers/ProfilController';
 import { UpdateProfil } from '../../../Types/Profil';
-import { dateToTimestamp, deleteAndCreateLocalStorage, setDataLocalStorage } from '../../../Tools/function';
+import { dateToTimestamp, deleteAndCreateLocalStorage, isEmpty, setDataLocalStorage } from '../../../Tools/function';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../../../Context/UserContext';
 
 interface IFormCreateProfil_2Props {
   id_user: number | null,
-  token: string | null
+  token: string | null,
+  idParams: number | undefined
 }
 
 type Errors = {
@@ -22,7 +23,7 @@ type Errors = {
   errorContent: boolean;
 }
 
-const FormCreateProfil_2: React.FunctionComponent<IFormCreateProfil_2Props> = ({id_user, token}) => {
+const FormCreateProfil_2: React.FunctionComponent<IFormCreateProfil_2Props> = ({id_user, token, idParams}) => {
 
   const { updateUserContext } = useContext(UserContext);
 
@@ -129,13 +130,21 @@ const FormCreateProfil_2: React.FunctionComponent<IFormCreateProfil_2Props> = ({
       if (storedData) {
         const parseData = JSON.parse(storedData);
         if (parseData.profil)  {
-          setImgProfil(parseData.profil);      
+          if (idParams && !isEmpty(idParams)) {
+            setImgProfil(`${import.meta.env.VITE_URL_IMG}/imgProfil/${idParams}/profil/${parseData.profil}`)
+          } else{
+            setImgProfil(parseData.profil);      
+          }
         } else {
           setImgProfil('../../../../public/images/profilDefault.png')
           setDataLocalStorage('formData', 'profil', '../../../../public/images/profilDefault.png')
         }
         if (parseData.banner)  {
-          setImgBanner(parseData.banner);      
+          if (idParams && !isEmpty(idParams)) {
+            setImgBanner(`${import.meta.env.VITE_URL_IMG}/imgProfil/${idParams}/bg/${parseData.banner}`)
+          } else {
+            setImgBanner(parseData.banner);      
+          }
         } else {
           setImgBanner('../../../../public/images/bannerDefault.png')
           setDataLocalStorage('formData', 'banner', '../../../../public/images/bannerDefault.png')
