@@ -38,8 +38,10 @@ export class ProfilModel implements Profil {
                     'Content-Type': 'multipart/form-data',
                 }
             }
+            console.log(profil);
             
-            const res = await axios.put(`${import.meta.env.VITE_URL_PROFIL}/${id}/update`, profil, config)
+            const res = await axios.put(`${import.meta.env.VITE_URL_PROFIL}/${id}/update`, profil, config);
+            
 
             if(res) {
                 return true;

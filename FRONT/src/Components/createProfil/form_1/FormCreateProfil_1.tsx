@@ -36,19 +36,22 @@ const FormCreateProfil_1: React.FunctionComponent<IFormCreateProfil_1Props> = ()
   
   // Permet de récup les données et de set les données dans les input
   useEffect(() => {
-    if (localStorage.getItem('formData')) {
-      const storedData = localStorage.getItem('formData');
-      if (storedData) {
-        const parseData = JSON.parse(storedData);
-        if (parseData.firstName) setFirstName(parseData.firstName);      
-        if (parseData.lastName) setLastName(parseData.lastName);      
-        if (parseData.day) setDayOption(parseData.day);      
-        if (parseData.month) setMonth(parseData.month);      
-        if (parseData.year) setYear(parseData.year);      
-        if (parseData.city) setCity(parseData.city);      
-        if (parseData.content) setContent(parseData.content);      
-      }
-    }
+      setTimeout(() => {
+        if (localStorage.getItem('formData')) {
+          const storedData = localStorage.getItem('formData');
+          if (storedData) {
+            const parseData = JSON.parse(storedData);
+            if (parseData.firstName) setFirstName(parseData.firstName);      
+            if (parseData.lastName) setLastName(parseData.lastName);      
+            if (parseData.day) setDayOption(parseData.day);      
+            if (parseData.month) setMonth(parseData.month);      
+            if (parseData.year) setYear(parseData.year);      
+            if (parseData.city) setCity(parseData.city);      
+            if (parseData.content) setContent(parseData.content);      
+          }
+        }
+      }, 50)
+      
     if (localStorage.getItem('formDataError')) {
       const dataError = localStorage.getItem('formDataError');
       if (dataError) {
@@ -70,21 +73,6 @@ const FormCreateProfil_1: React.FunctionComponent<IFormCreateProfil_1Props> = ()
         return <option key={elmnt} value={elmnt}>{elmnt}</option>
       })
   }
-
-  // Permet de set les données dans le localStorage
-  // const setDataLocalStorage = (node:string, value: string):void => {
-  //   if (localStorage.getItem('formData')) {
-  //     const storedData = localStorage.getItem('formData');
-  //     if (storedData) {
-  //       const parseData = JSON.parse(storedData);
-  //       if (node in parseData) {          
-  //         parseData[node] = value
-  //       }
-  //       localStorage.setItem('formData', JSON.stringify(parseData))
-  //     }
-  //   }
-  // }
-
 
   return (
     <>

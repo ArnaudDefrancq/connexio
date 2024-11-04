@@ -10,6 +10,7 @@ import { deleteAndCreateLocalStorage, isEmpty, timestampToDate } from '../../Too
 import { useParams } from 'react-router-dom';
 import { Profil } from '../../Types/Profil';
 import { ProfilController } from '../../Controllers/ProfilController';
+import { monthArray } from '../../Tools/config';
 
 interface IFormCreateProfilProps {
   id_user: number | null,
@@ -25,7 +26,9 @@ type StoredData = {
   city: string, 
   content :string,
   profil : File | null | string,
-  banner : File | null | string
+  banner : File | null | string,
+  isClickProfil: boolean,
+  isClickBanner: boolean
 }
 
 const FormCreateProfil: React.FunctionComponent<IFormCreateProfilProps> = () => {
@@ -43,7 +46,9 @@ const FormCreateProfil: React.FunctionComponent<IFormCreateProfilProps> = () => 
     city : "",
     content : "",
     profil: null,
-    banner : null
+    banner : null,
+    isClickProfil:  false,
+    isClickBanner: false
   }
 
   const getBirht = (date: string): Array<string> => {
@@ -62,7 +67,7 @@ const FormCreateProfil: React.FunctionComponent<IFormCreateProfilProps> = () => 
       defaultValue.profil = profilUser.img_profil;
       defaultValue.banner = profilUser.img_bg
       defaultValue.day = getBirht(timestampToDate(profilUser.date_naissance))[0];
-      defaultValue.month = getBirht(timestampToDate(profilUser.date_naissance))[1];
+      defaultValue.month = monthArray[parseInt(getBirht(timestampToDate(profilUser.date_naissance))[1], 10) - 1];
       defaultValue.year = getBirht(timestampToDate(profilUser.date_naissance))[2];
 
       deleteAndCreateLocalStorage('formData', defaultValue);
@@ -105,7 +110,7 @@ const FormCreateProfil: React.FunctionComponent<IFormCreateProfilProps> = () => 
         <div className={Style.formCreate}>
           <form className={`${Style.form} form`}>
           {
-            getForm ? <FormCreateProfil_1 /> : <FormCreateProfil_2 id_user={id_user} token={token} idParams={idParams.id}/> 
+            getForm ? <FormCreateProfil_1 /> : <FormCreateProfil_2 id_user={id_user} token={token} idParams={Number(idParams.id)}/> 
           }
           </form>
           <div className={Style.btnNextForm}>
