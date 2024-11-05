@@ -7,6 +7,62 @@ import { AuthRequest } from '../middlewares/auth';
 import { AmitieStatus } from "../types/StatusEnum";
 
 
+export class AmitieController {
+    static async createAmitie (req: AuthRequest, res: Response, next: NextFunction) : Promise<void | any> {
+        try {
+            const { userId, actif } = req.auth || {};
+            const { id_profil, id_profil_1 } = req.body;
+
+            if (id_profil === id_profil_1) {
+                return res.status(400).json({ message: "Les profils doivent être différents." });
+            }
+            if (actif == '1' && userId === id_profil) {
+                const profilModel: ProfilModel = new ProfilModel();
+                
+                const profil_1: Profil[] = await profilModel.findById(id_profil_1);
+                
+                
+                if (profil_1 && profil_1.length > 0) {
+                    const friend: Profil =  profil_1[0];                    
+                    
+                    if (friend.actif == 1) {                        
+                        const amitieModel: AmitieModel = new AmitieModel();
+
+                        const amitieFind: Array<Amitie> = await amitieModel.findAmitie(`WHERE id_profil=${id_profil} AND id_profil_1=${friend.id_profil}`);
+
+                        if (amitieFind && amitieFind.length > 0) {
+                            return res.status(400).json({error: 'Déja en attente'});
+                        }
+                        const newAmitie: Amitie = {
+                            id_profil,
+                            id_profil_1,
+                            status: AmitieStatus.Pending
+                        };
+                        amitieModel.createAmitie(newAmitie, (error, insertId) => {
+                            if (error) {
+                                return res.status(500).json({ error });
+                            }
+                            return res.status(201).json({ id: insertId });
+                        });
+                        return ;
+                    }
+                    return res.status(404).json({error : 'Compte ami pas actif'});
+                } 
+                return res.status(400).json({error: "Profil_1 pas trouvé"})
+            }
+            return res.status(404).json({error: 'Compte pas actif'})
+        } catch (error) {
+            return res.status(500).json({error: error})
+        }
+    }
+
+    static async updateAmitie (req: AuthRequest, res: Response, next: NextFunction) : Promise<void> {}
+
+    static async getAmitie (req: AuthRequest, res: Response, next: NextFunction) : Promise<void> {}
+
+    static async deleteAmitie (req: AuthRequest, res: Response, next: NextFunction) : Promise<void> {}
+}
+
 export const createAmitie = async (req: AuthRequest, res: Response, next: NextFunction) : Promise<void> => {
     try {
         const { userId, actif } = req.auth || {};
@@ -27,29 +83,7 @@ export const createAmitie = async (req: AuthRequest, res: Response, next: NextFu
             console.log(profil_1);
             
             
-            if (profil_1 && profil_1.length > 1) {
-                console.log('test');
-                const friend: Profil =  profil_1[0];
-
-                if (friend.actif == 1) {
-                    const amitieModel: AmitieModel = new AmitieModel();
-        
-                    const newAmitie: Amitie = {
-                        id_profil,
-                        id_profil_1,
-                        status: AmitieStatus.Pending
-                    };
-        
-                    amitieModel.createAmitie(newAmitie, (error, insertId) => {
-                        if (error) {
-                            return res.status(500).json({ error });
-                        }
-                        return res.status(201).json({ id: insertId });
-                    });
-                }
-                res.status(404).json({error : 'Compte ami pas actif'});
-                return;
-            }
+          
         }
         res.status(404).json({error: 'Compte pas actif ici'})
         return;
