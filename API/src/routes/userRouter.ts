@@ -1,12 +1,12 @@
 import express from 'express';
-import { signup, login, updateUser, deleteUser } from '../controllers/userController';
 import authMiddleware from '../middlewares/auth';
+import { UserController } from '../controllers/userController';
 
 const userRouter = express.Router();
 
-userRouter.post('/auth/signup', signup);
-userRouter.post('/auth/signin', login);
-userRouter.put('/:id/update',authMiddleware, updateUser);
-userRouter.delete("/:id/delete",authMiddleware, deleteUser);
+userRouter.post('/auth/signup', UserController.signup);
+userRouter.post('/auth/signin', UserController.login);
+userRouter.put('/:id/update',authMiddleware, UserController.updateUser);
+userRouter.delete("/:id/delete",authMiddleware, UserController.deleteUser);
 
 export default userRouter;

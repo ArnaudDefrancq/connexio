@@ -11,18 +11,24 @@ export const createAmitie = async (req: AuthRequest, res: Response, next: NextFu
     try {
         const { userId, actif } = req.auth || {};
         const { id_profil, id_profil_1 } = req.body;
+        console.log(userId + " " + id_profil);
+        
 
-        if (actif == "1" && userId == id_profil) {
-
+        if (actif == '1' && userId === id_profil) {
+            
+            
             if (id_profil === id_profil_1) {
                 res.status(400).json({ message: "Les profils doivent être différents." });
                 return;
             }
             const profilModel: ProfilModel = new ProfilModel();
-    
+            
             const profil_1: Profil[] = await profilModel.findById(id_profil_1);
-    
+            console.log(profil_1);
+            
+            
             if (profil_1 && profil_1.length > 1) {
+                console.log('test');
                 const friend: Profil =  profil_1[0];
 
                 if (friend.actif == 1) {
@@ -45,7 +51,7 @@ export const createAmitie = async (req: AuthRequest, res: Response, next: NextFu
                 return;
             }
         }
-        res.status(404).json({error: 'Compte pas actif'})
+        res.status(404).json({error: 'Compte pas actif ici'})
         return;
     } catch (error) {
         res.status(500).json({ error: 'Erreur interne du serveur' });

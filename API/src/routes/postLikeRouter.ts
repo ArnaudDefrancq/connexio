@@ -1,12 +1,12 @@
 import express from 'express';
-import { createPostLike, getAllPostLike, getOnePostLike, deletePostLike } from '../controllers/postLikeController';
 import authMiddleware from '../middlewares/auth';
+import { PostLikeController } from '../controllers/postLikeController';
 
 
 const postLikeRouter = express.Router();
 
-postLikeRouter.post('/',authMiddleware ,createPostLike);
-postLikeRouter.get('/:idPost',authMiddleware ,getAllPostLike);
-postLikeRouter.get('/:idPost/like',authMiddleware ,getOnePostLike);
-postLikeRouter.delete('/:id',authMiddleware ,deletePostLike);
+postLikeRouter.post('/',authMiddleware ,PostLikeController.createPostLike);
+postLikeRouter.get('/:idPost',authMiddleware ,PostLikeController.getAllPostLike);
+postLikeRouter.get('/:idPost/like',authMiddleware ,PostLikeController.getOnePostLike);
+postLikeRouter.delete('/:id',authMiddleware ,PostLikeController.deletePostLike);
 export default postLikeRouter;

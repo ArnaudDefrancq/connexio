@@ -1,7 +1,7 @@
 import express from 'express';
-import { updateProfil, getAllProfil, getProfilById } from '../controllers/profilController';
 import authMiddleware from '../middlewares/auth';
 import { getMulterConfigProfil } from '../middlewares/multer';
+import { ProfilController } from '../controllers/profilController';
 
 
 const profilRouter = express.Router();
@@ -14,10 +14,10 @@ profilRouter.put('/:id/update', authMiddleware, (req, res,next) => {
         {name: 'profil', maxCount: 1},
         {name: 'bg', maxCount: 1}
     ])(req, res, next)
-}, updateProfil);
+}, ProfilController.updateProfil);
 
-profilRouter.get('/', authMiddleware, getAllProfil);
+profilRouter.get('/', authMiddleware, ProfilController.getAllProfil);
 
-profilRouter.get('/:id/profil', authMiddleware, getProfilById);
+profilRouter.get('/:id/profil', authMiddleware, ProfilController.getProfilById);
 
 export default profilRouter;

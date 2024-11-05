@@ -1,7 +1,7 @@
 import express from 'express';
-import { getAllPostWithProfil, createPost, updatePost, getOnePostWithProfil, deletePost } from '../controllers/postController';
 import authMiddleware from '../middlewares/auth';
 import { getMulterConfigPost } from '../middlewares/multer';
+import { PostController } from '../controllers/postController';
 
 
 const postRouter = express.Router();
@@ -12,7 +12,7 @@ postRouter.post('/:id/post',authMiddleware, (req, res,next) => {
         upload.fields([
             {name: 'media', maxCount: 1},
         ])(req, res, next)
-},createPost);
+}, PostController.createPost);
 
 postRouter.put('/:idUser/update/:idPost', authMiddleware, (req, res,next) => {
     const upload = getMulterConfigPost('imgPost', Number(req.params.idUser));
@@ -20,12 +20,12 @@ postRouter.put('/:idUser/update/:idPost', authMiddleware, (req, res,next) => {
     upload.fields([
         {name: 'media', maxCount: 1},
     ])(req, res, next)
-}, updatePost);
+}, PostController.updatePost);
 
-postRouter.get('/', authMiddleware, getAllPostWithProfil);
+postRouter.get('/', authMiddleware, PostController.getAllPostWithProfil);
 
-postRouter.get('/:id', authMiddleware, getOnePostWithProfil);
+postRouter.get('/:id', authMiddleware, PostController.getOnePostWithProfil);
 
-postRouter.delete('/:id/delete', authMiddleware, deletePost);
+postRouter.delete('/:id/delete', authMiddleware, PostController.deletePost);
 
 export default postRouter;

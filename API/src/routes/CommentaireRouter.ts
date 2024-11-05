@@ -1,13 +1,13 @@
 import express from 'express';
-import { createCommentaire, deleteCommentaire, getAllCommentaireWithProfil, getOneCommentaireWithProfil } from '../controllers/commentaireController';
 import authMiddleware from '../middlewares/auth';
+import { CommentaireController } from '../controllers/commentaireController';
 
 
 const commentaireRouter = express.Router();
 
-commentaireRouter.post('/',authMiddleware ,createCommentaire);
-commentaireRouter.get('/:idPost', authMiddleware, getAllCommentaireWithProfil);
-commentaireRouter.get('/:idPost/commentaire', authMiddleware, getOneCommentaireWithProfil);
-commentaireRouter.delete('/:id',authMiddleware ,deleteCommentaire);
+commentaireRouter.post('/',authMiddleware ,CommentaireController.createCommentaire);
+commentaireRouter.get('/:idPost', authMiddleware, CommentaireController.getAllCommentaireWithProfil);
+commentaireRouter.get('/:idPost/commentaire', authMiddleware, CommentaireController.getOneCommentaireWithProfil);
+commentaireRouter.delete('/:id',authMiddleware ,CommentaireController.deleteCommentaire);
 
 export default commentaireRouter;
