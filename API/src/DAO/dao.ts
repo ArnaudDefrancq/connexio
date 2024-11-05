@@ -34,10 +34,10 @@ export class Dao<T> {
      */
     public find(where: string, select: string = '*', queryString?: string): Promise<T[]> {
         const query: string = queryString || `SELECT ${select} FROM cx__${this.tableName} ${where}`;        
-
+        
         return new Promise<T[]>((resolve, reject) => {
             connection.query(query, (error, results) => {
-                if (error) {
+                if (error) {                    
                     reject(error);
                 } else {
                     resolve(results as T[]);

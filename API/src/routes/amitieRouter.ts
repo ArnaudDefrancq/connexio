@@ -7,7 +7,7 @@ const amitieRouter = express.Router();
 
 amitieRouter.post('/', authMiddleware ,AmitieController.createAmitie);
 amitieRouter.put('/:idAmitie/:slug', authMiddleware ,AmitieController.updateAmitie);
-// amitieRouter.get('/', authMiddleware, getAmitie)
+amitieRouter.get('/:id/:slug', authMiddleware, AmitieController.getAmitie)
 // amitieRouter.delete('/:id',authMiddleware ,deleteAmitie);
 
 export default amitieRouter;

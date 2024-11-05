@@ -121,33 +121,45 @@ export class AmitieController {
         }
     }
 
-    static async getAmitie (req: AuthRequest, res: Response, next: NextFunction) : Promise<void> {}
+    static async getAmitie (req: AuthRequest, res: Response, next: NextFunction) : Promise<void | any> {
+        try {
+            const { userId, role, actif } = req.auth || {};
+            const id: number = Number(req.params.id);
+            const slug: string = req.params.slug; 
+            const amitieModel: AmitieModel = new AmitieModel();
+
+            if (isNaN(id)) {
+                return res.status(400).json({ error: 'ID invalide' });
+            }
+    
+            if (!Object.values(AmitieStatus).includes(slug as AmitieStatus)) {
+                return res.status(400).json({ message: "Statut invalide." });
+            }
+    
+            if (actif != '1') {
+                return res.status(400).json({message: 'Compte pas actif'});
+            }            
+            switch (slug as AmitieStatus) {
+                case AmitieStatus.Accepted :
+                    const amitiesAccepted: Array<Amitie> = await amitieModel.findAmitie(`WHERE id_profil = ${id} AND status = "${slug}"`);
+                    console.log(amitiesAccepted);
+                    
+                    res.status(200).json(amitiesAccepted);
+                    break;
+                case AmitieStatus.Pending :
+                    const amitiePending: Array<Amitie> = await amitieModel.findAmitie(`WHERE id_profil = ${id} AND status = "${slug}"`);
+                    res.status(200).json(amitiePending);
+                    break;
+                default : 
+                    res.status(400).json({error: "Pas le bon slug"});
+                    break;
+            }
+        } catch (error) {
+            res.status(500).json({ error: 'Erreur interne du serveur' });
+            return;
+        }
+    }
 
     static async deleteAmitie (req: AuthRequest, res: Response, next: NextFunction) : Promise<void | any> {
-        console.log('ici');
-        return res.status(204).json({message : 'delete Ok'});
-    }
-}
-export const getAmitie = async (req: AuthRequest, res: Response, next: NextFunction) : Promise<void> => {
-    try {
-        const { userId, actif } = req.auth || {};
-
-        if (actif == '1') {
-            const amitieModel: AmitieModel = new AmitieModel();
-            const status = req.query.status as string;
-
-            if (status && !Object.values(AmitieStatus).includes(status as AmitieStatus)) {
-                res.status(400).json({ message: "Statut invalide." });
-                return;
-            }
-
-            const amities = await amitieModel.findAmitie(`WHERE id_profil = ${userId} AND status = ${status}`);
-    
-            res.status(200).json(amities);
-        }
-        res.status(401).json({error: "Compte pas actif"})
-    } catch (error) {
-        res.status(500).json({ error: 'Erreur interne du serveur' });
-        return;
     }
 }
