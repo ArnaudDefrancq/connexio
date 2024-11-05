@@ -38,7 +38,7 @@ const ProfilHome: React.FunctionComponent<IProfilHomeProps> = () => {
         getProfil(Number(idProfilShow.id), token);
         dispatch(getAllPost(token));
     }
-  }, [])
+  }, [idProfilShow.id])
   return (
     <>
        <main>

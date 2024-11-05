@@ -17,7 +17,7 @@ export class AmitieModel {
         return  this.amitieDao.find(where, select);
       }
 
-      public findById(id: number, select: string = "*"): Promise<Amitie[]> {
+      public findById(id: number, select: string = "*"): Promise<Amitie[]> {       
         return this.amitieDao.findById(id, select);
       }
     

@@ -67,12 +67,12 @@
     top: 5%;
     right: 5%;
     z-index: 1;
-    font-size: 20px;    
+   
 }
 
 .iconSetting {
-    /* font-size: 20px; */
     padding: 20%;
     background-color: var(--colorWhite);
     border-radius: 50%;
+    font-size: 20px;    
 }

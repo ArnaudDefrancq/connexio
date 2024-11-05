@@ -3,7 +3,7 @@ import { useContext } from 'react';
 import { isEmpty, timestampToDate } from '../../../Tools/function';
 import Style from "./ProfilSection.module.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCakeCandles, faGear } from '@fortawesome/free-solid-svg-icons';
+import { faCakeCandles, faGear, faUserPlus } from '@fortawesome/free-solid-svg-icons';
 import { Profil } from '../../../Types/Profil';
 import Feeds from '../../mainPage/feeds/Feeds';
 import { UserContext } from '../../../Context/UserContext';
@@ -25,6 +25,8 @@ const ProfilSection: React.FunctionComponent<IProfilSectionProps> = ({ user }) =
         navigate(`/update-profil/${user?.id_profil}`);
     }
     
+    const handleClickFriends = (): void => {}
+
   return (
     <>
         <section className={Style.sectionProfil}>
@@ -33,7 +35,7 @@ const ProfilSection: React.FunctionComponent<IProfilSectionProps> = ({ user }) =
                     <>
                         <div className={Style.divImg}>
                             {
-                                (id_user == user.id_user) && <button className={Style.btnTools} onClick={(e) => settingsProfil(e)}><FontAwesomeIcon className={Style.iconSetting} icon={faGear}/></button>
+                                (id_user == user.id_user) ? <button className={Style.btnTools} onClick={(e) => settingsProfil(e)}><FontAwesomeIcon className={Style.iconSetting} icon={faGear}/></button> : <button className={Style.btnTools} ><FontAwesomeIcon className={Style.iconSetting} icon={faUserPlus}/></button>
                             }
                             <img className={Style.imgProfil} src={`${import.meta.env.VITE_URL_IMG}/imgProfil/${user.id_profil}/profil/${user.img_profil}`} alt="photo de profil" />
                             <img className={Style.imgBg} src={`${import.meta.env.VITE_URL_IMG}/imgProfil/${user.id_profil}/bg/${user.img_bg}`} alt="photo de profil" />

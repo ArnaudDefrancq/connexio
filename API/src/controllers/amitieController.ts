@@ -56,92 +56,78 @@ export class AmitieController {
         }
     }
 
-    static async updateAmitie (req: AuthRequest, res: Response, next: NextFunction) : Promise<void> {}
+    static async updateAmitie (req: AuthRequest, res: Response, next: NextFunction) : Promise<void | any> {
+        try {
+            const { userId, role, actif } = req.auth || {};
+            const idAmitie: number = Number(req.params.idAmitie);
+            const slug: string = req.params.slug; 
+            const amitieModel: AmitieModel = new AmitieModel();
+    
+            if (isNaN(idAmitie)) {
+                return res.status(400).json({ error: 'ID invalide' });
+            }
+    
+            if (!Object.values(AmitieStatus).includes(slug as AmitieStatus)) {
+                return res.status(400).json({ message: "Statut invalide." });
+            }
+            
+            if (actif != '1') {
+                return res.status(400).json({message: 'Compte pas actif'});
+            }
+
+            const amitieFind: Array<Amitie> = await amitieModel.findById(idAmitie)
+            
+            if (amitieFind.length == 0) {
+                return res.status(404).json({error: "Pas de demande trouvé"});
+            }
+
+            switch (slug as AmitieStatus) {
+                case AmitieStatus.Accepted :                           
+                    const updateAmitie: Partial<Amitie> = {
+                        status: AmitieStatus.Accepted
+                    } 
+    
+                    amitieModel.updateAmitie(idAmitie, updateAmitie, (error, affectedRows) => {
+                        if (error) {
+                            res.status(500).json({ error: 'Erreur de mise à jour' });
+                        } else {
+                            res.status(200).json({ id: affectedRows });
+                        }
+                    });
+                    break;
+
+                case AmitieStatus.Rejected:
+                    var message: number;
+                    const amitieDelete = await new Promise<number>((resolve, reject) => {
+                        amitieModel.deleteAmitie(idAmitie, (error, affectedRows) => {
+                            if (error) {
+                                reject(error);
+                            } else {
+                                resolve(affectedRows || 0);
+                            }
+                        });
+                    });
+
+                    message = amitieDelete;
+                    res.status(200).json({ message: 'amitie supprimé avec succès ligne affecté => '  + message});
+                    break;
+                default: 
+                    res.status(400).json({error: 'Slug non reconnu'});
+                    break;
+            }        
+            
+        } catch (error) {
+            return res.status(500).json({ error: 'Erreur interne du serveur' });    
+        }
+    }
 
     static async getAmitie (req: AuthRequest, res: Response, next: NextFunction) : Promise<void> {}
 
-    static async deleteAmitie (req: AuthRequest, res: Response, next: NextFunction) : Promise<void> {}
-}
-
-export const createAmitie = async (req: AuthRequest, res: Response, next: NextFunction) : Promise<void> => {
-    try {
-        const { userId, actif } = req.auth || {};
-        const { id_profil, id_profil_1 } = req.body;
-        console.log(userId + " " + id_profil);
-        
-
-        if (actif == '1' && userId === id_profil) {
-            
-            
-            if (id_profil === id_profil_1) {
-                res.status(400).json({ message: "Les profils doivent être différents." });
-                return;
-            }
-            const profilModel: ProfilModel = new ProfilModel();
-            
-            const profil_1: Profil[] = await profilModel.findById(id_profil_1);
-            console.log(profil_1);
-            
-            
-          
-        }
-        res.status(404).json({error: 'Compte pas actif ici'})
-        return;
-    } catch (error) {
-        res.status(500).json({ error: 'Erreur interne du serveur' });
-        return;
+    static async deleteAmitie (req: AuthRequest, res: Response, next: NextFunction) : Promise<void | any> {
+        console.log('ici');
+        return res.status(204).json({message : 'delete Ok'});
     }
 }
-
-export const updateAmitie = async (req: AuthRequest, res: Response, next: NextFunction) : Promise<void> => {
-    try {
-        const { userId, role, actif } = req.auth || {};
-        const idAmitie: number = Number(req.params.id);
-
-        if (isNaN(idAmitie)) {
-            res.status(400).json({ error: 'ID invalide' });
-            return;
-        }
-
-        if (!Object.values(AmitieStatus).includes(req.body.status)) {
-            res.status(400).json({ message: "Statut invalide." });
-            return;
-        }
-
-        if (actif == '1') {
-            const amitieModel: AmitieModel = new AmitieModel();
-            const result: Amitie[] = await amitieModel.findById(idAmitie);
-    
-            if (result && result.length > 0) {
-
-                const updateAmitie: Partial<Amitie> = {
-                    status: req.body.status
-                } 
-
-    
-                amitieModel.updateAmitie(idAmitie, updateAmitie, (error, affectedRows) => {
-                    if (error) {
-                        return res.status(500).json({ error });
-                    }
-                    return res.status(201).json({ id: affectedRows });
-                })
-                return;
-    
-            } else {
-                res.status(404).json({ error: 'Amitie non trouvé' });
-                return;
-            }
-        }
-
-        res.status(404).json({message: 'Les ID ne correspondent pas'});
-        return;
-
-    } catch (error) {
-        res.status(500).json({ error: 'Erreur interne du serveur' });    
-        return;
-    }
-}
-
 export const getAmitie = async (req: AuthRequest, res: Response, next: NextFunction) : Promise<void> => {
     try {
         const { userId, actif } = req.auth || {};
@@ -160,59 +146,6 @@ export const getAmitie = async (req: AuthRequest, res: Response, next: NextFunct
             res.status(200).json(amities);
         }
         res.status(401).json({error: "Compte pas actif"})
-    } catch (error) {
-        res.status(500).json({ error: 'Erreur interne du serveur' });
-        return;
-    }
-}
-
-export const deleteAmitie = async (req: AuthRequest, res: Response, next: NextFunction) : Promise<void> => {
-    try {
-        const { userId, role, actif } = req.auth || {};
-        const id: number = Number(req.params.id);
-
-        if (isNaN(id)) {
-            res.status(400).json({ error: ' ID pas invalide' });
-            return;
-        }
-
-        if (actif == "1") {
-            const amitieModel: AmitieModel = new AmitieModel();
-            let message;
-
-            const result: Amitie[] = await amitieModel.findById(id);
-
-            if (result && result.length > 0) {
-
-                const amitie: Amitie = result[0];
-                
-                if (amitie.id_profil == Number(userId)) {
-
-                    const amitieDelete = await new Promise<number>((resolve, reject) => {
-                        amitieModel.deleteAmitie(id, (error, affectedRows) => {
-                            if (error) {
-                                reject(error);
-                            } else {
-                                resolve(affectedRows || 0);
-                            }
-                        });
-                    });
-
-                    message = amitieDelete;
-                    res.status(200).json({ message: 'amitie supprimé avec succès ligne affecté => '  + message});
-                    return;
-                } else {
-                    res.status(401).json({error : "Unauthorize"})
-                    return;
-                }
-            } else {
-                res.status(404).json({ error: 'commentaire non trouvé' });
-                return;
-            }
-        }
-        res.status(404).json({message: 'Les ID ne correspondent pas'});
-        return;
-
     } catch (error) {
         res.status(500).json({ error: 'Erreur interne du serveur' });
         return;

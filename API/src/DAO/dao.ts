@@ -56,10 +56,10 @@ export class Dao<T> {
      */
     public findById(id: number, select: string = '*', queryString?: string): Promise<T[]> {
         const query: string = queryString || `SELECT ${select} FROM cx__${this.tableName} WHERE id_${this.tableName} = ?`;
-
+        
         return new Promise<T[]>((resolve, reject) => {
             connection.query(query, [id], (error, results) => {
-                if (error) {
+                if (error) {                    
                     reject(error);
                 } else {
                     resolve(results as T[]);
