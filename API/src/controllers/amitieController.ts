@@ -161,5 +161,43 @@ export class AmitieController {
     }
 
     static async deleteAmitie (req: AuthRequest, res: Response, next: NextFunction) : Promise<void | any> {
+        try {
+            const { userId, role, actif } = req.auth || {};
+            const id: number = Number(req.params.id);
+            let message;
+            const amitieModel: AmitieModel = new AmitieModel();
+    
+            if (isNaN(id)) {
+                return res.status(400).json({ error: ' ID pas invalide' });
+                
+            }
+    
+            if (actif != "1") {
+                return res.status(401).json({error : "Unauthorize"})
+            }
+
+            const result: Array<Amitie> = await amitieModel.findById(id);
+    
+            if (result && result.length == 0) {
+                return res.status(404).json({ error: 'commentaire non trouvé' });
+            };
+
+            const amitieDelete = await new Promise<number>((resolve, reject) => {
+                amitieModel.deleteAmitie(id, (error, affectedRows) => {
+                    if (error) {
+                        reject(error);
+                    } else {
+                        resolve(affectedRows || 0);
+                    }
+                });
+            });
+    
+            message = amitieDelete;
+            res.status(200).json({ message: 'amitie supprimé avec succès ligne affecté => '  + message});
+            return;
+        } catch (error) {
+            return res.status(500).json({ error: 'Erreur interne du serveur' });
+            
+        }
     }
 }

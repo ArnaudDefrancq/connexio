@@ -1,7 +1,7 @@
 import express from 'express';
 import authMiddleware from '../middlewares/auth';
 import { getMulterConfigProfil } from '../middlewares/multer';
-import { ProfilController } from '../controllers/profilController';
+import { ProfilController } from '../controllers/ProfilController';
 
 
 const profilRouter = express.Router();

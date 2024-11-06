@@ -1,6 +1,6 @@
 import express from 'express';
 import authMiddleware from '../middlewares/auth';
-import { PostLikeController } from '../controllers/postLikeController';
+import { PostLikeController } from '../controllers/PostLikeController';
 
 
 const postLikeRouter = express.Router();

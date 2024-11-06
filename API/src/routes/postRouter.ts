@@ -1,7 +1,7 @@
 import express from 'express';
 import authMiddleware from '../middlewares/auth';
 import { getMulterConfigPost } from '../middlewares/multer';
-import { PostController } from '../controllers/postController';
+import { PostController } from '../controllers/PostController';
 
 
 const postRouter = express.Router();
