@@ -162,7 +162,7 @@ export class AmitieController {
 
     static async deleteAmitie (req: AuthRequest, res: Response, next: NextFunction) : Promise<void | any> {
         try {
-            const { userId, role, actif } = req.auth || {};
+            const { actif } = req.auth || {};
             const id: number = Number(req.params.id);
             let message;
             const amitieModel: AmitieModel = new AmitieModel();
