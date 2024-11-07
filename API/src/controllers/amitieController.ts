@@ -60,14 +60,14 @@ export class AmitieController {
         try {
             const { userId, role, actif } = req.auth || {};
             const idAmitie: number = Number(req.params.idAmitie);
-            const slug: string = req.params.slug; 
+            const slugBody: string = req.body.status; 
             const amitieModel: AmitieModel = new AmitieModel();
     
             if (isNaN(idAmitie)) {
                 return res.status(400).json({ error: 'ID invalide' });
             }
     
-            if (!Object.values(AmitieStatus).includes(slug as AmitieStatus)) {
+            if (!Object.values(AmitieStatus).includes(slugBody as AmitieStatus)) {
                 return res.status(400).json({ message: "Statut invalide." });
             }
             
@@ -81,7 +81,7 @@ export class AmitieController {
                 return res.status(404).json({error: "Pas de demande trouvé"});
             }
 
-            switch (slug as AmitieStatus) {
+            switch (slugBody as AmitieStatus) {
                 case AmitieStatus.Accepted :                           
                     const updateAmitie: Partial<Amitie> = {
                         status: AmitieStatus.Accepted
