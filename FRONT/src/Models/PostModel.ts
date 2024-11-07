@@ -2,7 +2,7 @@ import { NewPost, Post, PostWithProfil } from "../Types/Post";
 import axios from "axios";
 
 export class PostModel implements Post {
-    id_post?: number;
+    id_post: number;
     content: string;
     media?: string | null;
     created_at: number;
