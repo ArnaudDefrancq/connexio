@@ -142,8 +142,6 @@ export class AmitieController {
             switch (slug as AmitieStatus) {
                 case AmitieStatus.Accepted :
                     const amitiesAccepted: Array<Amitie> = await amitieModel.findAmitie(`WHERE id_profil = ${id} AND status = "${slug}"`);
-                    console.log(amitiesAccepted);
-                    
                     res.status(200).json(amitiesAccepted);
                     break;
                 case AmitieStatus.Pending :
@@ -157,6 +155,31 @@ export class AmitieController {
         } catch (error) {
             res.status(500).json({ error: 'Erreur interne du serveur' });
             return;
+        }
+    }
+
+    static async getOneAmitie (req: AuthRequest, res: Response, next: NextFunction) : Promise<void | any> {
+        try {
+            const { userId, role, actif } = req.auth || {};
+            const id: number = Number(req.params.id);
+            const amitieModel: AmitieModel = new AmitieModel();
+            
+            if (isNaN(id)) {
+                return res.status(400).json({ error: 'ID invalide' });
+            }
+    
+            if (actif != '1') {
+                return res.status(400).json({message: 'Compte pas actif'});
+            }   
+            const amitieFind: Array<Amitie> = await amitieModel.findById(id);
+
+            if (amitieFind.length == 0) {
+                return res.status(400).json({error: "Rien trouvé"});
+            }
+            
+            return res.status(200).json(amitieFind);
+        } catch (error) {
+            return res.status(500).json({error: error})
         }
     }
 
