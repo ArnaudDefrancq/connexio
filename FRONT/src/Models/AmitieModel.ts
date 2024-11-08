@@ -40,7 +40,7 @@ export class AmitieModel implements Amitie {
                 }
             };
 
-            const res = await axios.put(`${import.meta.env.VITE_URL_AMITIE}/${idRelation}/${slug}`, {}, config);
+            const res = await axios.put(`${import.meta.env.VITE_URL_AMITIE}/${idRelation}`, { status: slug }, config);
 
             return res.data;
         } catch (error) {
@@ -49,7 +49,7 @@ export class AmitieModel implements Amitie {
         }
     }
 
-    static async getRelation (idProfil: number, slug: string, token: string): Promise<Array<Amitie> | void> {
+    static async getRelation (idProfil: number, slug: string, token: string): Promise<Array<Amitie>> {
         try {
             const config = {
                 headers: {
@@ -58,15 +58,15 @@ export class AmitieModel implements Amitie {
             };
 
             const res = await axios.get(`${import.meta.env.VITE_URL_AMITIE}/${idProfil}/${slug}`, config);
-
-            return res.data;
+            const allRelation: Array<Amitie> = res.data;
+            return allRelation.reverse();
         } catch (error) {
             console.log('Pb getRelation' + error);
-            return;
+            return [];
         }
     }
 
-    static async getOneRelation (idRelation: number, token: string): Promise<Amitie | void> {
+    static async getOneRelation (idRelation: number, token: string): Promise<Amitie> {
         try {
             const config = {
                 headers: {
@@ -79,7 +79,7 @@ export class AmitieModel implements Amitie {
             return res.data[0];
         } catch (error) {
             console.log('Pb getRelation' + error);
-            return;
+            throw error;
         }
     }
 
