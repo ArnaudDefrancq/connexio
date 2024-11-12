@@ -120,9 +120,9 @@ export class AmitieController {
             return res.status(500).json({ error: 'Erreur interne du serveur' });    
         }
     }
-
-    static async getAmitie (req: AuthRequest, res: Response, next: NextFunction) : Promise<void | any> {
-        try {
+    
+    static async getAmitieWithProfil (req: AuthRequest, res: Response, next: NextFunction) : Promise<void | any> {
+        try {           
             const { userId, role, actif } = req.auth || {};
             const id: number = Number(req.params.id);
             const slug: string = req.params.slug; 
@@ -138,14 +138,17 @@ export class AmitieController {
     
             if (actif != '1') {
                 return res.status(400).json({message: 'Compte pas actif'});
-            }            
+            }      
+            
+            const queryString: string = `SELECT a.id_amitie, a.id_profil, a.id_profil_1, a.status, p.nom, p.prenom, p.img_profil FROM cx__amitie AS a JOIN cx__profil AS p ON p.id_profil = a.id_profil_1 WHERE a.id_profil = ${id} AND a.status = "${slug}";`
             switch (slug as AmitieStatus) {
                 case AmitieStatus.Accepted :
-                    const amitiesAccepted: Array<Amitie> = await amitieModel.findAmitie(`WHERE id_profil = ${id} AND status = "${slug}"`);
+                    console.log('ici');
+                    const amitiesAccepted: Array<Amitie> = await amitieModel.findAmitie(``, '',queryString);
                     res.status(200).json(amitiesAccepted);
                     break;
                 case AmitieStatus.Pending :
-                    const amitiePending: Array<Amitie> = await amitieModel.findAmitie(`WHERE id_profil = ${id} AND status = "${slug}"`);
+                    const amitiePending: Array<Amitie> = await amitieModel.findAmitie(``, '', queryString);
                     res.status(200).json(amitiePending);
                     break;
                 default : 

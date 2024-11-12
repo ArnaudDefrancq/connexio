@@ -13,8 +13,8 @@ export class AmitieModel {
         return this.amitieDao.create(amitie, callback);
       }
     
-      public findAmitie(where: string, select: string = "*"): Promise<Amitie[]> {
-        return  this.amitieDao.find(where, select);
+      public findAmitie(where: string, select: string = "*", queryString?: string): Promise<Amitie[]> {
+        return  this.amitieDao.find(where, select, queryString);
       }
 
       public findById(id: number, select: string = "*"): Promise<Amitie[]> {       
