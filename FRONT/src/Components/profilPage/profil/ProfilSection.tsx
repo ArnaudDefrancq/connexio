@@ -93,6 +93,19 @@ const ProfilSection: React.FunctionComponent<IProfilSectionProps> = ({ user }) =
                         <div className={Style.divContent}>
                             <h2>Descritpion : <span>{user.description}</span></h2>
                         </div>
+                        <div className="friends">
+                            {
+                                (id_user) && (
+                                    <>
+                                        {
+                                            pendingAmitie[id_user].map(f => {
+                                                return <p>{f.prenom}</p>
+                                            }) 
+                                        }
+                                    </>
+                                )
+                            }
+                        </div>
                     </>
                 )
             }

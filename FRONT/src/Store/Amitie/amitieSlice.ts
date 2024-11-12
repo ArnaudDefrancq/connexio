@@ -1,11 +1,11 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { Amitie, NewAmitie } from "../../Types/Amitie";
+import { Amitie, AmitieWithProfil, NewAmitie } from "../../Types/Amitie";
 import { AmitieController } from "../../Controllers/AmitieController";
 import { AmitieStatus } from "../../Types/StatusEnum";
 
 interface AmitieState {
-    accepted: { [id_profil: number]: Array<Amitie> };
-    pending: { [id_profil: number]: Array<Amitie> };
+    accepted: { [id_profil: number]: Array<AmitieWithProfil> };
+    pending: { [id_profil: number]: Array<AmitieWithProfil> };
     rejected: { [id_profil: number]: Array<Amitie> };
 }
 
@@ -15,9 +15,9 @@ const initialState: AmitieState = {
     rejected: {}
 }
 
-export const getRelation = createAsyncThunk('getRelation', async({id_profil, slug, token}: {id_profil: number; slug: string; token: string}, thunkAPI): Promise<{ id_profil: number, res: Array<Amitie> }> => {
+export const getRelation = createAsyncThunk('getRelation', async({id_profil, slug, token}: {id_profil: number; slug: string; token: string}, thunkAPI): Promise<{ id_profil: number, res: Array<AmitieWithProfil> }> => {
     try {
-        const res: Array<Amitie> = await AmitieController.getRelation(id_profil, slug, token);
+        const res: Array<AmitieWithProfil> = await AmitieController.getRelation(id_profil, slug, token);
         return {id_profil, res}
     } catch (error) {
         console.log(error);
@@ -25,11 +25,11 @@ export const getRelation = createAsyncThunk('getRelation', async({id_profil, slu
     }
 });
 
-export const createRelation = createAsyncThunk('createRelation', async({ newRelation, token}: {newRelation: NewAmitie; token: string}, thunkAPI): Promise<Amitie> => {
+export const createRelation = createAsyncThunk('createRelation', async({ newRelation, token}: {newRelation: NewAmitie; token: string}, thunkAPI): Promise<AmitieWithProfil> => {
     try {
         await AmitieController.createRelation(newRelation, token);
         
-        const allRelation: Array<Amitie> = await AmitieController.getRelation(Number(newRelation.id_profil), newRelation.status, token);
+        const allRelation: Array<AmitieWithProfil> = await AmitieController.getRelation(Number(newRelation.id_profil), newRelation.status, token);
 
         return allRelation[0];
     } catch (error) {

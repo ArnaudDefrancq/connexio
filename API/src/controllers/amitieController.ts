@@ -120,7 +120,7 @@ export class AmitieController {
             return res.status(500).json({ error: 'Erreur interne du serveur' });    
         }
     }
-    
+
     static async getAmitieWithProfil (req: AuthRequest, res: Response, next: NextFunction) : Promise<void | any> {
         try {           
             const { userId, role, actif } = req.auth || {};
@@ -143,7 +143,6 @@ export class AmitieController {
             const queryString: string = `SELECT a.id_amitie, a.id_profil, a.id_profil_1, a.status, p.nom, p.prenom, p.img_profil FROM cx__amitie AS a JOIN cx__profil AS p ON p.id_profil = a.id_profil_1 WHERE a.id_profil = ${id} AND a.status = "${slug}";`
             switch (slug as AmitieStatus) {
                 case AmitieStatus.Accepted :
-                    console.log('ici');
                     const amitiesAccepted: Array<Amitie> = await amitieModel.findAmitie(``, '',queryString);
                     res.status(200).json(amitiesAccepted);
                     break;

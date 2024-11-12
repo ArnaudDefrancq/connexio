@@ -1,5 +1,5 @@
 import { AmitieModel } from "../Models/AmitieModel";
-import { Amitie, NewAmitie } from "../Types/Amitie";
+import { Amitie, AmitieWithProfil, NewAmitie } from "../Types/Amitie";
 
 export class AmitieController {
     static async createRelation (newRelation: NewAmitie, token:string): Promise<void> {
@@ -10,7 +10,7 @@ export class AmitieController {
         return await AmitieModel.updateRelation(idRelation,slug,token);
     }
 
-    static async getRelation (idProfil: number, slug: string, token: string): Promise<Array<Amitie>> {
+    static async getRelation (idProfil: number, slug: string, token: string): Promise<Array<AmitieWithProfil>> {
         return await AmitieModel.getRelation(idProfil, slug, token);
     }
 

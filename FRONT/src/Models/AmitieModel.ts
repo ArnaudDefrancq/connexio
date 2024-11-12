@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Amitie, NewAmitie } from "../Types/Amitie";
+import { Amitie, AmitieWithProfil, NewAmitie } from "../Types/Amitie";
 import { AmitieStatus } from "../Types/StatusEnum";
 
 export class AmitieModel implements Amitie {
@@ -49,7 +49,7 @@ export class AmitieModel implements Amitie {
         }
     }
 
-    static async getRelation (idProfil: number, slug: string, token: string): Promise<Array<Amitie>> {
+    static async getRelation (idProfil: number, slug: string, token: string): Promise<Array<AmitieWithProfil>> {
         try {
             const config = {
                 headers: {
@@ -58,7 +58,7 @@ export class AmitieModel implements Amitie {
             };
 
             const res = await axios.get(`${import.meta.env.VITE_URL_AMITIE}/${idProfil}/${slug}`, config);
-            const allRelation: Array<Amitie> = res.data;
+            const allRelation: Array<AmitieWithProfil> = res.data;
             return allRelation.reverse();
         } catch (error) {
             console.log('Pb getRelation' + error);
