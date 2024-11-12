@@ -9,7 +9,7 @@ import Feeds from '../../mainPage/feeds/Feeds';
 import { UserContext } from '../../../Context/UserContext';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../Store/store';
-import { createRelation } from '../../../Store/Amitie/amitieSlice';
+import { createRelation, deleteRelation } from '../../../Store/Amitie/amitieSlice';
 import { Amitie, NewAmitie } from '../../../Types/Amitie';
 import { AmitieStatus } from '../../../Types/StatusEnum';
 
@@ -24,10 +24,7 @@ const ProfilSection: React.FunctionComponent<IProfilSectionProps> = ({ user }) =
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const pendingAmitie = useAppSelector(state => state.amitie.pending);
-    const amitieAccepted = useAppSelector(state => state.amitie.accepted);        
-
-    console.log(amitieAccepted);
-    
+    const amitieAccepted = useAppSelector(state => state.amitie.accepted);            
 
     const settingsProfil = (e:React.MouseEvent<HTMLButtonElement>): void => {
         e.preventDefault();
@@ -43,10 +40,20 @@ const ProfilSection: React.FunctionComponent<IProfilSectionProps> = ({ user }) =
             }
             dispatch(createRelation({ newRelation, token }));
         }
-    }    
+    }   
+    
+    const handleClickDeleteFriend = (): void => {
+        if (amitieAccepted && id_user) {            
+            const relation = amitieAccepted[id_user].find(e => e.id_profil_1 == user?.id_profil);            
+            if (relation && token) {
+                dispatch(deleteRelation({ idRelation: Number(relation.id_amitie), token }))
+            }
+        }
+    }
 
     const goodIcon = (arrayPending: Array<Amitie>, arrayAccepted: Array<Amitie>, id: number): JSX.Element => {
         let icon = faUserPlus;
+        let f = handleClickFriends;
         if (arrayPending) {
             arrayPending.forEach((e) => {
                 if (e.id_profil_1 == id) icon = faHourglassHalf
@@ -54,10 +61,13 @@ const ProfilSection: React.FunctionComponent<IProfilSectionProps> = ({ user }) =
         }
         if (arrayAccepted) {
             arrayAccepted.forEach((e) => {
-                if (e.id_profil_1 == id) icon = faUserCheck
+                if (e.id_profil_1 == id) {
+                    icon = faUserCheck;
+                    f = handleClickDeleteFriend
+                }
             })
         }
-        return <FontAwesomeIcon className={Style.iconSetting} onClick={handleClickFriends} icon={icon}/>;
+        return <FontAwesomeIcon className={Style.iconSetting} onClick={f} icon={icon}/>;
     }
 
   return (

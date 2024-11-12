@@ -49,7 +49,7 @@ export const updateRelation = createAsyncThunk('updateRelation', async({ idRelat
     }
 })
 
-export const deleteRelation = createAsyncThunk('deleteRelation', async({ idRelation, slug, token}: {idRelation: number; slug: string, token: string}, thunkAPI): Promise<Amitie> => {
+export const deleteRelation = createAsyncThunk('deleteRelation', async({ idRelation, token}: {idRelation: number, token: string}, thunkAPI): Promise<Amitie> => {
     try {
         const relation: Amitie = await AmitieController.getOneRelation(idRelation, token);
         await AmitieController.deleteRelation(idRelation, token);
