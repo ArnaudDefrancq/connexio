@@ -68,8 +68,8 @@ export const AmitieSlice = createSlice({
         builder
             .addCase(createRelation.fulfilled, (state, action) => {
                 const id = action.payload.id_profil;
-                if (!state.pending[id]) state.pending = []
-                state.pending[id].unshift(action.payload)
+                if (!state.pending[id]) state.pending[id] = []
+                state.pending[id].unshift(action.payload);
             })
             .addCase(getRelation.fulfilled, (state, action) => {
                 const slug = action.meta.arg.slug;

@@ -8,6 +8,10 @@ import { Profil } from '../../../Types/Profil';
 import Feeds from '../../mainPage/feeds/Feeds';
 import { UserContext } from '../../../Context/UserContext';
 import { useNavigate } from 'react-router-dom';
+import { useAppDispatch } from '../../../Store/store';
+import { createRelation } from '../../../Store/Amitie/amitieSlice';
+import { NewAmitie } from '../../../Types/Amitie';
+import { AmitieStatus } from '../../../Types/StatusEnum';
 
 interface IProfilSectionProps {
     user: Profil | undefined
@@ -15,17 +19,26 @@ interface IProfilSectionProps {
 
 const ProfilSection: React.FunctionComponent<IProfilSectionProps> = ({ user }) => {
 
-    const { id_user } = useContext(UserContext);
+    const { id_user, token } = useContext(UserContext);
     const profilPost = true;
     const navigate = useNavigate();
-
+    const dispatch = useAppDispatch();
 
     const settingsProfil = (e:React.MouseEvent<HTMLButtonElement>): void => {
         e.preventDefault();
         navigate(`/update-profil/${user?.id_profil}`);
     }
     
-    const handleClickFriends = (): void => {}
+    const handleClickFriends = (): void => {
+        if (user?.id_profil && token && id_user) {
+            const newRelation: NewAmitie = {
+                id_profil: Number(id_user),
+                id_profil_1: Number(user?.id_profil),
+                status: AmitieStatus.Pending
+            }
+            dispatch(createRelation({ newRelation, token }));
+        }
+    }    
 
   return (
     <>
@@ -35,7 +48,7 @@ const ProfilSection: React.FunctionComponent<IProfilSectionProps> = ({ user }) =
                     <>
                         <div className={Style.divImg}>
                             {
-                                (id_user == user.id_user) ? <button className={Style.btnTools} onClick={(e) => settingsProfil(e)}><FontAwesomeIcon className={Style.iconSetting} icon={faGear}/></button> : <button className={Style.btnTools} ><FontAwesomeIcon className={Style.iconSetting} icon={faUserPlus}/></button>
+                                (id_user == user.id_user) ? <button className={Style.btnTools} onClick={(e) => settingsProfil(e)}><FontAwesomeIcon className={Style.iconSetting} icon={faGear}/></button> : <button className={Style.btnTools} ><FontAwesomeIcon className={Style.iconSetting} onClick={handleClickFriends} icon={faUserPlus}/></button>
                             }
                             <img className={Style.imgProfil} src={`${import.meta.env.VITE_URL_IMG}/imgProfil/${user.id_profil}/profil/${user.img_profil}`} alt="photo de profil" />
                             <img className={Style.imgBg} src={`${import.meta.env.VITE_URL_IMG}/imgProfil/${user.id_profil}/bg/${user.img_bg}`} alt="photo de profil" />
