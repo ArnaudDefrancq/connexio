@@ -3,14 +3,14 @@ import { useContext } from 'react';
 import { isEmpty, timestampToDate } from '../../../Tools/function';
 import Style from "./ProfilSection.module.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCakeCandles, faGear, faUserPlus } from '@fortawesome/free-solid-svg-icons';
+import { faCakeCandles, faGear, faUserPlus, faHourglassHalf, faUserCheck } from '@fortawesome/free-solid-svg-icons';
 import { Profil } from '../../../Types/Profil';
 import Feeds from '../../mainPage/feeds/Feeds';
 import { UserContext } from '../../../Context/UserContext';
 import { useNavigate } from 'react-router-dom';
-import { useAppDispatch } from '../../../Store/store';
+import { useAppDispatch, useAppSelector } from '../../../Store/store';
 import { createRelation } from '../../../Store/Amitie/amitieSlice';
-import { NewAmitie } from '../../../Types/Amitie';
+import { Amitie, NewAmitie } from '../../../Types/Amitie';
 import { AmitieStatus } from '../../../Types/StatusEnum';
 
 interface IProfilSectionProps {
@@ -23,6 +23,11 @@ const ProfilSection: React.FunctionComponent<IProfilSectionProps> = ({ user }) =
     const profilPost = true;
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
+    const pendingAmitie = useAppSelector(state => state.amitie.pending);
+    const amitieAccepted = useAppSelector(state => state.amitie.accepted);        
+
+    console.log(amitieAccepted);
+    
 
     const settingsProfil = (e:React.MouseEvent<HTMLButtonElement>): void => {
         e.preventDefault();
@@ -40,6 +45,21 @@ const ProfilSection: React.FunctionComponent<IProfilSectionProps> = ({ user }) =
         }
     }    
 
+    const goodIcon = (arrayPending: Array<Amitie>, arrayAccepted: Array<Amitie>, id: number): JSX.Element => {
+        let icon = faUserPlus;
+        if (arrayPending) {
+            arrayPending.forEach((e) => {
+                if (e.id_profil_1 == id) icon = faHourglassHalf
+            })
+        }
+        if (arrayAccepted) {
+            arrayAccepted.forEach((e) => {
+                if (e.id_profil_1 == id) icon = faUserCheck
+            })
+        }
+        return <FontAwesomeIcon className={Style.iconSetting} onClick={handleClickFriends} icon={icon}/>;
+    }
+
   return (
     <>
         <section className={Style.sectionProfil}>
@@ -48,7 +68,7 @@ const ProfilSection: React.FunctionComponent<IProfilSectionProps> = ({ user }) =
                     <>
                         <div className={Style.divImg}>
                             {
-                                (id_user == user.id_user) ? <button className={Style.btnTools} onClick={(e) => settingsProfil(e)}><FontAwesomeIcon className={Style.iconSetting} icon={faGear}/></button> : <button className={Style.btnTools} ><FontAwesomeIcon className={Style.iconSetting} onClick={handleClickFriends} icon={faUserPlus}/></button>
+                                (id_user == user.id_user) ? <button className={Style.btnTools} onClick={(e) => settingsProfil(e)}><FontAwesomeIcon className={Style.iconSetting} icon={faGear}/></button> : <button className={Style.btnTools} >{(id_user && user.id_profil) && goodIcon(pendingAmitie[id_user], amitieAccepted[id_user] ,user.id_profil) }</button>
                             }
                             <img className={Style.imgProfil} src={`${import.meta.env.VITE_URL_IMG}/imgProfil/${user.id_profil}/profil/${user.img_profil}`} alt="photo de profil" />
                             <img className={Style.imgBg} src={`${import.meta.env.VITE_URL_IMG}/imgProfil/${user.id_profil}/bg/${user.img_bg}`} alt="photo de profil" />
