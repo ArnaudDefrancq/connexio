@@ -8,7 +8,6 @@ import { ProfilController } from '../../Controllers/ProfilController';
 import { useParams } from 'react-router-dom';
 import { useAppDispatch } from '../../Store/store';
 import { getAllPost } from '../../Store/Post/postSlice';
-import { getRelation } from '../../Store/Amitie/amitieSlice';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface IProfilHomeProps {
@@ -38,8 +37,6 @@ const ProfilHome: React.FunctionComponent<IProfilHomeProps> = () => {
     if (id_user && token) {
         getProfil(Number(idProfilShow.id), token);
         dispatch(getAllPost(token));
-        dispatch(getRelation({ id_profil: id_user, slug: "pending", token }))
-        dispatch(getRelation({ id_profil: id_user, slug: "accepted", token }))
     }
   }, [idProfilShow.id])
   return (

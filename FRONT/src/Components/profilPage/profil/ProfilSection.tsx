@@ -24,7 +24,7 @@ const ProfilSection: React.FunctionComponent<IProfilSectionProps> = ({ user }) =
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const pendingAmitie = useAppSelector(state => state.amitie.pending);
-    const amitieAccepted = useAppSelector(state => state.amitie.accepted);            
+    const amitieAccepted = useAppSelector(state => state.amitie.accepted);                
 
     const settingsProfil = (e:React.MouseEvent<HTMLButtonElement>): void => {
         e.preventDefault();
@@ -92,19 +92,6 @@ const ProfilSection: React.FunctionComponent<IProfilSectionProps> = ({ user }) =
                         </div>  
                         <div className={Style.divContent}>
                             <h2>Descritpion : <span>{user.description}</span></h2>
-                        </div>
-                        <div className="friends">
-                            {
-                                (id_user) && (
-                                    <>
-                                        {
-                                            pendingAmitie[id_user].map(f => {
-                                                return <p>{f.prenom}</p>
-                                            }) 
-                                        }
-                                    </>
-                                )
-                            }
                         </div>
                     </>
                 )
