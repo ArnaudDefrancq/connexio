@@ -12,9 +12,10 @@ import { Profil } from '../../Types/Profil';
 import { ProfilController } from '../../Controllers/ProfilController';
 import { monthArray } from '../../Tools/config';
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface IFormCreateProfilProps {
-  id_user: number | null,
-  token: string | null
+  // id_user: number | null,
+  // token: string | null
 }
 
 type StoredData = {

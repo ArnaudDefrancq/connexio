@@ -29,6 +29,11 @@ const NavBar: React.FunctionComponent<INavBarProps> = ({ menu, setMenu }) => {
                 path = `/profil/${id_user}`;
                 navigate(path);
                 break;
+            case 'amis' :
+                setMenu(false);
+                path = `/profil-amis`;
+                navigate(path);
+                break;
             case 'deconnexion' :
                 setMenu(false);
                 path = '/';
@@ -54,6 +59,7 @@ const NavBar: React.FunctionComponent<INavBarProps> = ({ menu, setMenu }) => {
         <ul>
             <li data-menu="accueil" onClick={(e) => handleClick(e)}>Acceuil</li>
             <li data-menu="profil" onClick={(e) => handleClick(e)}>Profil</li>
+            <li data-menu="amis" onClick={(e) => handleClick(e)}>Amis</li>
             <li data-menu="deconnexion" onClick={(e) => {handleClick(e); logOut()}}>Déconnexion</li>
         </ul>
     </nav>
