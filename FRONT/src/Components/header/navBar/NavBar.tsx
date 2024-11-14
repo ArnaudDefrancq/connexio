@@ -31,7 +31,7 @@ const NavBar: React.FunctionComponent<INavBarProps> = ({ menu, setMenu }) => {
                 break;
             case 'amis' :
                 setMenu(false);
-                path = `/profil-amis`;
+                path = `/profil-amis/${id_user}`;
                 navigate(path);
                 break;
             case 'deconnexion' :

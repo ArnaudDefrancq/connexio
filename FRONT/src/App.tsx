@@ -23,7 +23,7 @@ function App() {
                 <Route path='/feeds' element={<HomePage />} />
                 <Route path='/profil/:id' element={<ProfilPage />} />
                 <Route path='/update-profil/:id' element={<CreateProfil />} />
-                <Route path='/profil-amis' element={<FriendsPage />} />
+                <Route path='/profil-amis/:id' element={<FriendsPage />} />
               </>
             ) : (
               <>
