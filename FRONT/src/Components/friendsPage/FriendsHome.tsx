@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import Style from "./FriendsHome.module.css";
 import { useAppDispatch, useAppSelector } from '../../Store/store';
 import { useParams } from 'react-router-dom';
@@ -17,31 +17,40 @@ const FriendsHome: React.FunctionComponent<IFriendsHomeProps> = () => {
     const idParams = useParams();
     const dispatch = useAppDispatch();
     const amisPending = useAppSelector(state => state.amitie.pending);
+    const amisAccepted = useAppSelector(state => state.amitie.accepted);
+    const [isClick, setIsClick] = useState<boolean>(true);
 
     useEffect(() => {
         if (idParams.id && token && id_user) {
             dispatch(getRelation({ id_profil:  id_user, slug: "pending", token}));
+            dispatch(getRelation({ id_profil:  id_user, slug: "accepted", token}));
         }
     }, [])
     
-    const displayCard = (array: Array<AmitieWithProfil>) => {        
+    const displayCard = (array: Array<AmitieWithProfil>) => {
+        console.log(array);
+                
         return array.map(profil => {           
-            return <CardFriend profil={profil} key={profil.id_amitie} />
+            return <CardFriend profil={profil} isClick={isClick} key={profil.id_amitie} />
         })
+    }
+
+    const pendingOrAccepted = ():void =>{
+        setIsClick(prev => !prev)
     }
 
   return (
     <>
         <main>
             <section className={Style.friendsSection}>
-                <button className={`${Style.btnFriends} ${Style.btnActive}`}>Amis</button>
-                <button className={Style.btnFriends}>En attente</button>
+                <button className={`${Style.btnFriends} ${isClick ? Style.btnActive : ''}`}  onClick={pendingOrAccepted}>Amis</button>
+                <button className={`${Style.btnFriends} ${!isClick ? Style.btnActive : ''}`} onClick={pendingOrAccepted}>En attente</button>
             </section>
             <section className={Style.cardSection}>
             {
-                (id_user && amisPending[id_user] && amisPending[id_user].length > 0) && (
+                (id_user && amisPending[id_user] && amisAccepted[id_user]) && (
                     <>
-                        {displayCard(amisPending[id_user])}
+                        {isClick ? displayCard(amisPending[id_user]) : displayCard(amisAccepted[id_user])}
                     </>
                 )
             }

@@ -3,10 +3,11 @@ import Style from "./CardFriend.module.css";
 import { AmitieWithProfil } from '../../../Types/Amitie';
 
 interface ICardFriendProps {
-    profil: AmitieWithProfil
+    profil: AmitieWithProfil,
+    isClick: boolean
 }
 
-const CardFriend: React.FunctionComponent<ICardFriendProps> = ({ profil }) => {
+const CardFriend: React.FunctionComponent<ICardFriendProps> = ({ profil, isClick }) => {
 
   return (
     <>
@@ -18,10 +19,16 @@ const CardFriend: React.FunctionComponent<ICardFriendProps> = ({ profil }) => {
               <div>
                 <p>{profil.nom} {profil.prenom}</p>
               </div>
-              <div className={Style.btnContainer}>
-                <button className={Style.accept}>Accepter</button>
-                <button className={Style.reject}>Refuser</button>
-              </div>
+              {
+                isClick && (
+                  <>
+                    <div className={Style.btnContainer}>
+                      <button className={Style.accept}>Accepter</button>
+                      <button className={Style.reject}>Refuser</button>
+                    </div>
+                  </>
+                )
+              }
             </div>
         </div>
     </>

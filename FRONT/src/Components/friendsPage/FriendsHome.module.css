@@ -16,4 +16,5 @@
     background-color: var(--color2);
     box-shadow: 0 0 3px 0 black;
     font-weight: bold;
+    pointer-events: none;
 }
