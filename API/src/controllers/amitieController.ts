@@ -38,13 +38,30 @@ export class AmitieController {
                             id_profil_1,
                             status: AmitieStatus.Pending
                         };
-                        amitieModel.createAmitie(newAmitie, (error, insertId) => {
-                            if (error) {
-                                return res.status(500).json({ error });
-                            }
-                            return res.status(201).json({ id: insertId });
+
+                        const newAmitie_2: Amitie = {
+                            id_profil: id_profil_1,
+                            id_profil_1: id_profil,
+                            status: AmitieStatus.Pending
+                        }
+                        const f1 = await new Promise<number>((resolve, reject) => {
+                            amitieModel.createAmitie(newAmitie, (error, insertId) => {
+                                if (error) {
+                                    reject(error)
+                                }
+                                resolve(insertId!);
+                            });
+                        })
+
+                        const f2 = await new Promise<number>((resolve, reject) => {
+                            amitieModel.createAmitie(newAmitie_2, (error, insertId) => {
+                                if (error) {
+                                    reject(error)
+                                }
+                                resolve(insertId!);
+                            });
                         });
-                        return ;
+                        return  res.status(201).json({message: f1 + " " + f2});
                     }
                     return res.status(404).json({error : 'Compte ami pas actif'});
                 } 
@@ -60,13 +77,14 @@ export class AmitieController {
         try {
             const { userId, role, actif } = req.auth || {};
             const idAmitie: number = Number(req.params.idAmitie);
-            const slugBody: string = req.body.status; 
+            const slugBody: string = req.body.slug; 
             const amitieModel: AmitieModel = new AmitieModel();
     
+            
             if (isNaN(idAmitie)) {
                 return res.status(400).json({ error: 'ID invalide' });
             }
-    
+            
             if (!Object.values(AmitieStatus).includes(slugBody as AmitieStatus)) {
                 return res.status(400).json({ message: "Statut invalide." });
             }
@@ -75,41 +93,74 @@ export class AmitieController {
                 return res.status(400).json({message: 'Compte pas actif'});
             }
 
-            const amitieFind: Array<Amitie> = await amitieModel.findById(idAmitie)
+            const amitieFind: Array<Amitie> = await amitieModel.findById(idAmitie);
             
             if (amitieFind.length == 0) {
                 return res.status(404).json({error: "Pas de demande trouvé"});
             }
+            const amitieFind_2: Array<Amitie> = await amitieModel.findAmitie(`WHERE id_profil=${amitieFind[0].id_profil_1} AND id_profil_1=${amitieFind[0].id_profil}`);
 
+            if (amitieFind_2.length == 0) {
+                return res.status(404).json({error: "Autre demande pas trouvé"});
+            }
+            
             switch (slugBody as AmitieStatus) {
                 case AmitieStatus.Accepted :                           
                     const updateAmitie: Partial<Amitie> = {
                         status: AmitieStatus.Accepted
                     } 
-    
-                    amitieModel.updateAmitie(idAmitie, updateAmitie, (error, affectedRows) => {
-                        if (error) {
-                            res.status(500).json({ error: 'Erreur de mise à jour' });
-                        } else {
-                            res.status(200).json({ id: affectedRows });
-                        }
-                    });
+                    if (typeof amitieFind_2[0].id_amitie != 'undefined') {
+                        const f1 = await new Promise<number>((resolve, reject) => {
+                            amitieModel.updateAmitie(idAmitie, updateAmitie, (error, affectedRows) => {
+                                if (error) {
+                                    reject(error);
+                                } else {
+                                    resolve(affectedRows!)
+                                }
+                            });
+                        });
+                        const idFriend: number = amitieFind_2[0].id_amitie;
+                        const f2 = await new Promise<number>((resolve, reject) => {
+                            amitieModel.updateAmitie(idFriend, updateAmitie, (error, affectedRows) => {
+                                if (error) {
+                                    reject(error);
+                                } else {
+                                    resolve(affectedRows!)
+                                }
+                            });
+                        });
+                        
+                        res.status(200).json({message: f1 + ' ' + f2})
+                    }
                     break;
 
                 case AmitieStatus.Rejected:
-                    var message: number;
-                    const amitieDelete = await new Promise<number>((resolve, reject) => {
-                        amitieModel.deleteAmitie(idAmitie, (error, affectedRows) => {
-                            if (error) {
-                                reject(error);
-                            } else {
-                                resolve(affectedRows || 0);
-                            }
+                    if (typeof amitieFind_2[0].id_amitie != 'undefined') {
+                        const idFriend: number = amitieFind_2[0].id_amitie;
+                        var message: string;
+                        const amitieDelete = await new Promise<number>((resolve, reject) => {
+                            amitieModel.deleteAmitie(idAmitie, (error, affectedRows) => {
+                                if (error) {
+                                    reject(error);
+                                } else {
+                                    resolve(affectedRows || 0);
+                                }
+                            });
                         });
-                    });
 
-                    message = amitieDelete;
-                    res.status(200).json({ message: 'amitie supprimé avec succès ligne affecté => '  + message});
+                        const amitieDelete_2 = await new Promise<number>((resolve, reject) => {
+                            amitieModel.deleteAmitie(idFriend, (error, affectedRows) => {
+                                if (error) {
+                                    reject(error);
+                                } else {
+                                    resolve(affectedRows || 0);
+                                }
+                            });
+                        });
+    
+                        message = amitieDelete + " " + amitieDelete_2;
+                        res.status(200).json({ message: 'amitie supprimé avec succès ligne affecté => '  + message});
+                    }
                     break;
                 default: 
                     res.status(400).json({error: 'Slug non reconnu'});
@@ -207,17 +258,37 @@ export class AmitieController {
                 return res.status(404).json({ error: 'commentaire non trouvé' });
             };
 
-            const amitieDelete = await new Promise<number>((resolve, reject) => {
-                amitieModel.deleteAmitie(id, (error, affectedRows) => {
-                    if (error) {
-                        reject(error);
-                    } else {
-                        resolve(affectedRows || 0);
-                    }
+            const amitieFind_2: Array<Amitie> = await amitieModel.findAmitie(`WHERE id_profil=${result[0].id_profil_1} AND id_profil_1=${result[0].id_profil}`);
+
+            if (amitieFind_2.length == 0) {
+                return res.status(404).json({error: "Autre demande pas trouvé"});
+            }
+
+            if (typeof amitieFind_2[0].id_amitie != 'undefined') {
+                const idFriend: number = amitieFind_2[0].id_amitie;
+                const amitieDelete = await new Promise<number>((resolve, reject) => {
+                    amitieModel.deleteAmitie(id, (error, affectedRows) => {
+                        if (error) {
+                            reject(error);
+                        } else {
+                            resolve(affectedRows || 0);
+                        }
+                    });
                 });
-            });
-    
-            message = amitieDelete;
+
+                const amitieDelete_2 = await new Promise<number>((resolve, reject) => {
+                    amitieModel.deleteAmitie(idFriend, (error, affectedRows) => {
+                        if (error) {
+                            reject(error);
+                        } else {
+                            resolve(affectedRows || 0);
+                        }
+                    });
+                });
+
+                message = amitieDelete + " " + amitieDelete_2;
+            }
+
             res.status(200).json({ message: 'amitie supprimé avec succès ligne affecté => '  + message});
             return;
         } catch (error) {
