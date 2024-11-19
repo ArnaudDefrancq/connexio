@@ -4,7 +4,7 @@ import Style from "./CardFriend.module.css";
 import { AmitieWithProfil } from '../../../Types/Amitie';
 import { useAppDispatch } from '../../../Store/store';
 import { UserContext } from '../../../Context/UserContext';
-import { updateRelation } from '../../../Store/Amitie/amitieSlice';
+import { deleteRelation, updateRelation } from '../../../Store/Amitie/amitieSlice';
 import { AmitieStatus } from '../../../Types/StatusEnum';
 
 interface ICardFriendProps {
@@ -30,6 +30,11 @@ const CardFriend: React.FunctionComponent<ICardFriendProps> = ({ profil, isClick
         if (token) {
           dispatch(updateRelation({idRelation: profil.id_amitie, slug: AmitieStatus.Rejected, token}));        }
         break;
+      case 'supprimer':
+        if (token) {
+          dispatch(deleteRelation({idRelation: profil.id_amitie, token}));
+        }
+        break;
       default:
         console.log('pas bonne action');
     }
@@ -47,14 +52,21 @@ const CardFriend: React.FunctionComponent<ICardFriendProps> = ({ profil, isClick
                 <p>{profil.nom} {profil.prenom}</p>
               </div>
               {
-                !isClick && (
+                !isClick ? (
                   <>
                     <div className={Style.btnContainer}>
                       <button className={Style.accept} data-updatefriends='accept' onClick={e => actionFriends(e)}>Accepter</button>
                       <button className={Style.reject} data-updatefriends='reject' onClick={e => actionFriends(e)}>Refuser</button>
                     </div>
+                  </> )
+                  : 
+                  (
+                  <>
+                    <div className={Style.btnContainer}>
+                      <button className={Style.reject} data-updatefriends='supprimer' onClick={e => actionFriends(e)}>Supprimer</button>
+                    </div>
                   </>
-                )
+                  )
               }
             </div>
         </div>
