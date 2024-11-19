@@ -64,7 +64,7 @@ export const PostLikeSlice = createSlice({
                 state.postLike[id_post] = res;
             })
             .addCase(deletePostLike.fulfilled, (state, action) => {
-                const deletePostLike = action.payload;
+                const deletePostLike = action.payload;                
                 if (deletePostLike && deletePostLike.id_post_like) {
                     const index = state.postLike[deletePostLike.id_post].findIndex(postLike => postLike.id_post_like === deletePostLike.id_post_like);
                     if (index !== -1) {

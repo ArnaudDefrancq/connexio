@@ -38,10 +38,10 @@ export const createRelation = createAsyncThunk('createRelation', async({ newRela
     }
 })
 
-export const updateRelation = createAsyncThunk('updateRelation', async({ idRelation, slug, token}: {idRelation: number; slug: string, token: string}, thunkAPI): Promise<Amitie> => {
+export const updateRelation = createAsyncThunk('updateRelation', async({ idRelation, slug, token}: {idRelation: number; slug: string, token: string}, thunkAPI): Promise<AmitieWithProfil> => {
     try {
         await AmitieController.updateRelation(idRelation, slug, token);
-        const relation: Amitie = await AmitieController.getOneRelation(idRelation, token);
+        const relation: AmitieWithProfil = await AmitieController.getOneRelation(idRelation, token);
         return relation;
     } catch (error) {
         console.log('Pb state update ' + error);
@@ -68,11 +68,8 @@ export const AmitieSlice = createSlice({
         builder
             .addCase(createRelation.fulfilled, (state, action) => {
                 const id = action.payload.id_profil;
-                const idFriend = action.payload.id_profil_1;
                 if (!state.pending[id]) state.pending[id] = []
-                if (!state.pending[idFriend]) state.pending[idFriend] = []
                 state.pending[id].unshift(action.payload);
-                state.pending[idFriend].unshift(action.payload);
             })
             .addCase(getRelation.fulfilled, (state, action) => {
                 const slug = action.meta.arg.slug;
@@ -84,6 +81,26 @@ export const AmitieSlice = createSlice({
                     case AmitieStatus.Pending:
                         state.pending[id_profil] = res;
                         break;
+                }
+            })
+            .addCase(updateRelation.fulfilled, (state, action) => {
+                const slug = action.meta.arg.slug;
+                const relation = action.payload;
+                const id = relation.id_profil;
+                const index = state.pending[id].findIndex(r => r.id_amitie == relation.id_amitie);                
+                if (!state.accepted[id]) state.accepted[id] = [];
+                if (index !== -1) {
+                    switch (slug) {
+                        case AmitieStatus.Accepted:
+                            state.accepted[id].unshift(relation);
+                            state.pending[id].splice(index, 1);
+                            break;
+                        case AmitieStatus.Rejected:
+                            state.pending[id].splice(index, 1);
+                            break;
+                        default :
+                            console.log('bad slug');
+                    }
                 }
             })
             .addCase(deleteRelation.fulfilled, (state, action) => {

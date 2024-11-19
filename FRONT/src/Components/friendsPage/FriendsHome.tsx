@@ -20,16 +20,14 @@ const FriendsHome: React.FunctionComponent<IFriendsHomeProps> = () => {
     const amisAccepted = useAppSelector(state => state.amitie.accepted);
     const [isClick, setIsClick] = useState<boolean>(true);
 
-    useEffect(() => {
-        if (idParams.id && token && id_user) {
-            dispatch(getRelation({ id_profil:  id_user, slug: "pending", token}));
-            dispatch(getRelation({ id_profil:  id_user, slug: "accepted", token}));
-        }
-    }, [])
+    // useEffect(() => {
+    //     if (idParams.id && token && id_user) {
+    //         dispatch(getRelation({ id_profil:  id_user, slug: "pending", token}));
+    //         dispatch(getRelation({ id_profil:  id_user, slug: "accepted", token}));
+    //     }
+    // }, [])
     
     const displayCard = (array: Array<AmitieWithProfil>) => {
-        console.log(array);
-                
         return array.map(profil => {           
             return <CardFriend profil={profil} isClick={isClick} key={profil.id_amitie} />
         })
@@ -50,7 +48,7 @@ const FriendsHome: React.FunctionComponent<IFriendsHomeProps> = () => {
             {
                 (id_user && amisPending[id_user] && amisAccepted[id_user]) && (
                     <>
-                        {isClick ? displayCard(amisPending[id_user]) : displayCard(amisAccepted[id_user])}
+                        {!isClick ? displayCard(amisPending[id_user]) : displayCard(amisAccepted[id_user])}
                     </>
                 )
             }

@@ -1,6 +1,11 @@
 import * as React from 'react';
+import { useContext } from 'react';
 import Style from "./CardFriend.module.css";
 import { AmitieWithProfil } from '../../../Types/Amitie';
+import { useAppDispatch } from '../../../Store/store';
+import { UserContext } from '../../../Context/UserContext';
+import { updateRelation } from '../../../Store/Amitie/amitieSlice';
+import { AmitieStatus } from '../../../Types/StatusEnum';
 
 interface ICardFriendProps {
     profil: AmitieWithProfil,
@@ -8,6 +13,28 @@ interface ICardFriendProps {
 }
 
 const CardFriend: React.FunctionComponent<ICardFriendProps> = ({ profil, isClick }) => {
+
+  const { token } = useContext(UserContext);
+  const dispatch = useAppDispatch();
+
+  const actionFriends = (e:React.MouseEvent<HTMLButtonElement>):void => {
+    const target = e.target as HTMLElement;
+
+    switch(target.dataset.updatefriends) {
+      case 'accept':
+        if (token) {
+          dispatch(updateRelation({idRelation: profil.id_amitie, slug: AmitieStatus.Accepted, token}));
+        }
+        break;
+      case 'reject':
+        if (token) {
+          dispatch(updateRelation({idRelation: profil.id_amitie, slug: AmitieStatus.Rejected, token}));        }
+        break;
+      default:
+        console.log('pas bonne action');
+    }
+    
+  }
 
   return (
     <>
@@ -20,11 +47,11 @@ const CardFriend: React.FunctionComponent<ICardFriendProps> = ({ profil, isClick
                 <p>{profil.nom} {profil.prenom}</p>
               </div>
               {
-                isClick && (
+                !isClick && (
                   <>
                     <div className={Style.btnContainer}>
-                      <button className={Style.accept}>Accepter</button>
-                      <button className={Style.reject}>Refuser</button>
+                      <button className={Style.accept} data-updatefriends='accept' onClick={e => actionFriends(e)}>Accepter</button>
+                      <button className={Style.reject} data-updatefriends='reject' onClick={e => actionFriends(e)}>Refuser</button>
                     </div>
                   </>
                 )

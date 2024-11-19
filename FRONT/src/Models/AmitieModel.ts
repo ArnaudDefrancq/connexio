@@ -40,7 +40,7 @@ export class AmitieModel implements Amitie {
                 }
             };
 
-            const res = await axios.put(`${import.meta.env.VITE_URL_AMITIE}/${idRelation}`, { status: slug }, config);
+            const res = await axios.put(`${import.meta.env.VITE_URL_AMITIE}/${idRelation}`, { slug }, config);
 
             return res.data;
         } catch (error) {
@@ -66,7 +66,7 @@ export class AmitieModel implements Amitie {
         }
     }
 
-    static async getOneRelation (idRelation: number, token: string): Promise<Amitie> {
+    static async getOneRelation (idRelation: number, token: string): Promise<AmitieWithProfil> {
         try {
             const config = {
                 headers: {
