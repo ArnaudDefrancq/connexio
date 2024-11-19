@@ -6,6 +6,7 @@ import { useAppDispatch } from '../../../Store/store';
 import { UserContext } from '../../../Context/UserContext';
 import { deleteRelation, updateRelation } from '../../../Store/Amitie/amitieSlice';
 import { AmitieStatus } from '../../../Types/StatusEnum';
+import { useNavigate } from 'react-router-dom';
 
 interface ICardFriendProps {
     profil: AmitieWithProfil,
@@ -16,6 +17,7 @@ const CardFriend: React.FunctionComponent<ICardFriendProps> = ({ profil, isClick
 
   const { token } = useContext(UserContext);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const actionFriends = (e:React.MouseEvent<HTMLButtonElement>):void => {
     const target = e.target as HTMLElement;
@@ -41,6 +43,10 @@ const CardFriend: React.FunctionComponent<ICardFriendProps> = ({ profil, isClick
     
   }
 
+  const handleClick = () => {
+    const path = `/profil/${profil.id_profil_1}`;
+    navigate(path);
+  }
   return (
     <>
         <div className={Style.cardFriend}>
@@ -49,7 +55,7 @@ const CardFriend: React.FunctionComponent<ICardFriendProps> = ({ profil, isClick
             </div>
             <div  className={Style.infoContainer}>
               <div>
-                <p>{profil.nom} {profil.prenom}</p>
+                <p onClick={handleClick}>{profil.nom} {profil.prenom}</p>
               </div>
               {
                 !isClick ? (
