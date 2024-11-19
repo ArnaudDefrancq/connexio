@@ -86,6 +86,8 @@ export const AmitieSlice = createSlice({
             .addCase(updateRelation.fulfilled, (state, action) => {
                 const slug = action.meta.arg.slug;
                 const relation = action.payload;
+                console.log(relation);
+                
                 const id = relation.id_profil;
                 const index = state.pending[id].findIndex(r => r.id_amitie == relation.id_amitie);                
                 if (!state.accepted[id]) state.accepted[id] = [];

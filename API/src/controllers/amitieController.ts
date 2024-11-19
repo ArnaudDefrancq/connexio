@@ -224,7 +224,9 @@ export class AmitieController {
             if (actif != '1') {
                 return res.status(400).json({message: 'Compte pas actif'});
             }   
-            const amitieFind: Array<Amitie> = await amitieModel.findById(id);
+            const queryString: string = `SELECT a.id_amitie, a.id_profil, a.id_profil_1, a.status, p.nom, p.prenom, p.img_profil FROM cx__amitie AS a JOIN cx__profil AS p ON p.id_profil = a.id_profil_1 WHERE a.id_amitie = ${id};`
+
+            const amitieFind: Array<Amitie> = await amitieModel.findAmitie("", "", queryString);
 
             if (amitieFind.length == 0) {
                 return res.status(400).json({error: "Rien trouvé"});
