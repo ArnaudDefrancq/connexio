@@ -30,6 +30,7 @@ const Content: React.FunctionComponent<IContentProps> = ({ id_post, content, med
   const { token, id_user } = useContext(UserContext);
 
   const dispatch = useAppDispatch();
+  
 
   const [contentPost, setContentPost] = useState<string>(content);
   const [imgPost, setImgPost] = useState<string>("");
@@ -71,7 +72,7 @@ const Content: React.FunctionComponent<IContentProps> = ({ id_post, content, med
                 errorFile: true,
             }));
     }
-}
+  }
 
   const previewImg = (e:React.ChangeEvent<HTMLInputElement>):void => {    
     if (e.target.files && e.target.files[0]) {
@@ -100,7 +101,7 @@ const Content: React.FunctionComponent<IContentProps> = ({ id_post, content, med
       setImgPost(`${import.meta.env.VITE_URL_IMG}/imgPost/${id_profil}/${media}`);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isUpdate])
+  }, [isUpdate, media])
 
   const handleClickUpdatePost = (e:React.MouseEvent<HTMLButtonElement>):void => {
     e.preventDefault();
@@ -109,14 +110,15 @@ const Content: React.FunctionComponent<IContentProps> = ({ id_post, content, med
           content: contentPost,
           media: (imgPostFile ? imgPostFile : "null")
       };
+      
       // await PostController.updatePost(newPost, id_user, id_post, token);
-      dispatch(updatePost({ newPost, id_user, id_post, token }))
+      dispatch(updatePost({ newPost, id_user, id_post, token }));
+      setImgPostFile(media);
       setIsUpdate(prev => !prev);
     } else {
         console.log('input pas OK');
     }
   }
-
 
   return (
     <>
@@ -125,8 +127,8 @@ const Content: React.FunctionComponent<IContentProps> = ({ id_post, content, med
         <div>
           <p>{contentPost}</p>
           <div className={Style.divImgPost}>
-            {
-              (imgPost && <img src={imgPost} alt="photo poster" className={Style.imgPost}/>)
+            {              
+              (media && <img src={imgPost} alt="photo poster" className={Style.imgPost}/>)
             }
           </div>
         </div>
@@ -160,7 +162,7 @@ const Content: React.FunctionComponent<IContentProps> = ({ id_post, content, med
             </form>
             <div className={Style.divImgPost}>
               {
-                (((imgPost || imgPostUpdate ) && !deletePicture) && (
+                (((media || imgPostUpdate ) && !deletePicture) && (
                   <>
                     <img src={(imgPostUpdate !== "") ? imgPostUpdate : imgPost} alt="photo poster" className={Style.imgPost} />
                     <button className={Style.btnImg} onClick={deleteImg}><FontAwesomeIcon className={Style.icon} icon={faCircleXmark} /></button>
