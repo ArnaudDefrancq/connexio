@@ -5,12 +5,14 @@ export interface Amitie {
     id_profil: number,
     id_profil_1: number,
     status: AmitieStatus
+    ask: number
 };
 
 export interface NewAmitie {
     id_profil: number,
     id_profil_1: number,
     status: AmitieStatus
+    ask: number
 }
 
 export interface AmitieWithProfil {
@@ -18,6 +20,7 @@ export interface AmitieWithProfil {
     id_profil: number,
     id_profil_1: number,
     status: AmitieStatus,
+    ask: number,
     nom: string,
     prenom: string,
     img_profil: string,

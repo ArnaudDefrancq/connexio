@@ -15,7 +15,7 @@ interface ICardFriendProps {
 
 const CardFriend: React.FunctionComponent<ICardFriendProps> = ({ profil, isClick }) => {
 
-  const { token } = useContext(UserContext);
+  const { token, id_user } = useContext(UserContext);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -49,33 +49,56 @@ const CardFriend: React.FunctionComponent<ICardFriendProps> = ({ profil, isClick
   }
   return (
     <>
-        <div className={Style.cardFriend}>
-            <div className={Style.imgFriends}>
-              <img src={`${import.meta.env.VITE_URL_IMG}/imgProfil/${profil.id_profil_1}/profil/${profil.img_profil}`} alt="Photo de profil" className={Style.img}/>
-            </div>
-            <div  className={Style.infoContainer}>
-              <div>
-                <p onClick={handleClick}>{profil.nom} {profil.prenom}</p>
-              </div>
-              {
-                !isClick ? (
-                  <>
-                    <div className={Style.btnContainer}>
-                      <button className={Style.accept} data-updatefriends='accept' onClick={e => actionFriends(e)}>Accepter</button>
-                      <button className={Style.reject} data-updatefriends='reject' onClick={e => actionFriends(e)}>Refuser</button>
-                    </div>
-                  </> )
-                  : 
-                  (
-                  <>
-                    <div className={Style.btnContainer}>
-                      <button className={Style.reject} data-updatefriends='supprimer' onClick={e => actionFriends(e)}>Supprimer</button>
-                    </div>
-                  </>
-                  )
-              }
-            </div>
+      <div className={Style.cardFriend}>
+        <div className={Style.imgFriends}>
+          <img 
+            src={`${import.meta.env.VITE_URL_IMG}/imgProfil/${profil.id_profil_1}/profil/${profil.img_profil}`} 
+            alt="Photo de profil" 
+            className={Style.img} 
+          />
         </div>
+        <div className={Style.infoContainer}>
+          <div>
+            <p onClick={handleClick}>{profil.nom} {profil.prenom}</p>
+          </div>
+          {!isClick ? (
+            profil.ask !== id_user ? (
+              <>
+                <div className={Style.btnContainer}>
+                  <button 
+                    className={Style.accept} 
+                    data-updatefriends="accept" 
+                    onClick={(e) => actionFriends(e)}
+                  >
+                    Accepter
+                  </button>
+                  <button 
+                    className={Style.reject} 
+                    data-updatefriends="reject" 
+                    onClick={(e) => actionFriends(e)}
+                  >
+                    Refuser
+                  </button>
+                </div>
+              </>
+            ) : (
+              <p>En attente</p>
+            )
+          ) : (
+            <>
+              <div className={Style.btnContainer}>
+                <button 
+                  className={Style.reject} 
+                  data-updatefriends="supprimer" 
+                  onClick={(e) => actionFriends(e)}
+                >
+                  Supprimer
+                </button>
+              </div>
+            </>
+          )}
+        </div>
+      </div>
     </>
   );
 };

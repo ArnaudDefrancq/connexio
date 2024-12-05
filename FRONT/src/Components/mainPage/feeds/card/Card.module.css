@@ -87,3 +87,13 @@
 .cardCom {
     padding: 0% 5%;
 }
+
+@media screen and (min-width: 576px) {
+    .iconTools {
+        font-size: 18px;
+    }
+    .divTools {
+        width: 30%;
+    
+    }
+}

@@ -10,7 +10,7 @@ interface IFeedsProps {
 
 const Feeds: React.FunctionComponent<IFeedsProps> = ({ profilPost }) => {
     const idParams = useParams();
-    const { posts } = useAppSelector(state => state.post);       
+    const { posts } = useAppSelector(state => state.post);           
 
     return (
         <>

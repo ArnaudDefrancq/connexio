@@ -27,8 +27,6 @@
     flex-direction: column;
     align-items: center;
     justify-content: space-evenly;
-    /* height: 100%; */
-    /* width: 40%; */
     right: 6%;
     top: 20%;
     z-index: 3;
@@ -46,4 +44,8 @@
     text-align: center;
     padding-left: 5%;
     font-size: 14px;
+}
+
+@media screen and (min-width: 768px) {
+
 }

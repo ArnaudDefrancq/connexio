@@ -18,3 +18,32 @@
     font-weight: bold;
     pointer-events: none;
 }
+
+@media screen and (min-width: 768px) {
+    .friendsSection {
+        margin: 2% auto;
+        width: 60%;
+    }
+
+    .cardSection {
+        margin: 2% auto;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        width: 80%;
+        gap: 30px;
+    }
+}
+
+@media screen and (min-width: 1200px) {
+    .friendsSection {
+        width: 40%;
+    }
+
+    .cardSection {
+        margin: 2% auto;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        width: 80%;
+        gap: 30px;
+    }
+}

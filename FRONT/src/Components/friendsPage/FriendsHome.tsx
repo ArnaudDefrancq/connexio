@@ -1,10 +1,8 @@
 import * as React from 'react';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import Style from "./FriendsHome.module.css";
-import { useAppDispatch, useAppSelector } from '../../Store/store';
-import { useParams } from 'react-router-dom';
+import { useAppSelector } from '../../Store/store';
 import { UserContext } from '../../Context/UserContext';
-import { getRelation } from '../../Store/Amitie/amitieSlice';
 import { AmitieWithProfil } from '../../Types/Amitie';
 import CardFriend from './cardFriend/CardFriend';
 
@@ -13,21 +11,15 @@ interface IFriendsHomeProps {
 }
 
 const FriendsHome: React.FunctionComponent<IFriendsHomeProps> = () => {
-    const { token, id_user } = useContext(UserContext);
-    const idParams = useParams();
-    const dispatch = useAppDispatch();
+    const { id_user } = useContext(UserContext);
+
     const amisPending = useAppSelector(state => state.amitie.pending);
     const amisAccepted = useAppSelector(state => state.amitie.accepted);
     const [isClick, setIsClick] = useState<boolean>(true);
 
-    // useEffect(() => {
-    //     if (idParams.id && token && id_user) {
-    //         dispatch(getRelation({ id_profil:  id_user, slug: "pending", token}));
-    //         dispatch(getRelation({ id_profil:  id_user, slug: "accepted", token}));
-    //     }
-    // }, [])
-    
     const displayCard = (array: Array<AmitieWithProfil>) => {
+        console.log(array);
+        
         return array.map(profil => {           
             return <CardFriend profil={profil} isClick={isClick} key={profil.id_amitie} />
         })

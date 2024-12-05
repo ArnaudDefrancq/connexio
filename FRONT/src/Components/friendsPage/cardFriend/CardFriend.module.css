@@ -20,9 +20,7 @@
 }
 
 .infoContainer {
-    /* margin-left: 10%; */
     width: 100%;
-    height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -53,4 +51,35 @@
 }
 .reject {
     background-color: var(--colorError);
+}
+
+
+@media screen and (min-width: 576px) {
+    .cardFriend {
+        width: 80%;
+    }
+
+    .imgFriends {
+        width: 30%;
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .cardFriend {
+        width: 100%;
+        height: 100%;
+    }
+    .imgFriends {
+        width: 40%;
+    }
+
+    .btnContainer button {
+        padding: 3%;
+    } 
+}
+
+@media screen and (min-width: 992px) {
+    .infoContainer {
+        height: 70%;
+    }
 }

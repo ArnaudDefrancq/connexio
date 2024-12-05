@@ -39,3 +39,37 @@
 .icon {
     font-size: 20px;
 }
+@media screen and (min-width: 576px) {
+    .sectionPost {
+        width: 80%;
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .sectionPost {
+        margin: 5% auto;
+        width: 70%;
+    }
+}
+
+@media screen and (min-width: 992px) {
+   .icon {
+        font-size: 22px;
+   }
+   .sectionPost {
+        width: 60%;
+}
+}
+
+@media screen and (min-width: 1200px) {
+    .sectionPost {
+        width: 50%;
+    }
+}
+
+@media screen and (min-width: 1400px) {
+    .sectionPost {
+        margin: 5% auto;
+        width: 45%;
+    }
+}

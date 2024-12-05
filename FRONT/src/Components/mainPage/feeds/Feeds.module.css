@@ -5,3 +5,33 @@
     flex-direction: column;
     justify-content: space-around;
 }
+
+@media screen and (min-width: 576px) {
+    .sectionFeeds {
+        width: 80%;
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .sectionFeeds {
+        width: 70%;
+    }
+}
+
+@media screen and (min-width: 992px) {
+   .sectionFeeds {
+        width: 60%;
+   }
+}
+
+@media screen and (min-width: 1200px) {
+   .sectionFeeds {
+        width: 50%;
+   }
+}
+
+@media screen and (min-width: 1400px) {
+   .sectionFeeds {
+        width: 45%;
+   }
+}

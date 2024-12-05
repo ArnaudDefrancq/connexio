@@ -42,6 +42,7 @@ const ProfilHome: React.FunctionComponent<IProfilHomeProps> = () => {
         dispatch(getRelation({ id_profil: id_user, slug: "accepted", token }));
     }
   }, [idProfilShow.id])
+  
   return (
     <>
        <main>

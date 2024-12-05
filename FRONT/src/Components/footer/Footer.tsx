@@ -8,7 +8,7 @@ interface IFooterProps {
 const Footer: React.FunctionComponent<IFooterProps> = () => {
   return (
     <>
-        <footer >
+        <footer>
             <p>© Copyright 2024 - Arnaud Defrancq - Tous droits réservés</p>
         </footer>
     </>

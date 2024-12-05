@@ -81,7 +81,12 @@ export const PostSlice = createSlice({
                 if (updatedPost && updatedPost.id_post) {
                     const index = state.posts.findIndex(post => post.id_post === updatedPost.id_post);
                     if (index !== -1) {
-                        state.posts[index] = updatedPost;
+                        // state.posts[index] = updatedPost;
+                        state.posts = [
+                            ...state.posts.slice(0, index),
+                            updatedPost,
+                            ...state.posts.slice(index + 1)
+                        ];
                     }
                 }
             })

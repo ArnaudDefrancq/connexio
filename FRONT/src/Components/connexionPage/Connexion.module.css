@@ -59,3 +59,33 @@
   display: flex;
   flex-direction: column;
 }
+
+
+@media screen and (min-width: 576px) {
+    .modalConnexion {
+      width: 50%;
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .modalConnexion {
+      width: 40%;
+    }
+}
+
+@media screen and (min-width: 992px) {
+    .modalConnexion {
+      width: 30%;
+    }
+}
+
+@media screen and (min-width: 1200px) {
+    .modalConnexion {
+      width: 30%;
+    }
+}
+@media screen and (min-width: 1400px) {
+    .modalConnexion {
+      width: 25%;
+    }
+}
