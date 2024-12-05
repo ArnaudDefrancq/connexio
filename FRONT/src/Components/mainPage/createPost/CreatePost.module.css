@@ -70,6 +70,11 @@
 @media screen and (min-width: 1400px) {
     .sectionPost {
         margin: 5% auto;
-        width: 45%;
+        max-width: 700px;
+    }
+
+    .icon:hover {
+        color: var(--color3);
+        cursor: pointer;
     }
 }

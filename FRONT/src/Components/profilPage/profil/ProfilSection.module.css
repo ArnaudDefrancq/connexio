@@ -23,6 +23,7 @@
     height: 100%;
     width: 100%;
     z-index: 0;
+    object-fit: fill;
 }
 
 .imgProfil {
@@ -123,5 +124,9 @@
     .sectionProfil {
         height: 400px;
         width: 80%;
+    }
+
+    .divContent span, .divContent h2{
+        font-size: 18px;
     }
 } 

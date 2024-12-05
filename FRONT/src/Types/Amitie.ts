@@ -12,7 +12,6 @@ export interface NewAmitie {
     id_profil: number,
     id_profil_1: number,
     status: AmitieStatus
-    ask: number
 }
 
 export interface AmitieWithProfil {

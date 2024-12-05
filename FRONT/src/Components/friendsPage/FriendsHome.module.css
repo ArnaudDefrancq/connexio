@@ -47,3 +47,18 @@
         gap: 30px;
     }
 }
+
+@media screen and (min-width: 1400px) {
+    .friendsSection {
+        max-width: 600px;
+    }
+
+    .cardSection {
+        margin: 2% auto;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-rows: 150px;
+        width: 80%;
+        gap: 30px;
+    }
+}

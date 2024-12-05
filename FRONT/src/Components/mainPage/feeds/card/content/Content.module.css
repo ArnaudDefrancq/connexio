@@ -31,3 +31,10 @@
 .btnImg {
     margin-left: 10%;
 }
+
+
+@media screen and (min-width: 1400px) {
+    .imgPost {
+        width: 40%;
+    }
+}

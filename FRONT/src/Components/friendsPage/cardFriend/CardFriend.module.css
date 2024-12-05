@@ -83,3 +83,13 @@
         height: 70%;
     }
 }
+
+@media screen and (min-width: 1400px) {
+    .infoContainer {
+        height: 70%;
+    }
+
+    .imgFriends {
+        width: 25%;
+    }
+}
