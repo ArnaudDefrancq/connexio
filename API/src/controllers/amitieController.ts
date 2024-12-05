@@ -36,13 +36,15 @@ export class AmitieController {
                         const newAmitie: Amitie = {
                             id_profil,
                             id_profil_1,
-                            status: AmitieStatus.Pending
+                            status: AmitieStatus.Pending,
+                            ask: id_profil
                         };
 
                         const newAmitie_2: Amitie = {
                             id_profil: id_profil_1,
                             id_profil_1: id_profil,
-                            status: AmitieStatus.Pending
+                            status: AmitieStatus.Pending,
+                            ask: id_profil
                         }
                         const f1 = await new Promise<number>((resolve, reject) => {
                             amitieModel.createAmitie(newAmitie, (error, insertId) => {
@@ -191,7 +193,7 @@ export class AmitieController {
                 return res.status(400).json({message: 'Compte pas actif'});
             }      
             
-            const queryString: string = `SELECT a.id_amitie, a.id_profil, a.id_profil_1, a.status, p.nom, p.prenom, p.img_profil FROM cx__amitie AS a JOIN cx__profil AS p ON p.id_profil = a.id_profil_1 WHERE a.id_profil = ${id} AND a.status = "${slug}";`
+            const queryString: string = `SELECT a.id_amitie, a.id_profil, a.id_profil_1, a.status, a.ask, p.nom, p.prenom, p.img_profil FROM cx__amitie AS a JOIN cx__profil AS p ON p.id_profil = a.id_profil_1 WHERE a.id_profil = ${id} AND a.status = "${slug}";`
             switch (slug as AmitieStatus) {
                 case AmitieStatus.Accepted :
                     const amitiesAccepted: Array<Amitie> = await amitieModel.findAmitie(``, '',queryString);
@@ -224,7 +226,7 @@ export class AmitieController {
             if (actif != '1') {
                 return res.status(400).json({message: 'Compte pas actif'});
             }   
-            const queryString: string = `SELECT a.id_amitie, a.id_profil, a.id_profil_1, a.status, p.nom, p.prenom, p.img_profil FROM cx__amitie AS a JOIN cx__profil AS p ON p.id_profil = a.id_profil_1 WHERE a.id_amitie = ${id};`
+            const queryString: string = `SELECT a.id_amitie, a.id_profil, a.id_profil_1, a.status, a.ask, p.nom, p.prenom, p.img_profil FROM cx__amitie AS a JOIN cx__profil AS p ON p.id_profil = a.id_profil_1 WHERE a.id_amitie = ${id};`
 
             const amitieFind: Array<Amitie> = await amitieModel.findAmitie("", "", queryString);
 
